@@ -1,0 +1,1707 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>크루캠 인 양평 몽 · 전수창업 시뮬레이션 발표</title>
+<style>
+:root {
+  --bg: #f4f6fb; --card: #ffffff; --ink: #0b1324; --ink2: #334155; --sub: #6b7385; --line: #e7e9f0; --soft: #f7f8fc;
+  --brand: #0d7a6f; --brand-2: #14b8a6; --brand-soft: #e7f6f3; --rev: #2f6bff; --cost: #f06a2a;
+  --good: #12a150; --warn: #d99100; --bad: #e5484d;
+  --s1: #2f6bff; --s2: #7c4dff; --s3: #e8458b;
+  --radius: 18px;
+  --shadow: 0 1px 1px rgba(16,24,40,.03), 0 10px 28px -10px rgba(16,24,40,.12);
+  --shadow-lg: 0 24px 48px -16px rgba(16,24,40,.22);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; color: var(--ink);
+  font-family: 'Pretendard Variable', 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+body { background:
+  radial-gradient(1100px 520px at 105% -10%, #dff3ef 0%, transparent 60%),
+  radial-gradient(900px 520px at -10% 110%, #ecebff 0%, transparent 60%), var(--bg); background-attachment: fixed; }
+button, input, select { font: inherit; color: inherit; }
+b, strong { font-weight: 800; }
+::selection { background: #c7f0e8; }
+.slide::-webkit-scrollbar, .tablebox::-webkit-scrollbar { width: 10px; height: 10px; }
+.slide::-webkit-scrollbar-thumb, .tablebox::-webkit-scrollbar-thumb { background: #d5d9e3; border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+
+/* ── 슬라이드 프레임 ── */
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; gap: 10px;
+  padding: 0 28px; background: rgba(255,255,255,.78); backdrop-filter: saturate(1.6) blur(14px); border-bottom: 1px solid rgba(15,23,42,.06); z-index: 20; }
+.topbar .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--ink); letter-spacing: -.4px; font-size: 16px; }
+.topbar .logo i { font-style: normal; width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-size: 17px;
+  background: linear-gradient(135deg, #14b8a6, #0d7a6f); box-shadow: 0 6px 14px -6px rgba(13,122,111,.7); }
+.topbar .crumb { color: var(--sub); font-size: 13px; padding-left: 12px; border-left: 1px solid var(--line); }
+.topbar .sp { flex: 1; }
+.tgroup { display: flex; gap: 4px; padding: 4px; background: #f1f3f8; border-radius: 12px; }
+.tbtn { border: none; background: transparent; border-radius: 9px; padding: 6px 11px; font-size: 13px; cursor: pointer; white-space: nowrap; color: var(--ink2); font-weight: 600; }
+.tbtn:hover { background: #fff; color: var(--brand); box-shadow: 0 1px 3px rgba(16,24,40,.08); }
+.tbtn.on { background: var(--ink); color: #fff; }
+.slides { position: fixed; top: 60px; bottom: 64px; left: 0; right: 0; }
+.slide { position: absolute; inset: 0; overflow: auto; padding: 34px 52px 40px; opacity: 0; pointer-events: none;
+  transform: translateY(10px) scale(.995); transition: opacity .4s ease, transform .4s ease; }
+.slide.active { opacity: 1; pointer-events: auto; transform: none; }
+.slide.prev { transform: translateY(-10px) scale(.995); }
+.wrap { max-width: 1440px; margin: 0 auto; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; height: 64px; display: flex; align-items: center; gap: 14px; padding: 0 28px;
+  background: rgba(255,255,255,.85); backdrop-filter: blur(14px); border-top: 1px solid rgba(15,23,42,.06); z-index: 20; }
+.nav .prog { position: absolute; top: -1px; left: 0; height: 3px; background: linear-gradient(90deg, var(--brand-2), var(--brand)); transition: width .4s ease; border-radius: 0 3px 3px 0; }
+.nav .arrow { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 18px; transition: all .2s; }
+.nav .arrow:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.dots { flex: 1; display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+.dot { border: none; background: transparent; border-radius: 10px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; color: var(--sub); font-weight: 600; transition: all .2s; }
+.dot:hover { background: #f1f3f8; color: var(--ink); }
+.dot.active { background: var(--ink); color: #fff; }
+.dot .n { opacity: .55; margin-right: 4px; }
+@media (max-width: 1400px) { .dot .t { display: none; } .dot .n { opacity: 1; margin: 0; } .edit-hint, .topbar .crumb { display: none; } }
+.pageno { color: var(--sub); font-size: 13px; min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── 공통 요소 ── */
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: var(--brand); letter-spacing: .2px; }
+.eyebrow .chip { background: var(--brand); color: #fff; border-radius: 999px; padding: 3px 11px; font-size: 12px; letter-spacing: .6px; box-shadow: 0 4px 10px -4px rgba(0,0,0,.3); }
+h1.title { font-size: 36px; line-height: 1.22; margin: 10px 0 8px; letter-spacing: -1.1px; font-weight: 900; }
+h2.title { font-size: 28px; line-height: 1.3; margin: 6px 0 6px; letter-spacing: -.6px; }
+.lead { color: var(--ink2); font-size: 16.5px; margin: 0 0 22px; max-width: 1100px; }
+h3 { font-size: 16.5px; margin: 0 0 12px; letter-spacing: -.3px; font-weight: 800; }
+.card { background: var(--card); border: 1px solid rgba(15,23,42,.06); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; transition: box-shadow .25s, transform .25s; }
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); } .g5 { grid-template-columns: repeat(5, 1fr); }
+.g-73 { grid-template-columns: 7fr 3fr; } .g-37 { grid-template-columns: 3fr 7fr; } .g-64 { grid-template-columns: 6fr 4fr; } .g-46 { grid-template-columns: 4fr 6fr; }
+@media (max-width: 1100px) { .g2, .g3, .g4, .g5, .g-73, .g-37, .g-64, .g-46 { grid-template-columns: 1fr; } .slide { padding: 20px; } }
+.muted { color: var(--sub); } .small { font-size: 13px; } .tiny { font-size: 12px; }
+.num { font-variant-numeric: tabular-nums; }
+.kpi .k { font-size: 13px; color: var(--sub); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.kpi .k .ico { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; font-size: 15px; background: var(--soft); }
+.kpi.rev .ico { background: #e8efff; } .kpi.cost .ico { background: #fff0e8; } .kpi.good .ico { background: #e3f6ea; } .kpi.brand .ico { background: var(--brand-soft); }
+.kpi .v { font-size: 29px; font-weight: 900; letter-spacing: -1px; margin: 8px 0 2px; transition: color .3s; }
+.kpi .v.bump { animation: bump .5s ease; }
+@keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.kpi .d { font-size: 12.5px; color: var(--sub); }
+.kpi.rev .v { color: var(--rev); } .kpi.cost .v { color: var(--cost); } .kpi.good .v { color: var(--good); } .kpi.brand .v { color: var(--brand); }
+.kpi .ic { font-size: 20px; }
+.pill { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: 13px; font-weight: 800; }
+.pill.good { background: #dcfce7; color: #166534; } .pill.warn { background: #fef3c7; color: #92400e; } .pill.bad { background: #fee2e2; color: #991b1b; }
+.term { border-bottom: 1px dotted var(--sub); cursor: help; }
+.tag { display: inline-block; font-size: 11.5px; font-weight: 800; border-radius: 999px; padding: 2px 9px; }
+.tag.s1 { background: #dbeafe; color: var(--s1); } .tag.s2 { background: #ede9fe; color: var(--s2); } .tag.s3 { background: #fce7f3; color: var(--s3); }
+.tag.fixed { background: #e2e8f0; color: #334155; } .tag.rental { background: #ede9fe; color: var(--s2); }
+.note-box { border-left: 4px solid var(--brand); background: #effaf8; padding: 12px 14px; border-radius: 12px; }
+.note-box.warn { border-left-color: var(--warn); background: #fffbeb; }
+.note-box.bad { border-left-color: var(--bad); background: #fef2f2; }
+
+/* 편집 가능 텍스트 */
+body.editing [contenteditable="true"] { outline: 1px dashed transparent; border-radius: 6px; transition: outline-color .2s, background .2s; }
+body.editing [contenteditable="true"]:hover { outline-color: #94a3b8; background: rgba(20,184,166,.05); cursor: text; }
+body.editing [contenteditable="true"]:focus { outline: 2px solid var(--brand2, #14b8a6); background: #fff; }
+.edit-hint { font-size: 12px; color: var(--sub); }
+
+/* ── 차트 ── */
+.bar-row { display: grid; grid-template-columns: 170px 1fr 110px; gap: 10px; align-items: center; margin: 7px 0; font-size: 13.5px; }
+.bar-row .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { height: 16px; background: #eff1f6; border-radius: 999px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 999px; transition: width .55s cubic-bezier(.2,.8,.2,1); background-image: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)); }
+.bar-row .val { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stack { display: flex; height: 36px; border-radius: 12px; overflow: hidden; background: #eff1f6; gap: 2px; }
+.stack > div { height: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; transition: width .45s; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 13px; }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.gauge { position: relative; height: 20px; background: #eff1f6; border-radius: 999px; overflow: visible; margin: 26px 0 30px; box-shadow: inset 0 1px 2px rgba(16,24,40,.06); }
+.gauge .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; transition: width .45s; }
+.gauge .mark { position: absolute; top: -8px; bottom: -8px; width: 3px; background: var(--ink); border-radius: 2px; transition: left .45s; }
+.gauge .mark span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 800; }
+.gauge .mark.top span { bottom: 100%; margin-bottom: 2px; } .gauge .mark.bot span { top: 100%; margin-top: 2px; }
+.donut { width: 230px; height: 230px; border-radius: 50%; position: relative; flex: none; transition: background .4s; }
+.donut::after { content: ''; position: absolute; inset: 40px; background: #fff; border-radius: 50%; box-shadow: 0 0 0 6px rgba(255,255,255,.6), inset 0 2px 8px rgba(16,24,40,.06); }
+.donut .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; text-align: center; }
+.donut .center b { font-size: 24px; }
+svg text { font-family: inherit; }
+
+/* ── 흐름도 ── */
+.flow { display: flex; align-items: stretch; gap: 0; }
+.flow .step { flex: 1; background: #fff; border: 1px solid rgba(15,23,42,.06); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); position: relative; }
+.flow .arrowx { width: 44px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #a3abbb; flex: none; font-weight: 900; }
+.flow .step .big { font-size: 26px; font-weight: 900; letter-spacing: -.6px; }
+.flow .step .emoji { font-size: 30px; }
+@media (max-width: 1100px) { .flow { flex-direction: column; } .flow .arrowx { width: auto; height: 30px; transform: rotate(90deg); } }
+.formula { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 15px; }
+.formula .box { background: var(--soft); border: 1px solid var(--line); border-radius: 14px; padding: 12px 18px; text-align: center; min-width: 130px; }
+.formula .box b { display: block; font-size: 22px; }
+.formula .op { font-size: 22px; font-weight: 900; color: var(--sub); }
+.formula .box.res { background: linear-gradient(135deg, #14b8a6, #0d7a6f); color: #fff; border-color: transparent; box-shadow: 0 10px 24px -10px rgba(13,122,111,.7); }
+
+/* ── 대시보드(컨트롤 패널) ── */
+.kpi-strip { display: grid; grid-template-columns: repeat(5, 1fr) 1.2fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 1300px) { .kpi-strip { grid-template-columns: repeat(3, 1fr); } }
+.verdict-card { display: flex; flex-direction: column; justify-content: center; border-radius: var(--radius); padding: 16px 20px; color: #fff; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; }
+.verdict-card::after { content: ''; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,.12); }
+.verdict-card.good { background: linear-gradient(135deg, #0f9f6e, #0d7a6f 60%, #0b5f58); }
+.verdict-card.warn { background: linear-gradient(135deg, #e0a100, #c46f00); }
+.verdict-card.bad { background: linear-gradient(135deg, #ef5b5f, #c4262c); }
+.verdict-card .v { font-size: 25px; font-weight: 900; letter-spacing: -.6px; }
+.panel { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1700px) {
+  .panel { grid-template-columns: 1fr; }
+  .panel-side { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .panel-side > .card { margin-top: 0 !important; }
+}
+@media (max-width: 1000px) { .panel-side { grid-template-columns: 1fr; } }
+.ctl { margin: 12px 0; }
+.ctl label { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; }
+.ctl label output { color: var(--brand); font-weight: 900; font-size: 15px; }
+.ctl .help { font-size: 12px; color: var(--sub); margin-top: 2px; }
+input[type=range] { width: 100%; accent-color: var(--brand); }
+.mini-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; margin-top: 8px; }
+.mini-inputs div { font-size: 12.5px; color: var(--sub); }
+.mini-inputs input { width: 100%; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 14px; padding: 5px; background: #f1f3f8; border-radius: 14px; }
+.tab { border: none; background: transparent; border-radius: 10px; padding: 8px 12px; cursor: pointer; font-size: 13.5px; text-align: left; line-height: 1.3; font-weight: 700; color: var(--ink2); transition: all .2s; }
+.tab small { display: block; font-size: 11.5px; color: var(--sub); font-weight: 700; font-variant-numeric: tabular-nums; }
+.tab:hover { background: rgba(255,255,255,.7); }
+.tab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 4px 12px -4px rgba(16,24,40,.12); }
+.tab.active small { color: var(--brand); }
+.tab-desc { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.tab-desc .sumchips { display: flex; gap: 6px; flex-wrap: wrap; }
+.sumchip { background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; font-size: 12.5px; color: var(--ink2); }
+.sumchip b { color: var(--ink); }
+table.ed { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+table.ed th { background: var(--soft); color: #586174; font-weight: 800; padding: 9px 6px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; font-size: 12px; letter-spacing: .1px; }
+table.ed th:first-child { border-top-left-radius: 10px; } table.ed th:last-child { border-top-right-radius: 10px; }
+table.ed td { padding: 5px 4px; border-bottom: 1px solid #f0f2f6; vertical-align: middle; transition: background .2s, opacity .2s; }
+table.ed tbody tr:hover td { background: #fafbff; }
+table.ed tr.off td { opacity: .42; }
+table.ed tr.off td:first-child, table.ed tr.off td.actions { opacity: 1; }
+table.ed tr.off td.calc { text-decoration: line-through; }
+table.ed td.calc { text-align: right; font-weight: 800; white-space: nowrap; padding-right: 10px; font-variant-numeric: tabular-nums; }
+table.ed td.calc.flash { animation: flash 1s ease; }
+@keyframes flash { 0% { background: #fff4c2; color: #8a5a00; } 100% { background: transparent; } }
+table.ed tfoot td { background: linear-gradient(90deg, #e9f7f4, #f4f6ff); font-weight: 800; padding: 10px 12px; border-radius: 0 0 10px 10px; color: var(--ink); }
+.in { width: 100%; border: 1px solid #e3e6ee; background: #fff; border-radius: 8px; padding: 6px 8px; min-width: 50px; height: 32px; transition: border-color .15s, box-shadow .15s; }
+.in:hover { border-color: #c9cfdb; }
+.in:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(13,122,111,.14); }
+select.in { padding-right: 4px; cursor: pointer; min-width: 72px; }
+select.in[data-f="stage"] { min-width: 108px; }
+.in.n { text-align: right; font-variant-numeric: tabular-nums; }
+.in.w-s { width: 64px; } .in.w-m { width: 96px; } .in.w-l { width: 118px; }
+.in.w-name { min-width: 230px; font-weight: 600; } .in.w-note { min-width: 170px; color: var(--sub); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid #e3e6ee; border-radius: 8px; overflow: hidden; background: #fff; height: 32px; }
+.stepper:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(13,122,111,.14); }
+.stepper button { width: 26px; height: 100%; border: none; background: var(--soft); cursor: pointer; font-weight: 900; color: var(--ink2); }
+.stepper button:hover { background: var(--brand); color: #fff; }
+.stepper .in { border: none; box-shadow: none !important; width: 46px; min-width: 0; height: 30px; text-align: center; border-radius: 0; padding: 0 2px; }
+td.actions { white-space: nowrap; text-align: right; }
+.act { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 4px 8px; cursor: pointer; font-size: 12px; font-weight: 700; color: var(--ink2); margin-left: 4px; transition: all .15s; }
+.act:hover { border-color: var(--brand); color: var(--brand); }
+.act.del { border-color: #f6d2d3; background: #fff6f6; color: #d23b40; }
+select.in.loc { width: 84px; font-weight: 600; background-color: #f2fbf9; border-color: #bfe6df; color: var(--brand); }
+.act.del:hover { background: var(--bad); border-color: var(--bad); color: #fff; }
+.sw { position: relative; display: inline-block; width: 36px; height: 20px; vertical-align: middle; cursor: pointer; }
+.sw input { opacity: 0; width: 0; height: 0; position: absolute; }
+.sw span { position: absolute; inset: 0; background: #d5d9e3; border-radius: 999px; transition: background .2s; }
+.sw span::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.sw input:checked + span { background: var(--brand); }
+.sw input:checked + span::after { transform: translateX(16px); }
+.add { margin-top: 10px; border: 1.5px dashed #b8c0cf; background: #fff; border-radius: 10px; padding: 8px 14px; cursor: pointer; font-size: 13px; color: var(--ink2); font-weight: 700; transition: all .2s; }
+.add:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-soft); }
+.subhead { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; font-weight: 800; }
+.subhead .muted { font-weight: 500; font-size: 12.5px; }
+.tablebox { overflow-x: auto; }
+.help-strip { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--sub); background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 7px 12px; margin-bottom: 12px; }
+.help-strip b { color: var(--ink2); }
+
+/* ── 의사결정 ── */
+.decide { display: flex; gap: 10px; flex-wrap: wrap; }
+.decide button { flex: 1; min-width: 140px; border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: 12px; cursor: pointer; font-weight: 800; font-size: 15px; }
+.decide button.sel.good { border-color: var(--good); background: #dcfce7; color: #166534; }
+.decide button.sel.warn { border-color: var(--warn); background: #fef3c7; color: #92400e; }
+.decide button.sel.bad { border-color: var(--bad); background: #fee2e2; color: #991b1b; }
+ol.talk, ul.talk { margin: 6px 0 0; padding-left: 22px; } ol.talk li, ul.talk li { margin: 6px 0; }
+.exec-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.exec-table td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
+.exec-table td:first-child { color: var(--sub); font-weight: 700; width: 46%; }
+.exec-table td:last-child { text-align: right; font-weight: 900; font-variant-numeric: tabular-nums; }
+.toast { position: fixed; bottom: 82px; left: 50%; transform: translate(-50%, 10px); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 13.5px; opacity: 0; transition: opacity .25s, transform .25s; z-index: 50; pointer-events: none; display: flex; gap: 12px; align-items: center; box-shadow: var(--shadow-lg); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.toast button { border: none; background: #fff; color: var(--ink); border-radius: 8px; padding: 4px 10px; font-weight: 800; cursor: pointer; font-size: 12.5px; }
+/* ── 핵심요약 보고서 (인쇄 전용) ── */
+#report { display: none; }
+@page { size: A4 landscape; margin: 8mm 10mm; }
+@media print {
+  html, body { height: auto; background: #fff !important; font-size: 10.5px; }
+  body > *:not(#report) { display: none !important; }
+  #report { display: block; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+.rp-page { break-after: page; color: #0b1324; font-size: 10.5px; line-height: 1.5; }
+.rp-page:last-child { break-after: auto; }
+.rp-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0d7a6f; padding-bottom: 5px; margin-bottom: 10px; font-size: 9.5px; color: #6b7385; }
+.rp-head b { color: #0d7a6f; font-size: 10.5px; }
+.rp-title { display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; }
+.rp-title .no { background: #0d7a6f; color: #fff; border-radius: 6px; padding: 2px 9px; font-weight: 900; font-size: 12px; }
+.rp-title h2 { margin: 0; font-size: 16px; letter-spacing: -.3px; }
+.rp-title.s1 .no { background: #2f6bff; } .rp-title.s2 .no { background: #7c4dff; } .rp-title.s3 .no { background: #e8458b; }
+.rp-lead { margin: 0 0 6px; color: #334155; font-size: 11px; }
+.rp-cover { background: linear-gradient(120deg, #0d7a6f, #14b8a6); color: #fff; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; }
+.rp-cover .eb { font-size: 10px; letter-spacing: 1.5px; opacity: .85; font-weight: 800; }
+.rp-cover h1 { margin: 2px 0 4px; font-size: 24px; letter-spacing: -.5px; }
+.rp-cover .sub { opacity: .9; font-size: 11px; }
+.rp-verdict { display: flex; gap: 16px; align-items: center; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; border: 1.5px solid; }
+.rp-verdict.good { background: #ecfdf3; border-color: #86efac; } .rp-verdict.warn { background: #fffbeb; border-color: #fcd34d; } .rp-verdict.bad { background: #fef2f2; border-color: #fca5a5; }
+.rp-verdict .lb { font-size: 9.5px; color: #6b7385; font-weight: 800; } .rp-verdict .v { font-size: 17px; font-weight: 900; white-space: nowrap; }
+.rp-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin-bottom: 10px; }
+.rp-kpi { border: 1px solid #e7e9f0; border-radius: 9px; padding: 8px 10px; background: #fafbfd; }
+.rp-kpi .k { font-size: 9.5px; color: #6b7385; font-weight: 800; } .rp-kpi .v { font-size: 16px; font-weight: 900; letter-spacing: -.3px; } .rp-kpi .d { font-size: 8.5px; color: #6b7385; }
+.rp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .rp-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.rp-box { border: 1px solid #e7e9f0; border-radius: 10px; padding: 6px 9px; margin-bottom: 6px; break-inside: avoid; }
+.rp-box h3 { margin: 0 0 6px; font-size: 12px; }
+.rp-stage { border-top: 4px solid; }
+.rp-stage.s1 { border-top-color: #2f6bff; } .rp-stage.s2 { border-top-color: #7c4dff; } .rp-stage.s3 { border-top-color: #e8458b; }
+table.rp { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 2px; }
+table.rp th { background: #f3f5f9; color: #475063; font-weight: 800; padding: 3px 5px; text-align: left; border-bottom: 1px solid #dfe3ea; white-space: nowrap; font-size: 9.5px; }
+table.rp td { padding: 2.5px 5px; border-bottom: 1px solid #eef0f4; font-size: 9.5px; }
+table.rp .r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.rp tr.tot td { font-weight: 900; background: #eef8f6; border-top: 1px solid #cfe9e4; }
+table.rp tr.sub td { font-weight: 800; background: #fafbfd; }
+table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:last-child { text-align: right; font-weight: 900; }
+.rp-good { color: #12a150 !important; } .rp-bad { color: #e5484d !important; } .rp-mut { color: #6b7385; }
+.rp-bar { height: 8px; background: #eef0f4; border-radius: 99px; overflow: hidden; } .rp-bar i { display: block; height: 100%; border-radius: 99px; }
+.rp-disc { border: 1.5px dashed #b9c2d0; border-radius: 10px; padding: 6px 10px; background: #fcfcfe; break-inside: avoid; }
+.rp-disc h3 { margin: 0 0 4px; font-size: 12px; color: #0d7a6f; }
+.rp-disc ol { margin: 0; padding-left: 18px; } .rp-disc li { margin: 3px 0; }
+.rp-disc .lines { margin-top: 8px; }
+.rp-disc .lines div { border-bottom: 1px solid #dfe3ea; height: 16px; font-size: 9px; color: #9aa3b2; }
+.rp-check { display: flex; gap: 18px; font-size: 12px; font-weight: 800; margin: 4px 0 8px; }
+.rp-check span::before { content: '☐ '; font-size: 14px; } .rp-check span.on::before { content: '☑ '; color: #0d7a6f; }
+.rp-foot { margin-top: 6px; font-size: 8.5px; color: #9aa3b2; }
+.rp-sum { font-size: 10px; }
+.rp-sum .rp-box { padding: 6px 9px; margin-bottom: 6px; }
+.rp-sum .rp-box h3 { margin-bottom: 4px; font-size: 11.5px; }
+.rp-sum table.rp th, .rp-sum table.rp td { padding: 2px 5px; font-size: 9px; }
+.rp-sum .rp-kpis { margin-bottom: 6px; } .rp-sum .rp-kpi { padding: 6px 8px; } .rp-sum .rp-kpi .v { font-size: 15px; }
+.rp-sum .rp-verdict { padding: 7px 12px; margin-bottom: 6px; }
+.rp-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
+.rp-steps div { background: #f4fbf9; border: 1px solid #d5efe9; border-radius: 8px; padding: 5px 8px; }
+.rp-steps b { display: block; color: #0d7a6f; font-size: 10px; }
+.rp-side { background: #faf8ff; border: 1.5px dashed #c4b5fd; border-radius: 10px; padding: 7px 10px; }
+.rp-side h3 { margin: 0 0 2px; font-size: 12px; color: #6d28d9; }
+.rp-tag { display: inline-block; background: #ede9fe; color: #6d28d9; border-radius: 99px; padding: 0 7px; font-size: 9px; font-weight: 800; }
+</style>
+</head>
+<body class="editing">
+
+<header class="topbar">
+  <span class="logo"><i>⛺</i>크루캠 인 양평 몽</span>
+  <span class="crumb" id="crumb">전수창업 운영 시뮬레이션</span>
+  <span class="sp"></span>
+  <span class="edit-hint">글씨는 클릭해서 바로 고칠 수 있어요</span>
+  <div class="tgroup">
+   <button class="tbtn on" id="btnEdit" title="글씨 편집 켜기/끄기">✏️ 편집 ON</button>
+   <button class="tbtn" id="btnDash" title="대시보드로 이동 (값 조정)">🎛 값 조정</button>
+  </div>
+  <div class="tgroup">
+   <button class="tbtn" id="btnReport" title="지금 값으로 핵심요약 PDF 만들기 (인쇄 창에서 'PDF로 저장' 선택)">📄 요약 PDF</button>
+   <button class="tbtn" id="btnExport" title="현재 숫자·글씨를 파일로 저장">💾 저장</button>
+   <button class="tbtn" id="btnImport" title="저장 파일 불러오기">📂 불러오기</button>
+   <button class="tbtn" id="btnReset" title="모든 값을 PDF 기본값으로">↺ 기본값</button>
+   <button class="tbtn" id="btnFull" title="전체 화면 (F)">⛶ 전체화면</button>
+  </div>
+  <input type="file" id="fileIn" accept=".json" hidden>
+</header>
+
+<main class="slides" id="slides">
+
+<!-- ═════════ 1. 메인 시뮬레이션 대시보드 ═════════ -->
+<section class="slide" data-title="대시보드">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">MAIN</span> 시뮬레이션 대시보드</div>
+  <h1 class="title" contenteditable="true" data-k="s1.title">숫자를 바꾸면, 모든 슬라이드가 바로 다시 계산됩니다</h1>
+  <p class="lead" contenteditable="true" data-k="s1.lead">왼쪽에서 손님이 오는 비율과 요금을, 오른쪽에서 비용 항목을 고쳐 보세요. 기본값은 수정본 시뮬레이션 PDF(2026-10-07)의 숫자입니다.</p>
+
+  <div class="kpi-strip" id="kpiStrip"></div>
+
+  <div class="panel">
+   <div class="panel-side">
+    <div class="card">
+     <h3>🎛 기본 조건</h3>
+     <div class="ctl"><label>주말(금·토) 손님 비율 <output data-out="weekendRate"></output></label>
+      <input type="range" min="0" max="100" step="1" data-meta="weekendRate"><div class="help">주말 104일 중 손님이 오는 날의 비율 (가동률)</div></div>
+     <div class="ctl"><label>평일 손님 비율 <output data-out="weekdayRate"></output></label>
+      <input type="range" min="0" max="100" step="1" data-meta="weekdayRate"><div class="help">평일 261일 중 손님이 오는 날의 비율</div></div>
+     <div class="ctl"><label>비용 여유분 (보수 할증) <output data-out="buffer"></output></label>
+      <input type="range" min="0" max="30" step="1" data-meta="buffer"><div class="help">예상 비용에 덧붙이는 안전 여유분. 20%는 적자 위험이 커서 기본 15%</div></div>
+     <label class="small" style="display:flex;gap:6px;align-items:center;margin-top:4px"><input type="checkbox" data-meta-check="bufferLabor"> 인건비에도 여유분 적용 (기본: 미적용, 상한값 사용)</label>
+     <div class="mini-inputs">
+      <div>1박 구역 청소비 (원)<input class="in n" data-meta-num="zoneClean"></div>
+      <div>1박 펜션 청소·세탁비 (원)<input class="in n" data-meta-num="pensionClean"></div>
+      <div>대여 장비 파손·분실 대비 (%)<input class="in n" data-meta-num="lossRate"></div>
+      <div>목표 회수 기간 (개월)<input class="in n" data-meta-num="targetMonths"></div>
+      <div>1년 주말 일수<input class="in n" data-meta-num="weekendDays"></div>
+      <div>1년 평일 일수<input class="in n" data-meta-num="weekdayDays"></div>
+     </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+     <h3>🏕 객실 · 1박 요금 <span class="tag s1">1단계</span></h3>
+     <div class="tablebox" id="tblRooms"></div>
+    </div>
+   </div>
+   <div class="card">
+    <h3>💰 비용 · 장비 항목</h3>
+    <div class="help-strip"><span><b>숫자 칸</b> 클릭해서 바로 수정</span><span><b>− ＋</b> 수량 조절</span><span><b>포함 스위치</b> 끄면 삭제 없이 계산에서 빠짐</span><span><b>위치</b> 외부 ↔ 내부 이동</span><span><b>⇄</b> 상시 비치 ↔ 대여 상품 이동</span><span><b>삭제</b> 후 '되돌리기' 가능</span></div>
+    <div class="tabs" id="tabs"></div>
+    <div id="tabBody"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 2. 사업 개요 ═════════ -->
+<section class="slide" data-title="개요">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">01</span> 사업 개요</div>
+  <h1 class="title" contenteditable="true" data-k="s2.title">기존 캠핑장을 '구역 통대여'로 바꿔, 한 팀이 한 구역을 통째로 씁니다</h1>
+  <p class="lead" contenteditable="true" data-k="s2.lead">양평 몽 캠핑장의 기존 사이트를 7개 구역으로 묶고, 구역마다 프레임형 풀타프(큰 천막 집)를 세웁니다. 펜션은 8인 단체 객실로 따로 운영합니다.</p>
+  <div class="grid g3">
+   <div class="card"><div style="font-size:34px">🏕</div><h3 contenteditable="true" data-k="s2.c1t">7개 구역 + 펜션 1실</h3>
+    <p class="muted" contenteditable="true" data-k="s2.c1">일반 구역(8명) 4곳, 큰 구역(12명 단체) 3곳, 펜션(8명) 1실. 비가 와도, 추워도 쓸 수 있는 4계절 풀타프입니다.</p>
+    <div id="ovRooms"></div></div>
+   <div class="card"><div style="font-size:34px">🔑</div><h3 contenteditable="true" data-k="s2.c2t">구역을 통째로 빌려줍니다</h3>
+    <p class="muted" contenteditable="true" data-k="s2.c2">다른 팀과 섞이지 않아 가족·친구 모임에 좋습니다. 그래서 1박 요금을 일반 캠핑보다 높게 받을 수 있습니다.</p>
+    <div id="ovPrice"></div></div>
+   <div class="card"><div style="font-size:34px">🧭</div><h3 contenteditable="true" data-k="s2.c3t">3단계로 매출을 키웁니다</h3>
+    <p class="muted" contenteditable="true" data-k="s2.c3">① 숙박으로 기본 매출을 만들고, ② 장비를 빌려주고, ③ 체험을 팔아 같은 손님에게서 추가 매출을 얻습니다.</p>
+    <div id="ovStages"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+   <h3>📖 이 발표에서 쓰는 쉬운 말</h3>
+   <div class="grid g4 small">
+    <div><b>처음 드는 돈</b><br><span class="muted">= 초기 투자비. 시작할 때 한 번 쓰는 돈</span></div>
+    <div><b>매달 꼭 나가는 돈</b><br><span class="muted">= 고정비. 손님이 없어도 나가는 돈 (월급·임대료)</span></div>
+    <div><b>손님 올 때마다 드는 돈</b><br><span class="muted">= 변동비. 청소·세탁·재료비처럼 팔수록 늘어나는 돈</span></div>
+    <div><b>남는 돈</b><br><span class="muted">= 영업이익. 번 돈 − 나간 돈</span></div>
+    <div><b>손님 비율</b><br><span class="muted">= 가동률. 1년 중 객실이 팔린 날의 비율</span></div>
+    <div><b>본전 찾는 기간</b><br><span class="muted">= 투자 회수 기간. 남는 돈으로 처음 돈을 다 메우는 기간</span></div>
+    <div><b>본전 라인</b><br><span class="muted">= 손익분기점(BEP). 이보다 손님이 적으면 손해</span></div>
+    <div><b>투자 수익률</b><br><span class="muted">= ROI. 1년에 남는 돈 ÷ 처음 드는 돈</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 3. 돈의 흐름 ═════════ -->
+<section class="slide" data-title="돈의 흐름">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">02</span> 돈의 흐름 한눈에</div>
+  <h1 class="title" contenteditable="true" data-k="s3.title">한 번 넣고, 매년 벌고, 쓰고, 남깁니다</h1>
+  <p class="lead" contenteditable="true" data-k="s3.lead">캠핑장 사업은 처음에 시설을 갖추는 돈이 들고, 그 뒤로는 손님에게 받는 돈에서 운영비를 뺀 만큼이 남습니다. 남는 돈이 처음 넣은 돈을 다 메우면 '본전'입니다.</p>
+  <div class="flow" id="moneyFlow"></div>
+  <div class="grid g2" style="margin-top:16px">
+   <div class="card"><h3>📊 1년에 번 돈은 어디로 가나</h3><div id="whereGo"></div></div>
+   <div class="card"><h3>⏱ 본전 찾는 기간</h3><div id="paybackGauge"></div>
+    <p class="small muted" contenteditable="true" data-k="s3.pb">기준 — 2년 안에 본전: 추진 검토 · 3년 안: 조건부 · 그 이상: 재검토</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 4. 1단계 숙박 ═════════ -->
+<section class="slide" data-title="1단계 숙박">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip" style="background:var(--s1)">1단계</span> 기본 숙박 매출</div>
+  <h1 class="title" contenteditable="true" data-k="s4.title">먼저 '잠자리'를 팔아 기본 매출을 만듭니다</h1>
+  <p class="lead" contenteditable="true" data-k="s4.lead">모든 매출의 출발점입니다. 손님이 와야 장비도 빌리고 체험도 합니다. 그래서 1단계 숙박 매출만으로도 매달 꼭 나가는 돈을 버틸 수 있는지가 가장 중요합니다.</p>
+  <div class="card"><h3>🧮 숙박 매출은 이렇게 계산해요</h3><div class="formula" id="lodgeFormula"></div></div>
+  <div class="grid g-64" style="margin-top:16px">
+   <div class="card"><h3>🏕 객실별 1년 숙박 매출</h3><div id="lodgeBars"></div></div>
+   <div class="card"><h3>📅 1년 365일 중 손님이 오는 날</h3><div id="lodgeDays"></div>
+    <div class="note-box" style="margin-top:12px"><b contenteditable="true" data-k="s4.whyT">왜 필요한가?</b>
+     <div contenteditable="true" data-k="s4.why">주말 수요가 강한 양평 지역 특성상 금·토 판매가 매출의 대부분입니다. 평일 손님은 적게(10%) 잡아 보수적으로 계산했습니다.</div></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 5. 2단계 장비 대여 ═════════ -->
+<section class="slide" data-title="2단계 대여">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip" style="background:var(--s2)">2단계</span> 장비 대여 매출</div>
+  <h1 class="title" contenteditable="true" data-k="s5.title">짐 없이 와도 되도록, 장비를 빌려줍니다</h1>
+  <p class="lead" contenteditable="true" data-k="s5.lead">캠핑 장비가 없어서, 짐이 많아서 망설이는 손님이 많습니다. 텐트·침구·팬히터를 빌려주면 그런 손님도 올 수 있고, 같은 손님에게서 대여비라는 추가 매출이 생깁니다.</p>
+  <div class="flow" id="rentFlow"></div>
+  <div class="grid g-64" style="margin-top:16px">
+   <div class="card"><h3>🎒 대여 상품별 — 구입비 vs 1년 대여 수익</h3><div id="rentBars"></div>
+    <div class="legend"><span><i style="background:#cbd5e1"></i>구입비 (처음 드는 돈)</span><span><i style="background:var(--s2)"></i>1년 대여 수익</span></div></div>
+   <div class="card"><h3>📦 '상시 비치'와 '대여 상품'의 차이</h3>
+    <div class="grid g2 small">
+     <div class="note-box"><span class="tag fixed">① 상시 비치</span><div contenteditable="true" data-k="s5.fixed" style="margin-top:6px">냉난방기·소화기·조명처럼 구역마다 늘 놓여 있는 기본 품목. 처음 사는 돈만 들고, 따로 대여비를 받지 않습니다.</div><div id="fixedSum" style="margin-top:8px"></div></div>
+     <div class="note-box" style="border-left-color:var(--s2);background:#f5f3ff"><span class="tag rental">② 대여 상품</span><div contenteditable="true" data-k="s5.rental" style="margin-top:6px">텐트·침낭·팬히터처럼 원하는 손님에게만 빌려주는 품목. 전체 수용 인원의 30%만 먼저 사고, 대여비로 추가 수익을 냅니다.</div><div id="rentalSum" style="margin-top:8px"></div></div>
+    </div>
+    <div class="note-box bad small" style="margin-top:12px" contenteditable="true" data-k="s5.safety">🔥 안전 원칙 — 등유·화목 난로는 밀폐된 풀타프 안에서 일산화탄소 중독 위험이 있어 들이지 않습니다. 보조 난방은 전기·안전형 팬히터만 대여합니다. (참고 모델 신일 SFH-CC910MVP는 석유식일 수 있어 구매 전 연료 방식 확인 필요)</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 6. 3단계 체험 ═════════ -->
+<section class="slide" data-title="3단계 체험">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip" style="background:var(--s3)">3단계</span> 체험 · 콘텐츠 매출</div>
+  <h1 class="title" contenteditable="true" data-k="s6.title">머무는 시간을 '즐길 거리'로 채워 한 번 더 팝니다</h1>
+  <p class="lead" contenteditable="true" data-k="s6.lead">잠만 자고 가는 캠핑장은 가격 경쟁에 휘말립니다. 바베큐·커피 만들기·팝콘·빙어/송어 잡기처럼 '여기서만 하는 경험'을 붙이면 다시 오고 싶은 이유가 되고, 추가 매출도 생깁니다.</p>
+  <div class="grid g4" id="progCards"></div>
+  <div class="grid g-64" style="margin-top:16px">
+   <div class="card"><h3>🎯 프로그램별 1년 매출과 남는 돈</h3><div id="progBars"></div>
+    <div class="legend"><span><i style="background:var(--s3)"></i>남는 돈</span><span><i style="background:#fbcfe8"></i>재료비(원가)</span></div></div>
+   <div class="card"><h3>💡 3단계 한 줄 정리</h3><div id="progSum"></div>
+    <div class="note-box" style="margin-top:12px" contenteditable="true" data-k="s6.note">숙박 손님만 대상으로 계산했습니다(외부 방문객 미포함). 빙어 잡기는 결빙 수면을 확보할 때만 운영하고, 안 되면 송어 수조 체험만 합니다.</div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ═════════ 7. 단계별 수익 쌓기 ═════════ -->
+<section class="slide" data-title="단계별 수익">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">03</span> 단계별로 쌓이는 수익</div>
+  <h1 class="title" contenteditable="true" data-k="s7.title">같은 손님, 같은 시설로 단계마다 남는 돈이 커집니다</h1>
+  <p class="lead" contenteditable="true" data-k="s7.lead">2단계와 3단계는 새로 손님을 모으지 않아도 이미 온 손님에게서 생기는 매출입니다. 비용은 조금 늘지만 남는 돈은 더 크게 늘어납니다.</p>
+  <div class="grid g3" id="stageCols"></div>
+  <div class="card" style="margin-top:16px"><h3>📊 1년 남는 돈이 쌓이는 모습</h3><div id="stageStair"></div></div>
+ </div>
+</section>
+
+<!-- ═════════ 8. 초기 투자 ═════════ -->
+<section class="slide" data-title="처음 드는 돈">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">04</span> 처음 드는 돈 (초기 투자)</div>
+  <h1 class="title" contenteditable="true" data-k="s8.title">시작할 때 한 번, 시설·장비·공사에 돈이 듭니다</h1>
+  <p class="lead" contenteditable="true" data-k="s8.lead">풀타프와 구역 시설이 가장 크고, 바닥 공사(파쇄석·석분)와 포크레인 작업(3일)도 들어갑니다. 예상 못 한 비용에 대비해 여유분을 더했습니다.</p>
+  <div class="grid g-46">
+   <div class="card" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap"><div class="donut" id="investDonut"></div><div id="investLegend" style="flex:1;min-width:220px"></div></div>
+   <div class="card"><h3>🔝 돈이 많이 드는 품목 TOP 8</h3><div id="investTop"></div></div>
+  </div>
+  <div class="grid g3" style="margin-top:16px" id="investNotes"></div>
+ </div>
+</section>
+
+<!-- ═════════ 9. 운영비 ═════════ -->
+<section class="slide" data-title="매달 나가는 돈">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">05</span> 매달 나가는 돈 (운영비)</div>
+  <h1 class="title" contenteditable="true" data-k="s9.title">손님이 없어도 나가는 돈과, 손님이 올수록 드는 돈</h1>
+  <p class="lead" contenteditable="true" data-k="s9.lead">월급·임대료처럼 매달 꼭 나가는 돈이 가장 큽니다. 상주 매니저(250만원)와 주말 알바 2명(150만원)으로 인건비를 넉넉히 잡았고, 방역·저수조 청소 같은 잡비도 빠짐없이 넣었습니다.</p>
+  <div class="grid g-46">
+   <div class="card"><h3>🧾 한 달 평균 나가는 돈</h3><div id="costBars"></div></div>
+   <div class="card"><h3>📆 달마다 번 돈 vs 나간 돈</h3><div id="monthChart"></div>
+    <div class="legend"><span><i style="background:var(--rev)"></i>번 돈 (매출)</span><span><i style="background:var(--cost)"></i>나간 돈 (지출)</span></div></div>
+  </div>
+  <div class="grid g3" style="margin-top:16px" id="unitEcon"></div>
+ </div>
+</section>
+
+<!-- ═════════ 10. 1년 성적표 & 5년 ═════════ -->
+<section class="slide" data-title="1년·5년 성적">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">06</span> 1년 성적표 & 5년 전망</div>
+  <h1 class="title" contenteditable="true" data-k="s10.title">1년 동안 벌고, 쓰고, 남는 돈 — 그리고 5년 뒤</h1>
+  <p class="lead" contenteditable="true" data-k="s10.lead">매년 같은 실적이 이어진다고 가정했습니다(물가 상승·장비 교체·대출 이자 미반영). 선이 0을 넘는 때가 본전을 찾는 시점입니다.</p>
+  <div class="grid g-46">
+   <div class="card"><h3>🧾 1년 성적표</h3><div id="pnl"></div></div>
+   <div class="card"><h3>📈 처음 넣은 돈을 메워가는 모습 (5년 누적)</h3><div id="cumChart"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><div class="tablebox" id="yearTable"></div></div>
+ </div>
+</section>
+
+<!-- ═════════ 11. 리스크 ═════════ -->
+<section class="slide" data-title="리스크 방어선">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip" style="background:var(--bad)">07</span> 리스크 방어선 (최소 가동률)</div>
+  <h1 class="title" contenteditable="true" data-k="s11.title">손님이 얼마나 줄어도 버틸 수 있을까?</h1>
+  <p class="lead" contenteditable="true" data-k="s11.lead">가장 큰 위험은 '손님이 예상보다 적게 오는 것'입니다. 아래 슬라이더로 주말 손님 비율을 바꿔 보면서, 어디까지 떨어지면 손해가 나는지 확인하세요.</p>
+  <div class="card">
+   <div class="ctl" style="margin:0"><label style="font-size:15px">주말 손님 비율 (지금 값으로 전체 재계산) <output data-out="weekendRate"></output></label>
+    <input type="range" min="0" max="100" step="1" data-meta="weekendRate"></div>
+   <div id="riskGauge"></div>
+  </div>
+  <div class="grid g3" style="margin-top:16px" id="defense"></div>
+  <div class="card" style="margin-top:16px"><h3>📉 주말 손님 비율에 따른 1년 남는 돈</h3><div id="sensChart"></div></div>
+ </div>
+</section>
+
+<!-- ═════════ 12. 경영진 의사결정 요약 ═════════ -->
+<section class="slide" data-title="의사결정 요약">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip" style="background:#0f172a">EXECUTIVE SUMMARY</span> 경영진 의사결정 요약</div>
+  <h1 class="title" contenteditable="true" data-k="s12.title">결론과 토론할 것</h1>
+  <div id="execVerdict"></div>
+  <div class="grid g3" style="margin-top:16px">
+   <div class="card"><h3>💵 투자와 회수</h3><table class="exec-table" id="exec1"></table></div>
+   <div class="card"><h3>⚖️ 본전 라인 (손익분기점 · BEP)</h3><table class="exec-table" id="exec2"></table></div>
+   <div class="card"><h3>🛡 월별 리스크 방어선</h3><table class="exec-table" id="exec3"></table></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+   <div class="card"><h3>🗣 토론 포인트</h3>
+    <ol class="talk" contenteditable="true" data-k="s12.talk"></ol>
+   </div>
+   <div class="card"><h3>✅ 최종 결정</h3>
+    <div class="decide" id="decide">
+     <button data-d="go" class="good">🟢 추진</button>
+     <button data-d="cond" class="warn">🟡 조건부 추진</button>
+     <button data-d="hold" class="bad">🔴 보류 · 재검토</button>
+    </div>
+    <div class="small muted" style="margin-top:14px">결정 메모 · 조건 · 담당자 (클릭해서 입력)</div>
+    <div class="note-box" style="min-height:120px;margin-top:6px" contenteditable="true" data-k="s12.memo">예) 주말 가동률 60% 이상 확보 가능성 검증 후 착공 · 팬히터 전기식 확정 · 담당: ○○○ · 기한: ○월 ○일</div>
+    <div class="small muted" style="margin-top:10px" id="decideStamp"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<nav class="nav">
+  <div class="prog" id="prog"></div>
+  <button class="arrow" id="prev" title="이전 (←)">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="pageno" id="pageno"></span>
+  <button class="arrow" id="next" title="다음 (→)">›</button>
+</nav>
+<div class="toast" id="toast"></div>
+<div id="report"></div>
+
+<script>
+'use strict';
+/* ═══════════════════════ 기본값 (수정본 PDF 기준) ═══════════════════════ */
+const STORE_KEY = 'crewcamp-yangpyeong-sim-v1';
+let seq = 0;
+const uid = () => 'i' + (Date.now().toString(36)) + (seq++).toString(36);
+const withIds = arr => arr.map(o => ({ id: uid(), ...o }));
+
+function makeDefault() {
+  return {
+    meta: { weekendRate: 70, weekdayRate: 10, weekendDays: 104, weekdayDays: 261, buffer: 15, bufferLabor: false,
+            lossRate: 10, zoneClean: 10000, pensionClean: 30000, targetMonths: 24 },
+    rooms: withIds([
+      { name: '1구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 16·15' },
+      { name: '2구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 14·13·12' },
+      { name: '3구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 11·10·9·8 (큰 구역)' },
+      { name: '4구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 7·6·5' },
+      { name: '5구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 4·3·2·1 (큰 구역)' },
+      { name: '6구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 19·20·방갈로 (단체 12인)' },
+      { name: '7구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 17·18' },
+      { name: '펜션', kind: '펜션', cap: 8, wd: 200000, we: 200000, note: '8인 단체 객실 (단체 대여 공간)' },
+    ]),
+    construction: withIds([
+      { name: '파쇄석(쇄석) 포설', price: 700000, qty: 10, stage: 1, note: '25t 1대 70만원 · 5cm 도포 약 900평' },
+      { name: '석분 상부 포설', price: 600000, qty: 6, stage: 1, note: '텐트 피칭면 3cm · 25t 1대 60만원' },
+      { name: '석분 포설·다짐', price: 1500000, qty: 1, stage: 1, note: '인력 2명 × 3일 + 진동롤러' },
+      { name: '포크레인 (중장비)', price: 1000000, qty: 3, stage: 1, note: '1일 100만원 × 3일 · 정지·포설 최소 2~3일' },
+    ]),
+    outdoorFixed: withIds([
+      { name: '프레임형 풀타프 (게이블·일체형)', price: 3636000, qty: 7, stage: 1, note: '구역마다 1동' },
+      { name: '1.5×6m 모듈형 울타리', price: 400000, qty: 4, stage: 1, note: '3·5구역 각 2모듈' },
+      { name: '헬로닷 줄조명 파티라이트 6구', price: 77000, qty: 7, stage: 1, note: '야간 분위기' },
+      { name: '영라이즌 접이식 캠핑화로대', price: 24900, qty: 7, stage: 1, note: '불멍·숯불' },
+    ]),
+    outdoorRental: withIds([
+      { name: '스위스마운틴 헥사돔 원터치텐트', price: 93800, qty: 5, fee: 20000, rate: 30, months: 12, care: 1000, note: '4인용' },
+      { name: '이너텐트', price: 60000, qty: 5, fee: 5000, rate: 30, months: 12, care: 0, note: '단가 추정' },
+    ]),
+    indoorFixed: withIds([
+      { name: '스탠드형 냉난방기', price: 1500000, qty: 7, stage: 1, note: '4계절 기본 냉난방' },
+      { name: '사이트 분전반 + 케이블 릴', price: 41070, qty: 7, stage: 1, note: '누전차단기 포함' },
+      { name: 'ABC 분말 소화기 3.3kg', price: 17900, qty: 7, stage: 1, note: '화기 구역 필수' },
+      { name: '일산화탄소(CO) 경보기', price: 30000, qty: 7, stage: 1, note: '안전 · 단가 추정' },
+      { name: '하이그라운즈 카고박스', price: 57560, qty: 7, stage: 1, note: '수납' },
+      { name: '펜션 비품 (침구 8인분 등)', price: 1000000, qty: 1, stage: 1, note: '추정' },
+      { name: '팝콘 기기', price: 19500, qty: 1, stage: 3, note: '팝콘 판매' },
+      { name: '핸드드립 세트 (그라인더 포함)', price: 59000, qty: 2, stage: 3, note: '커피 체험' },
+      { name: '로스팅 도구', price: 59000, qty: 1, stage: 3, note: '커피 체험' },
+      { name: '207L 냉장고 (바베큐 식자재)', price: 265000, qty: 1, stage: 3, note: '바베큐 패키지' },
+      { name: '낚시 도구 세트', price: 30000, qty: 10, stage: 3, note: '빙어·송어 · 추정' },
+      { name: '송어 잡기 간이 수조·그물', price: 1000000, qty: 1, stage: 3, note: '동절기 · 추정' },
+    ]),
+    indoorRental: withIds([
+      { name: '팬히터 (전기·안전형)', price: 403200, qty: 4, fee: 20000, rate: 60, months: 5, care: 4000, note: '11~3월 · 신일 SFH-CC910MVP 가격' },
+      { name: '포레바 자충매트리스 (더블)', price: 169000, qty: 10, fee: 7500, rate: 30, months: 12, care: 3000, note: '2인용' },
+      { name: '블랙독 침낭', price: 25800, qty: 24, fee: 2500, rate: 25, months: 12, care: 2000, note: '세탁 순환분 포함' },
+      { name: '로티캠프 로우체어', price: 99800, qty: 20, fee: 2500, rate: 30, months: 12, care: 0, note: '' },
+      { name: '빈슨메시프 롤테이블', price: 45400, qty: 5, fee: 5000, rate: 30, months: 12, care: 0, note: '4인용' },
+      { name: '207L 냉장고', price: 265000, qty: 2, fee: 10000, rate: 30, months: 12, care: 0, note: '' },
+      { name: '버너 세트 (스토브·그리들·키친툴)', price: 105940, qty: 5, fee: 10000, rate: 30, months: 12, care: 3000, note: '부탄가스 포함' },
+    ]),
+    labor: withIds([
+      { name: '메인 매니저 (평일·주말 상주)', amount: 2500000, cycle: '월', note: '200~250만원 중 상한' },
+      { name: '주말 보조 알바 2명', amount: 1500000, cycle: '월', note: '시급 10,320원 × 2명 × 금·토 약 8.5시간' },
+    ]),
+    rent: withIds([
+      { name: '임대료 · 지대', amount: 2500000, cycle: '월', note: '' },
+    ]),
+    utility: withIds([
+      { name: '전기 · 수도 · 가스', amount: 1500000, cycle: '월', note: '냉난방기 상시 가동' },
+    ]),
+    misc: withIds([
+      { name: '저수조 청소', amount: 110000, cycle: '연', note: '' },
+      { name: '방역 · 소독', amount: 100000, cycle: '월', note: '월 1회' },
+      { name: '정화조 청소 · 수질검사', amount: 420000, cycle: '연', note: '추정' },
+      { name: '쓰레기 · 음식물 처리', amount: 300000, cycle: '월', note: '' },
+      { name: '공용 소모품', amount: 200000, cycle: '월', note: '화장실·샤워장 휴지·세제' },
+      { name: '시설 수선 · 유지보수', amount: 200000, cycle: '월', note: '' },
+      { name: '야영장 배상책임 · 화재보험', amount: 1200000, cycle: '연', note: '의무 가입' },
+      { name: '통신 · 인터넷 · CCTV', amount: 100000, cycle: '월', note: '' },
+      { name: '예초 · 조경 관리', amount: 50000, cycle: '월', note: '' },
+      { name: '소방시설 점검', amount: 300000, cycle: '연', note: '' },
+      { name: '온라인 홍보 · 광고', amount: 200000, cycle: '월', note: '' },
+    ]),
+    programs: withIds([
+      { name: '바베큐 패키지 (4인)', icon: '🍖', price: 80000, uptake: 20, perTeam: 1, unit: '팀', costRate: 60, months: 12 },
+      { name: '커피 만들기 체험', icon: '☕', price: 15000, uptake: 15, perTeam: 2, unit: '명', costRate: 30, months: 12 },
+      { name: '팝콘 판매', icon: '🍿', price: 3000, uptake: 100, perTeam: 1, unit: '봉', costRate: 35, months: 12 },
+      { name: '빙어 · 송어 잡기', icon: '🎣', price: 20000, uptake: 30, perTeam: 3, unit: '명', costRate: 50, months: 3 },
+    ]),
+  };
+}
+
+/* ═══════════════════════ 상태 저장 ═══════════════════════ */
+let state, texts = {}, decision = { pick: null, at: null };
+function load() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; return; }
+  } catch (e) {}
+  state = makeDefault();
+}
+let saveTimer;
+function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ state, texts, decision })); } catch (e) {}
+  }, 250);
+}
+
+/* ═══════════════════════ 포맷 ═══════════════════════ */
+const fmt = n => Math.round(n).toLocaleString('ko-KR');
+const won = n => fmt(n) + '원';
+function man(n) {
+  const neg = n < 0, a = Math.abs(n);
+  let s;
+  if (a >= 1e8) s = (a / 1e8).toFixed(2).replace(/\.?0+$/, '') + '억원';
+  else if (a >= 1e4) s = Math.round(a / 1e4).toLocaleString('ko-KR') + '만원';
+  else s = fmt(a) + '원';
+  return (neg ? '−' : '') + s;
+}
+const pct = (n, d = 0) => (isFinite(n) ? n.toFixed(d) : '-') + '%';
+const num = v => { const x = Number(String(v).replace(/[^\d.\-]/g, '')); return isFinite(x) ? x : 0; };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function monthsTxt(m) {
+  if (!isFinite(m) || m <= 0) return '회수 불가';
+  if (m < 24) return `${m.toFixed(1)}개월`;
+  const t = Math.round(m), y = Math.floor(t / 12), r = t % 12;
+  return `${t}개월 (${y}년${r ? ` ${r}개월` : ''})`;
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ═══════════════════════ 계산 엔진 ═══════════════════════ */
+const SEASON_ORDER = [1, 12, 2, 11, 3, 10, 4, 9, 5, 8, 6, 7];
+const seasonSet = m => new Set(SEASON_ORDER.slice(0, clamp(Math.round(m), 0, 12)));
+const monthlyOf = it => it.cycle === '연' ? num(it.amount) / 12 : num(it.amount);
+
+const LISTS = ['rooms', 'construction', 'outdoorFixed', 'outdoorRental', 'indoorFixed', 'indoorRental', 'labor', 'rent', 'utility', 'misc', 'programs'];
+const activeOf = s => { const o = { ...s }; LISTS.forEach(k => { o[k] = (s[k] || []).filter(i => i.on !== false); }); return o; };
+let VIEW;
+
+function calc(src, ov = {}) {
+  const s = activeOf(src);
+  const m = { ...s.meta, ...ov };
+  const B = 1 + num(m.buffer) / 100;
+  const nWe = ov.continuous ? m.weekendDays * m.weekendRate / 100 : Math.round(m.weekendDays * m.weekendRate / 100);
+  const nWd = ov.continuous ? m.weekdayDays * m.weekdayRate / 100 : Math.round(m.weekdayDays * m.weekdayRate / 100);
+  const nights = nWe + nWd;
+  const units = s.rooms.length;
+  const unitNights = units * nights;
+  const pensionCount = s.rooms.filter(r => r.kind === '펜션').length;
+  const zoneCount = units - pensionCount;
+
+  const roomMap = {};
+  let lodging = 0;
+  s.rooms.forEach(r => { const v = num(r.wd) * nWd + num(r.we) * nWe; roomMap[r.id] = v; lodging += v; });
+  const lodgingVarBase = zoneCount * nights * num(m.zoneClean) + pensionCount * nights * num(m.pensionClean);
+
+  const monthRev = Array(12).fill(0), monthVar = Array(12).fill(0);
+  const spread = (amount, months, arr) => {
+    const set = seasonSet(months); if (!set.size) return;
+    for (let i = 1; i <= 12; i++) if (set.has(i)) arr[i - 1] += amount / set.size;
+  };
+  spread(lodging, 12, monthRev); spread(lodgingVarBase * B, 12, monthVar);
+
+  const rentalAll = [...s.outdoorRental.map(x => ({ ...x, cat: '외부' })), ...s.indoorRental.map(x => ({ ...x, cat: '내부' }))];
+  const rentalMap = {};
+  let rentalRev = 0, rentalCare = 0;
+  rentalAll.forEach(it => {
+    const count = num(it.qty) * nights * num(it.rate) / 100 * clamp(num(it.months), 0, 12) / 12;
+    const rev = count * num(it.fee), care = count * num(it.care);
+    rentalMap[it.id] = { count, rev, care, invest: num(it.price) * num(it.qty) };
+    rentalRev += rev; rentalCare += care;
+    const loss = rev * num(m.lossRate) / 100;
+    spread(rev, it.months, monthRev); spread((care + loss) * B, it.months, monthVar);
+  });
+  const rentalLoss = rentalRev * num(m.lossRate) / 100;
+  const rentalVarBase = rentalCare + rentalLoss;
+
+  const progMap = {};
+  let expRev = 0, expVarBase = 0;
+  s.programs.forEach(p => {
+    const qty = unitNights * clamp(num(p.months), 0, 12) / 12 * num(p.uptake) / 100 * num(p.perTeam);
+    const rev = qty * num(p.price), cost = rev * num(p.costRate) / 100;
+    progMap[p.id] = { qty, rev, cost };
+    expRev += rev; expVarBase += cost;
+    spread(rev, p.months, monthRev); spread(cost * B, p.months, monthVar);
+  });
+
+  const sumInv = arr => arr.reduce((a, it) => a + num(it.price) * num(it.qty), 0);
+  const inv = {
+    construction: sumInv(s.construction), outdoorFixed: sumInv(s.outdoorFixed), outdoorRental: sumInv(s.outdoorRental),
+    indoorFixed: sumInv(s.indoorFixed), indoorRental: sumInv(s.indoorRental),
+  };
+  const investBase = Object.values(inv).reduce((a, b) => a + b, 0);
+  const investBuffer = investBase * (B - 1);
+  const investTotal = investBase + investBuffer;
+  const stage3Fixed = [...s.construction, ...s.outdoorFixed, ...s.indoorFixed].filter(i => Number(i.stage) === 3)
+    .reduce((a, it) => a + num(it.price) * num(it.qty), 0);
+  const rentalInvest = inv.outdoorRental + inv.indoorRental;
+  const stage1Invest = (investBase - rentalInvest - stage3Fixed) * B;
+  const stage2Invest = rentalInvest * B;
+  const stage3Invest = stage3Fixed * B;
+
+  const sumM = arr => arr.reduce((a, it) => a + monthlyOf(it), 0);
+  const fixedM = {
+    labor: sumM(s.labor) * (m.bufferLabor ? B : 1),
+    rent: sumM(s.rent) * B, utility: sumM(s.utility) * B, misc: sumM(s.misc) * B,
+  };
+  const fixedMonthly = fixedM.labor + fixedM.rent + fixedM.utility + fixedM.misc;
+  const fixedAnnual = fixedMonthly * 12;
+  const lodgingVar = lodgingVarBase * B, rentalVar = rentalVarBase * B, expVar = expVarBase * B;
+  const varAnnual = lodgingVar + rentalVar + expVar;
+  const revenue = lodging + rentalRev + expRev;
+  const expense = fixedAnnual + varAnnual;
+  const profit = revenue - expense;
+  const payback = profit > 0 ? investTotal / profit * 12 : Infinity;
+
+  const monthProfit = monthRev.map((r, i) => r - monthVar[i] - fixedMonthly);
+  const stage1Profit = lodging - lodgingVar - fixedAnnual;
+  const stage2Add = rentalRev - rentalVar;
+  const stage3Add = expRev - expVar;
+
+  return {
+    S: s, m, B, nWe, nWd, nights, units, unitNights, zoneCount, pensionCount,
+    roomMap, lodging, lodgingVar, rentalMap, rentalRev, rentalVar, rentalLoss, rentalAll, progMap, expRev, expVar,
+    inv, investBase, investBuffer, investTotal, stage1Invest, stage2Invest, stage3Invest,
+    fixedM, fixedMonthly, fixedAnnual, varAnnual, revenue, expense, profit, payback,
+    monthRev, monthVar, monthProfit, stage1Profit, stage2Add, stage3Add,
+  };
+}
+
+function solveWeekend(target) { // 주말 가동률(평일 고정)을 몇 %로 해야 1년 이익 = target 인가
+  const f = x => calc(state, { weekendRate: x, continuous: true }).profit - target;
+  if (f(100) < 0) return Infinity;
+  if (f(0) >= 0) return 0;
+  let lo = 0, hi = 100;
+  for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (f(mid) >= 0) hi = mid; else lo = mid; }
+  return hi;
+}
+
+/* ═══════════════════════ 차트 도우미 ═══════════════════════ */
+function bars(rows, { color = 'var(--brand)', max, fmtV = man, labelW } = {}) {
+  const mx = max ?? Math.max(1, ...rows.map(r => Math.abs(r.v)));
+  return rows.map(r => `<div class="bar-row"${labelW ? ` style="grid-template-columns:${labelW}px 1fr 110px"` : ''}>
+    <div class="lbl" title="${esc(r.label)}">${r.label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${clamp(Math.abs(r.v) / mx * 100, 0, 100)}%;background:${r.color || color}"></div></div>
+    <div class="val" style="${r.v < 0 ? 'color:var(--bad)' : ''}">${fmtV(r.v)}</div></div>`).join('');
+}
+function dualBars(rows, max) {
+  const mx = max ?? Math.max(1, ...rows.flatMap(r => [r.a, r.b]));
+  return rows.map(r => `<div class="bar-row" style="grid-template-columns:200px 1fr 150px">
+    <div class="lbl" title="${esc(r.label)}">${esc(r.label)}</div>
+    <div><div class="bar-track" style="height:10px;margin-bottom:3px"><div class="bar-fill" style="width:${r.a / mx * 100}%;background:#cbd5e1"></div></div>
+      <div class="bar-track" style="height:10px"><div class="bar-fill" style="width:${r.b / mx * 100}%;background:var(--s2)"></div></div></div>
+    <div class="val small">${r.right}</div></div>`).join('');
+}
+function stackBar(parts) {
+  const total = parts.reduce((a, p) => a + Math.max(0, p.v), 0) || 1;
+  return `<div class="stack">${parts.map(p => `<div style="width:${Math.max(0, p.v) / total * 100}%;background:${p.color}" title="${esc(p.label)} ${man(p.v)}">${p.v / total > .09 ? Math.round(p.v / total * 100) + '%' : ''}</div>`).join('')}</div>
+    <div class="legend">${parts.map(p => `<span><i style="background:${p.color}"></i>${p.label} <b>${man(p.v)}</b></span>`).join('')}</div>`;
+}
+function gauge(value, max, { color = 'var(--brand)', marks = [] } = {}) {
+  return `<div class="gauge"><div class="fill" style="width:${clamp(value / max * 100, 0, 100)}%;background:${color}"></div>
+    ${marks.map(mk => `<div class="mark ${mk.pos || 'top'}" style="left:${clamp(mk.v / max * 100, 0, 100)}%;background:${mk.color || 'var(--ink)'}"><span style="color:${mk.color || 'var(--ink)'}">${mk.label}</span></div>`).join('')}</div>`;
+}
+function columnChart(series, labels, { h = 230, w = 760, colors, zeroLine = false } = {}) {
+  const W = w, H = h, pad = { l: 56, r: 10, t: 14, b: 28 };
+  const all = series.flat();
+  const maxV = Math.max(0, ...all), minV = Math.min(0, ...all);
+  const span = (maxV - minV) || 1;
+  const y = v => pad.t + (maxV - v) / span * (H - pad.t - pad.b);
+  const n = labels.length, gw = (W - pad.l - pad.r) / n, bw = Math.min(26, gw / (series.length + 1));
+  let g = '';
+  for (let k = 0; k <= 4; k++) {
+    const v = minV + span * k / 4;
+    g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="#eef2f7"/><text x="${pad.l - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end" fill="#94a3b8">${man(v).replace('원', '')}</text>`;
+  }
+  labels.forEach((lb, i) => {
+    series.forEach((s, j) => {
+      const v = s[i], x = pad.l + gw * i + (gw - bw * series.length) / 2 + bw * j;
+      const top = Math.min(y(v), y(0)), hh = Math.abs(y(v) - y(0));
+      const c = typeof colors[j] === 'function' ? colors[j](v) : colors[j];
+      g += `<rect x="${x}" y="${top}" width="${bw - 2}" height="${Math.max(hh, .5)}" rx="3" fill="${c}"><title>${lb} ${man(v)}</title></rect>`;
+    });
+    g += `<text x="${pad.l + gw * i + gw / 2}" y="${H - 8}" font-size="11.5" text-anchor="middle" fill="#64748b">${lb}</text>`;
+  });
+  if (zeroLine) g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(0)}" y2="${y(0)}" stroke="#0f172a" stroke-width="1.2"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${g}</svg>`;
+}
+function lineChart(values, { h = 260, marker } = {}) {
+  const W = 760, H = h, pad = { l: 64, r: 16, t: 18, b: 30 };
+  const maxV = Math.max(0, ...values), minV = Math.min(0, ...values), span = (maxV - minV) || 1;
+  const x = i => pad.l + i / (values.length - 1) * (W - pad.l - pad.r);
+  const y = v => pad.t + (maxV - v) / span * (H - pad.t - pad.b);
+  let g = '';
+  for (let k = 0; k <= 4; k++) {
+    const v = minV + span * k / 4;
+    g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="#eef2f7"/><text x="${pad.l - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end" fill="#94a3b8">${man(v).replace('원', '')}</text>`;
+  }
+  for (let yr = 0; yr <= 5; yr++) {
+    const i = yr * 12; if (i >= values.length) break;
+    g += `<line x1="${x(i)}" x2="${x(i)}" y1="${pad.t}" y2="${H - pad.b}" stroke="#f1f5f9"/><text x="${x(i)}" y="${H - 10}" font-size="11.5" text-anchor="middle" fill="#64748b">${yr === 0 ? '시작' : yr + '년'}</text>`;
+  }
+  const pts = values.map((v, i) => `${x(i)},${y(v)}`).join(' ');
+  const area = `${x(0)},${y(0)} ${pts} ${x(values.length - 1)},${y(0)}`;
+  g += `<clipPath id="cpPos"><rect x="0" y="0" width="${W}" height="${y(0)}"/></clipPath><clipPath id="cpNeg"><rect x="0" y="${y(0)}" width="${W}" height="${H}"/></clipPath>`;
+  g += `<polygon points="${area}" fill="rgba(22,163,74,.15)" clip-path="url(#cpPos)"/><polygon points="${area}" fill="rgba(220,38,38,.12)" clip-path="url(#cpNeg)"/>`;
+  g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(0)}" y2="${y(0)}" stroke="#0f172a" stroke-width="1.2"/><text x="${W - pad.r}" y="${y(0) - 6}" font-size="11.5" text-anchor="end" font-weight="700" fill="#0f172a">본전 (0원)</text>`;
+  g += `<polyline points="${pts}" fill="none" stroke="#0f766e" stroke-width="3" stroke-linejoin="round"/>`;
+  if (marker != null && marker < values.length) {
+    g += `<circle cx="${x(marker)}" cy="${y(values[marker])}" r="7" fill="#16a34a" stroke="#fff" stroke-width="3"/>
+      <text x="${x(marker)}" y="${y(values[marker]) - 14}" font-size="13" text-anchor="middle" font-weight="800" fill="#166534">${marker}개월째 본전!</text>`;
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block">${g}</svg>`;
+}
+
+/* ═══════════════════════ 컨트롤 패널 (표 편집) ═══════════════════════ */
+const SCHEMA = {
+  fixed: [
+    { f: 'name', label: '품목', type: 'text', cls: 'w-name' }, { f: 'price', label: '단가 (원)', type: 'num', cls: 'w-l' },
+    { f: 'qty', label: '수량', type: 'qty' }, { calc: 'amount', label: '금액' },
+    { f: 'stage', label: '용도', type: 'stage' }, { f: 'note', label: '메모', type: 'text', cls: 'w-note' },
+  ],
+  rental: [
+    { f: 'name', label: '품목', type: 'text', cls: 'w-name' }, { f: 'price', label: '단가 (원)', type: 'num', cls: 'w-m' },
+    { f: 'qty', label: '수량', type: 'qty' }, { calc: 'amount', label: '구입비' },
+    { f: 'fee', label: '1박 대여료', type: 'num', cls: 'w-m' }, { f: 'rate', label: '대여율 %', type: 'num', cls: 'w-s' },
+    { f: 'months', label: '운영 개월', type: 'num', cls: 'w-s' }, { f: 'care', label: '1회 관리비', type: 'num', cls: 'w-s' },
+    { calc: 'rentRev', label: '1년 대여 수익' },
+  ],
+  monthly: [
+    { f: 'name', label: '항목', type: 'text', cls: 'w-name' }, { f: 'amount', label: '금액 (원)', type: 'num', cls: 'w-l' },
+    { f: 'cycle', label: '주기', type: 'cycle' }, { calc: 'perMonth', label: '월 환산' }, { calc: 'perMonthAdj', label: '여유분 포함 월' },
+    { f: 'note', label: '메모', type: 'text', cls: 'w-note' },
+  ],
+  program: [
+    { f: 'icon', label: '', type: 'text', cls: 'w-s' }, { f: 'name', label: '프로그램', type: 'text', cls: 'w-name' },
+    { f: 'price', label: '단가 (원)', type: 'num', cls: 'w-m' }, { f: 'uptake', label: '참여 팀 %', type: 'num', cls: 'w-s' },
+    { f: 'perTeam', label: '팀당 수량', type: 'num', cls: 'w-s' }, { f: 'unit', label: '단위', type: 'text', cls: 'w-s' },
+    { f: 'costRate', label: '재료비 %', type: 'num', cls: 'w-s' }, { f: 'months', label: '운영 개월', type: 'num', cls: 'w-s' },
+    { calc: 'progRev', label: '1년 매출' },
+  ],
+  rooms: [
+    { f: 'name', label: '객실', type: 'text', cls: 'w-m' }, { f: 'kind', label: '종류', type: 'kind' },
+    { f: 'cap', label: '정원', type: 'num', cls: 'w-s' }, { f: 'wd', label: '평일 1박', type: 'num', cls: 'w-m' },
+    { f: 'we', label: '주말 1박', type: 'num', cls: 'w-m' }, { calc: 'roomRev', label: '1년 매출' },
+  ],
+};
+const NEW_ITEM = {
+  fixed: () => ({ id: uid(), name: '새 품목', price: 0, qty: 1, stage: 1, note: '' }),
+  rental: () => ({ id: uid(), name: '새 대여 상품', price: 0, qty: 1, fee: 10000, rate: 30, months: 12, care: 0, note: '' }),
+  monthly: () => ({ id: uid(), name: '새 항목', amount: 0, cycle: '월', note: '' }),
+  program: () => ({ id: uid(), icon: '✨', name: '새 프로그램', price: 10000, uptake: 10, perTeam: 1, unit: '명', costRate: 40, months: 12 }),
+  rooms: () => ({ id: uid(), name: '새 객실', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '' }),
+};
+const TABS = [
+  { key: 'construction', label: '공사비', icon: '🚧', parts: [{ list: 'construction', schema: 'fixed' }], kind: 'invest',
+    desc: '바닥 공사·중장비처럼 시작할 때 한 번 드는 공사 비용' },
+  { key: 'outdoor', label: '외부 시설비', icon: '🏕', kind: 'invest', desc: '풀타프·울타리·텐트 등 바깥 시설',
+    parts: [{ list: 'outdoorFixed', schema: 'fixed', title: '① 상시 비치 상품', tag: 'fixed', sub: '처음 사는 돈만 들고 대여비는 없음' },
+            { list: 'outdoorRental', schema: 'rental', title: '② 대여 상품', tag: 'rental', sub: '빌려주고 대여비를 받음 → 2단계 수익' }] },
+  { key: 'indoor', label: '내부 장비비', icon: '🛋', kind: 'invest', desc: '풀타프 안 장비·가전·체험 도구',
+    parts: [{ list: 'indoorFixed', schema: 'fixed', title: '① 상시 비치 상품', tag: 'fixed', sub: '처음 사는 돈만 들고 대여비는 없음 · 용도 "체험"은 3단계 장비' },
+            { list: 'indoorRental', schema: 'rental', title: '② 대여 상품', tag: 'rental', sub: '빌려주고 대여비를 받음 → 2단계 수익' }] },
+  { key: 'labor', label: '인건비', icon: '👥', parts: [{ list: 'labor', schema: 'monthly' }], kind: 'monthly', desc: '매니저·알바 월급' },
+  { key: 'rent', label: '월 임대료', icon: '🏠', parts: [{ list: 'rent', schema: 'monthly' }], kind: 'monthly', desc: '땅·시설을 빌리는 돈' },
+  { key: 'utility', label: '운영비', icon: '⚡', parts: [{ list: 'utility', schema: 'monthly' }], kind: 'monthly', desc: '전기·수도·가스 등' },
+  { key: 'misc', label: '잡비', icon: '🧹', parts: [{ list: 'misc', schema: 'monthly' }], kind: 'monthly', desc: '방역·청소·소모품·보험 등 꼭 필요한 자잘한 비용' },
+  { key: 'programs', label: '체험 프로그램', icon: '🎣', parts: [{ list: 'programs', schema: 'program' }], kind: 'program', desc: '3단계 체험·판매 상품' },
+];
+let activeTab = 'construction';
+
+const MOVE = { outdoorFixed: 'outdoorRental', outdoorRental: 'outdoorFixed', indoorFixed: 'indoorRental', indoorRental: 'indoorFixed' };
+const numVal = v => Number.isInteger(num(v)) ? fmt(num(v)) : num(v);
+
+function cellInput(list, it, col) {
+  const v = it[col.f];
+  const base = `data-list="${list}" data-id="${it.id}" data-f="${col.f}"`;
+  if (col.type === 'num') return `<input class="in n ${col.cls || ''}" inputmode="decimal" ${base} value="${numVal(v)}">`;
+  if (col.type === 'qty') return `<span class="stepper"><button type="button" data-step="-1" tabindex="-1">−</button><input class="in n" inputmode="decimal" ${base} value="${numVal(v)}"><button type="button" data-step="1" tabindex="-1">＋</button></span>`;
+  if (col.type === 'stage') return `<select class="in" ${base}><option value="1"${Number(v) !== 3 ? ' selected' : ''}>기본</option><option value="3"${Number(v) === 3 ? ' selected' : ''}>체험(3단계)</option></select>`;
+  if (col.type === 'cycle') return `<select class="in" ${base}><option${v === '월' ? ' selected' : ''}>월</option><option${v === '연' ? ' selected' : ''}>연</option></select>`;
+  if (col.type === 'kind') return `<select class="in" ${base}><option${v === '구역' ? ' selected' : ''}>구역</option><option${v === '펜션' ? ' selected' : ''}>펜션</option></select>`;
+  return `<input class="in ${col.cls || ''}" ${base} value="${esc(v)}" title="${esc(v)}">`;
+}
+const locSelect = (list, id) => `<select class="in loc" data-loc="${list}" data-id="${id}" title="외부 시설 / 내부 장비 바꾸기">
+  <option value="outdoor"${list.startsWith('outdoor') ? ' selected' : ''}>🏕 외부</option><option value="indoor"${list.startsWith('indoor') ? ' selected' : ''}>🛋 내부</option></select>`;
+function tableHTML(list, schemaKey) {
+  const sc = SCHEMA[schemaKey];
+  const hasLoc = !!MOVE[list], span = sc.length + 2 + (hasLoc ? 1 : 0);
+  const rows = state[list].map(it => `<tr class="${it.on === false ? 'off' : ''}" data-row="${it.id}">
+      <td><label class="sw" title="계산에 포함"><input type="checkbox" data-list="${list}" data-id="${it.id}" data-f="on"${it.on !== false ? ' checked' : ''}><span></span></label></td>
+      ${hasLoc ? `<td>${locSelect(list, it.id)}</td>` : ''}
+      ${sc.map(c => c.calc
+        ? `<td class="calc" data-calc="${c.calc}" data-list="${list}" data-id="${it.id}"></td>`
+        : `<td>${cellInput(list, it, c)}</td>`).join('')}
+      <td class="actions">${MOVE[list] ? `<button class="act" data-move="${list}" data-id="${it.id}" title="${list.endsWith('Fixed') ? '대여 상품으로 옮기기' : '상시 비치로 옮기기'}">⇄ ${list.endsWith('Fixed') ? '대여로' : '상시로'}</button>` : ''}<button class="act del" data-del="${list}" data-id="${it.id}" title="이 품목 삭제">삭제</button></td></tr>`).join('');
+  const empty = state[list].length ? '' : `<tr><td colspan="${span}" class="muted small" style="text-align:center;padding:16px">품목이 없습니다. 아래 ＋ 버튼으로 추가하세요.</td></tr>`;
+  return `<table class="ed"><thead><tr><th>포함</th>${hasLoc ? '<th>위치</th>' : ''}${sc.map(c => `<th${c.calc ? ' style="text-align:right;padding-right:10px"' : ''}>${c.label}</th>`).join('')}<th></th></tr></thead><tbody>${rows}${empty}</tbody>
+    <tfoot><tr><td colspan="${span}" data-foot="${list}"></td></tr></tfoot></table>
+    <button class="add" data-add="${list}" data-schema="${schemaKey}">＋ 품목 추가</button>`;
+}
+function renderTabs() {
+  document.getElementById('tabs').innerHTML = TABS.map(t =>
+    `<button class="tab${t.key === activeTab ? ' active' : ''}" data-tab="${t.key}">${t.icon} ${t.label}<small data-tabsum="${t.key}"></small></button>`).join('');
+  const t = TABS.find(x => x.key === activeTab);
+  document.getElementById('tabBody').innerHTML = `<div class="tab-desc"><span class="small muted">${t.desc}</span><span class="sumchips" id="tabChips"></span></div>` +
+    t.parts.map(p => `${p.title ? `<div class="subhead"><span class="tag ${p.tag}">${p.title}</span><span class="muted">${p.sub}</span></div>` : ''}<div class="tablebox">${tableHTML(p.list, p.schema)}</div>`).join('');
+}
+function rerender(list) { list === 'rooms' ? renderRoomsTable() : renderTabs(); renderAll(); save(); }
+const LIST_LABEL = { outdoorFixed: '외부 시설 · ① 상시 비치', outdoorRental: '외부 시설 · ② 대여 상품', indoorFixed: '내부 장비 · ① 상시 비치', indoorRental: '내부 장비 · ② 대여 상품' };
+function moveItem(from, to, id) {
+  const idx = state[from].findIndex(x => x.id === id);
+  if (idx < 0 || !state[to]) return;
+  const [item] = state[from].splice(idx, 1);
+  if (to.endsWith('Rental')) item.fee ??= 10000, item.rate ??= 30, item.months ??= 12, item.care ??= 0;
+  else item.stage ??= 1;
+  state[to].push(item);
+  rerender(from);
+  toast(`'${item.name}' → ${LIST_LABEL[to]}(으)로 옮겼습니다`, '되돌리기', () => {
+    state[to] = state[to].filter(x => x !== item); state[from].splice(idx, 0, item); rerender(from); });
+}
+function renderRoomsTable() { document.getElementById('tblRooms').innerHTML = tableHTML('rooms', 'rooms'); }
+
+function updateCalcCells(R) {
+  document.querySelectorAll('[data-calc]').forEach(td => {
+    const it = (state[td.dataset.list] || []).find(x => x.id === td.dataset.id); if (!it) return;
+    let v = '';
+    switch (td.dataset.calc) {
+      case 'amount': v = man(num(it.price) * num(it.qty)); break;
+      case 'rentRev': v = man(R.rentalMap[it.id]?.rev || 0); break;
+      case 'perMonth': v = man(monthlyOf(it)); break;
+      case 'perMonthAdj': v = man(monthlyOf(it) * (td.dataset.list === 'labor' && !R.m.bufferLabor ? 1 : R.B)); break;
+      case 'progRev': v = man(R.progMap[it.id]?.rev || 0); break;
+      case 'roomRev': v = man(R.roomMap[it.id] || 0); break;
+    }
+    if (td.textContent !== v) {
+      const changed = td.dataset.init === '1';
+      td.textContent = v; td.dataset.init = '1';
+      if (changed) { td.classList.remove('flash'); void td.offsetWidth; td.classList.add('flash'); }
+    }
+  });
+  const chips = document.getElementById('tabChips');
+  if (chips) {
+    const B = R.B, t = activeTab;
+    const c = (k, v) => `<span class="sumchip">${k} <b>${v}</b></span>`;
+    chips.innerHTML =
+      t === 'construction' ? c('공사비', man(R.inv.construction)) + c(`여유분 ${R.m.buffer}% 포함`, man(R.inv.construction * B)) :
+      t === 'outdoor' ? c('상시', man(R.inv.outdoorFixed)) + c('대여', man(R.inv.outdoorRental)) + c('1년 대여 수익', man(sumRent(VIEW.outdoorRental, R))) :
+      t === 'indoor' ? c('상시', man(R.inv.indoorFixed)) + c('대여', man(R.inv.indoorRental)) + c('1년 대여 수익', man(sumRent(VIEW.indoorRental, R))) :
+      t === 'programs' ? c('1년 매출', man(R.expRev)) + c('재료비', man(R.expVar)) :
+      c('월', man(R.fixedM[t])) + c('1년', man(R.fixedM[t] * 12));
+  }
+  const foot = {
+    construction: `합계 ${won(R.inv.construction)} · 여유분 ${R.m.buffer}% 포함 ${man(R.inv.construction * R.B)}`,
+    outdoorFixed: `상시 비치 합계 ${won(R.inv.outdoorFixed)}`,
+    outdoorRental: `대여 상품 구입비 ${won(R.inv.outdoorRental)} · 1년 대여 수익 ${man(sumRent(VIEW.outdoorRental, R))}`,
+    indoorFixed: `상시 비치 합계 ${won(R.inv.indoorFixed)}`,
+    indoorRental: `대여 상품 구입비 ${won(R.inv.indoorRental)} · 1년 대여 수익 ${man(sumRent(VIEW.indoorRental, R))}`,
+    labor: `월 ${won(R.fixedM.labor)} · 1년 ${man(R.fixedM.labor * 12)}`,
+    rent: `월 ${won(R.fixedM.rent)} (여유분 포함) · 1년 ${man(R.fixedM.rent * 12)}`,
+    utility: `월 ${won(R.fixedM.utility)} (여유분 포함) · 1년 ${man(R.fixedM.utility * 12)}`,
+    misc: `월 ${won(R.fixedM.misc)} (여유분 포함) · 1년 ${man(R.fixedM.misc * 12)}`,
+    programs: `1년 체험 매출 ${man(R.expRev)} · 재료비 ${man(R.expVar)} (여유분 포함)`,
+    rooms: `객실 ${R.units}개 × 1년 ${fmt(R.nights)}박 = 숙박 매출 ${man(R.lodging)}`,
+  };
+  document.querySelectorAll('[data-foot]').forEach(td => td.textContent = foot[td.dataset.foot] || '');
+  const tabSum = {
+    construction: man(R.inv.construction), outdoor: man(R.inv.outdoorFixed + R.inv.outdoorRental),
+    indoor: man(R.inv.indoorFixed + R.inv.indoorRental), labor: '월 ' + man(R.fixedM.labor), rent: '월 ' + man(R.fixedM.rent),
+    utility: '월 ' + man(R.fixedM.utility), misc: '월 ' + man(R.fixedM.misc), programs: '연 ' + man(R.expRev),
+  };
+  document.querySelectorAll('[data-tabsum]').forEach(el => el.textContent = tabSum[el.dataset.tabsum]);
+}
+const sumRent = (arr, R) => arr.reduce((a, it) => a + (R.rentalMap[it.id]?.rev || 0), 0);
+
+function syncMetaInputs() {
+  const m = state.meta;
+  document.querySelectorAll('[data-meta]').forEach(el => { if (document.activeElement !== el) el.value = m[el.dataset.meta]; });
+  document.querySelectorAll('[data-out]').forEach(el => el.textContent = m[el.dataset.out] + '%');
+  document.querySelectorAll('[data-meta-num]').forEach(el => { if (document.activeElement !== el) el.value = fmt(m[el.dataset.metaNum]); });
+  document.querySelectorAll('[data-meta-check]').forEach(el => el.checked = !!m[el.dataset.metaCheck]);
+}
+
+/* ═══════════════════════ 슬라이드 렌더링 ═══════════════════════ */
+function verdictOf(R) {
+  if (!isFinite(R.payback)) return { cls: 'bad', label: '재검토', text: '1년에 남는 돈이 없어 본전을 찾을 수 없습니다' };
+  if (R.payback <= 24) return { cls: 'good', label: '추진 검토 가능', text: `약 ${monthsTxt(R.payback)} 만에 본전을 찾습니다` };
+  if (R.payback <= 36) return { cls: 'warn', label: '조건부 검토', text: `본전까지 ${monthsTxt(R.payback)} 걸립니다 (2~3년)` };
+  return { cls: 'bad', label: '재검토', text: `본전까지 ${monthsTxt(R.payback)} 걸립니다 (3년 초과)` };
+}
+
+function renderAll() {
+  const R = calc(state);
+  VIEW = R.S;
+  const V = verdictOf(R);
+  const bepWe = solveWeekend(0);
+  const targetWe = solveWeekend(R.investTotal / (num(state.meta.targetMonths) || 24) * 12);
+  const contrib = R.unitNights > 0 ? (R.revenue - R.varAnnual) / R.unitNights : 0; // 1박 팔 때 남는 돈 (고정비 제외)
+  const avgPrice = R.unitNights > 0 ? R.revenue / R.unitNights : 0;
+  const minNightsMonth = contrib > 0 ? R.fixedMonthly / contrib : Infinity;
+  const daysMonth = 365 / 12, weekendMonth = num(state.meta.weekendDays) / 12;
+  const minOccMonth = minNightsMonth / (R.units * daysMonth) * 100;
+  const minWeekendOnly = minNightsMonth / (R.units * weekendMonth) * 100;
+  const curOcc = R.nights / 365 * 100;
+  const cum = [-R.investTotal];
+  for (let i = 0; i < 60; i++) cum.push(cum[i] + R.monthProfit[i % 12]);
+  const pbMonth = cum.findIndex(v => v >= 0);
+  const X = { R, V, bepWe, targetWe, contrib, avgPrice, minNightsMonth, minOccMonth, minWeekendOnly, curOcc, cum, pbMonth };
+
+  updateCalcCells(R);
+  syncMetaInputs();
+  renderKpi(X); renderOverview(X); renderFlow(X); renderStage1(X); renderStage2(X); renderStage3(X);
+  renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderRisk(X); renderExec(X);
+  buildReport(X);
+}
+
+function kpiCard(cls, icon, k, v, d) { return `<div class="card kpi ${cls}"><div class="k"><span class="ico">${icon}</span>${k}</div><div class="v num">${v}</div><div class="d">${d}</div></div>`; }
+let prevKpi = [];
+function bumpChanged(root) {
+  const vals = [...root.querySelectorAll('.v')];
+  vals.forEach((el, i) => { if (prevKpi.length && prevKpi[i] !== el.textContent) el.classList.add('bump'); });
+  prevKpi = vals.map(el => el.textContent);
+}
+
+function renderKpi({ R, V }) {
+  document.getElementById('kpiStrip').innerHTML =
+    kpiCard('brand', '🏗', '처음 드는 돈', man(R.investTotal), `여유분 ${R.m.buffer}% ${man(R.investBuffer)} 포함`) +
+    kpiCard('rev', '💵', '1년 번 돈 (매출)', man(R.revenue), `숙박 ${man(R.lodging)} · 대여 ${man(R.rentalRev)} · 체험 ${man(R.expRev)}`) +
+    kpiCard('cost', '🧾', '1년 나간 돈 (지출)', man(R.expense), `매달 꼭 ${man(R.fixedMonthly)} · 손님당 ${man(R.varAnnual)}/년`) +
+    kpiCard(R.profit >= 0 ? 'good' : 'cost', '💰', '1년 남는 돈', man(R.profit), `한 달 평균 ${man(R.profit / 12)} · 이익률 ${pct(R.revenue ? R.profit / R.revenue * 100 : 0, 1)}`) +
+    kpiCard('brand', '⏱', '본전 찾는 기간', monthsTxt(R.payback), `객실당 1년 ${fmt(R.nights)}박 판매 기준`) +
+    `<div class="verdict-card ${V.cls}"><div class="small" style="opacity:.85">판정</div><div class="v">${V.label}</div><div class="small">${V.text}</div></div>`;
+  bumpChanged(document.getElementById('kpiStrip'));
+}
+
+function renderOverview({ R }) {
+  const zones = VIEW.rooms.filter(r => r.kind !== '펜션'), pens = VIEW.rooms.filter(r => r.kind === '펜션');
+  const cap = VIEW.rooms.reduce((a, r) => a + num(r.cap), 0);
+  document.getElementById('ovRooms').innerHTML = `<div class="grid g3" style="gap:8px;margin-top:8px">
+    <div><div class="kpi"><div class="v brand" style="color:var(--brand)">${zones.length}</div><div class="d">풀타프 구역</div></div></div>
+    <div><div class="kpi"><div class="v" style="color:var(--brand)">${pens.length}</div><div class="d">펜션 객실</div></div></div>
+    <div><div class="kpi"><div class="v" style="color:var(--brand)">${cap}명</div><div class="d">최대 수용</div></div></div></div>`;
+  const prices = [...new Set(VIEW.rooms.map(r => num(r.we)))].sort((a, b) => a - b);
+  document.getElementById('ovPrice').innerHTML = `<div style="margin-top:8px">${prices.map(p => {
+    const names = VIEW.rooms.filter(r => num(r.we) === p).map(r => r.name).join(' · ');
+    return `<div class="bar-row" style="grid-template-columns:90px 1fr"><b>${man(p)}</b><span class="small muted">${esc(names)}</span></div>`; }).join('')}
+    <div class="small muted">주말 1박 기준 · 객실당 1년 ${fmt(R.nights)}박 판매</div></div>`;
+  document.getElementById('ovStages').innerHTML = stackBar([
+    { label: '① 숙박', v: R.lodging, color: 'var(--s1)' }, { label: '② 대여', v: R.rentalRev, color: 'var(--s2)' }, { label: '③ 체험', v: R.expRev, color: 'var(--s3)' }]);
+}
+
+function renderFlow({ R, V, pbMonth }) {
+  document.getElementById('moneyFlow').innerHTML = `
+    <div class="step"><div class="emoji">🏗</div><div class="small muted">처음 한 번</div><div class="big" style="color:var(--brand)">${man(R.investTotal)}</div><div class="small">시설·장비·공사 + 여유분</div></div>
+    <div class="arrowx">➜</div>
+    <div class="step"><div class="emoji">💵</div><div class="small muted">1년 동안 버는 돈</div><div class="big" style="color:var(--rev)">${man(R.revenue)}</div><div class="small">숙박 + 장비 대여 + 체험</div></div>
+    <div class="arrowx">−</div>
+    <div class="step"><div class="emoji">🧾</div><div class="small muted">1년 동안 나가는 돈</div><div class="big" style="color:var(--cost)">${man(R.expense)}</div><div class="small">월급·임대료·운영비·잡비·재료비</div></div>
+    <div class="arrowx">=</div>
+    <div class="step" style="border-color:${R.profit >= 0 ? '#86efac' : '#fca5a5'};background:${R.profit >= 0 ? '#f0fdf4' : '#fef2f2'}"><div class="emoji">💰</div><div class="small muted">1년에 남는 돈</div><div class="big" style="color:${R.profit >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(R.profit)}</div><div class="small">한 달 평균 ${man(R.profit / 12)}</div></div>`;
+  document.getElementById('whereGo').innerHTML = stackBar([
+    { label: '인건비', v: R.fixedM.labor * 12, color: '#f97316' }, { label: '임대료', v: R.fixedM.rent * 12, color: '#fb923c' },
+    { label: '운영비', v: R.fixedM.utility * 12, color: '#fdba74' }, { label: '잡비', v: R.fixedM.misc * 12, color: '#fed7aa' },
+    { label: '손님당 비용', v: R.varAnnual, color: '#94a3b8' }, { label: '남는 돈', v: Math.max(0, R.profit), color: 'var(--good)' }]) +
+    `<p class="small muted" style="margin-top:10px">1년 번 돈 ${man(R.revenue)}을 100으로 볼 때, 남는 돈은 <b style="color:var(--good)">${pct(R.revenue ? Math.max(0, R.profit) / R.revenue * 100 : 0)}</b>입니다.</p>`;
+  const pb = isFinite(R.payback) ? R.payback : 60;
+  document.getElementById('paybackGauge').innerHTML = `<div class="kpi"><div class="v" style="color:var(--${V.cls})">${monthsTxt(R.payback)}</div><div class="d">${V.text}</div></div>` +
+    gauge(Math.min(pb, 60), 60, { color: `var(--${V.cls})`, marks: [{ v: 24, label: '2년', pos: 'top' }, { v: 36, label: '3년', pos: 'top' }, { v: Math.min(pb, 60), label: '지금', pos: 'bot', color: `var(--${V.cls})` }] });
+}
+
+function renderStage1({ R }) {
+  const avg = R.units ? R.lodging / R.units / Math.max(R.nights, 1) : 0;
+  document.getElementById('lodgeFormula').innerHTML = `
+    <div class="box"><span class="small muted">객실 수</span><b>${R.units}개</b></div><span class="op">×</span>
+    <div class="box"><span class="small muted">평균 1박 요금</span><b>${man(avg)}</b></div><span class="op">×</span>
+    <div class="box"><span class="small muted">객실당 1년 판매</span><b>${fmt(R.nights)}박</b><span class="tiny muted">주말 ${fmt(R.nWe)} + 평일 ${fmt(R.nWd)}</span></div><span class="op">=</span>
+    <div class="box res"><span class="small" style="opacity:.85">1년 숙박 매출</span><b>${man(R.lodging)}</b></div>`;
+  document.getElementById('lodgeBars').innerHTML = bars(VIEW.rooms.map(r => ({
+    label: `${esc(r.name)} <span class="tiny muted">${num(r.cap)}명 · ${man(num(r.we))}</span>`, v: R.roomMap[r.id] || 0,
+    color: r.kind === '펜션' ? '#0ea5e9' : num(r.we) >= 300000 ? '#1d4ed8' : 'var(--s1)' })), { labelW: 190 });
+  const m = state.meta;
+  document.getElementById('lodgeDays').innerHTML = `
+    <div class="small"><b>주말 (금·토)</b> ${m.weekendDays}일 중 <b style="color:var(--s1)">${fmt(R.nWe)}일</b> 손님 (${m.weekendRate}%)</div>
+    ${gauge(R.nWe, m.weekendDays, { color: 'var(--s1)' }).replace('margin: 26px 0 30px', '')}
+    <div class="small" style="margin-top:-10px"><b>평일</b> ${m.weekdayDays}일 중 <b style="color:var(--s1)">${fmt(R.nWd)}일</b> 손님 (${m.weekdayRate}%)</div>
+    ${gauge(R.nWd, m.weekdayDays, { color: '#93c5fd' })}
+    <div class="small muted" style="margin-top:-12px">→ 1년 365일 중 약 <b>${pct(R.nights / 365 * 100)}</b>만 팔아도 되는 보수적인 계획입니다.</div>`;
+}
+
+function renderStage2({ R }) {
+  const inv = (R.inv.outdoorRental + R.inv.indoorRental) * R.B;
+  const net = R.rentalRev - R.rentalVar;
+  document.getElementById('rentFlow').innerHTML = `
+    <div class="step"><div class="emoji">🧳</div><div class="small muted">손님의 고민</div><div style="font-weight:800" contenteditable="true" data-k="s5.f1">"장비가 없어요" "짐이 너무 많아요"</div></div><div class="arrowx">➜</div>
+    <div class="step"><div class="emoji">🎒</div><div class="small muted">대여 장비 구입 (수용 인원 30%)</div><div class="big" style="color:var(--s2)">${man(inv)}</div><div class="small">여유분 포함</div></div><div class="arrowx">➜</div>
+    <div class="step"><div class="emoji">💜</div><div class="small muted">1년 대여 수익</div><div class="big" style="color:var(--s2)">${man(R.rentalRev)}</div><div class="small">세탁·파손 대비 ${man(R.rentalVar)} 제외 시 ${man(net)}</div></div><div class="arrowx">➜</div>
+    <div class="step"><div class="emoji">⏱</div><div class="small muted">대여 장비 본전</div><div class="big" style="color:var(--s2)">${monthsTxt(net > 0 ? inv / net * 12 : Infinity)}</div><div class="small">장비값을 대여비로 메우는 기간</div></div>`;
+  applyTexts(document.getElementById('rentFlow'));
+  const rows = R.rentalAll.map(it => { const x = R.rentalMap[it.id];
+    return { label: it.name, a: x.invest, b: x.rev, right: `${man(x.invest)} → <b style="color:var(--s2)">${man(x.rev)}</b>` }; });
+  document.getElementById('rentBars').innerHTML = rows.length ? dualBars(rows) : '<div class="muted">대여 상품이 없습니다. 대시보드에서 추가하세요.</div>';
+  document.getElementById('fixedSum').innerHTML = `<b>${man((R.inv.outdoorFixed + R.inv.indoorFixed) * R.B)}</b> <span class="small muted">· ${VIEW.outdoorFixed.length + VIEW.indoorFixed.length}개 품목 · 대여 수익 0원</span>`;
+  document.getElementById('rentalSum').innerHTML = `<b style="color:var(--s2)">${man(inv)}</b> <span class="small muted">· ${R.rentalAll.length}개 품목 · 1년 ${man(R.rentalRev)} 수익</span>`;
+}
+
+function renderStage3({ R }) {
+  document.getElementById('progCards').innerHTML = VIEW.programs.map(p => { const x = R.progMap[p.id];
+    return `<div class="card"><div style="font-size:30px">${esc(p.icon || '✨')}</div><h3 style="margin:4px 0">${esc(p.name)}</h3>
+      <div class="small muted">${man(num(p.price))} × 1년 ${fmt(x.qty)}${esc(p.unit)}${num(p.months) < 12 ? ` · ${num(p.months)}개월 운영` : ''}</div>
+      <div class="kpi"><div class="v" style="color:var(--s3);font-size:24px">${man(x.rev)}</div><div class="d">남는 돈 ${man(x.rev - x.cost * R.B)} (재료비 ${num(p.costRate)}%)</div></div></div>`; }).join('');
+  const mx = Math.max(1, ...VIEW.programs.map(p => R.progMap[p.id].rev));
+  document.getElementById('progBars').innerHTML = VIEW.programs.map(p => { const x = R.progMap[p.id], c = x.cost * R.B, n = Math.max(0, x.rev - c);
+    return `<div class="bar-row" style="grid-template-columns:170px 1fr 110px"><div class="lbl">${esc(p.icon || '')} ${esc(p.name)}</div>
+      <div class="bar-track" style="display:flex"><div class="bar-fill" style="width:${n / mx * 100}%;background:var(--s3);border-radius:999px 0 0 999px"></div><div class="bar-fill" style="width:${Math.min(c, x.rev) / mx * 100}%;background:#fbcfe8;border-radius:0 999px 999px 0"></div></div>
+      <div class="val">${man(x.rev)}</div></div>`; }).join('');
+  const net = R.expRev - R.expVar;
+  document.getElementById('progSum').innerHTML = `<table class="exec-table">
+    <tr><td>1년 체험 매출</td><td style="color:var(--s3)">${man(R.expRev)}</td></tr>
+    <tr><td>재료비 (여유분 포함)</td><td>− ${man(R.expVar)}</td></tr>
+    <tr><td>체험으로 남는 돈</td><td style="color:var(--good)">${man(net)}</td></tr>
+    <tr><td>체험 장비 구입비</td><td>${man(R.stage3Invest)}</td></tr>
+    <tr><td>체험 장비 본전</td><td>${monthsTxt(net > 0 ? R.stage3Invest / net * 12 : Infinity)}</td></tr></table>`;
+}
+
+function renderStages({ R }) {
+  const p1 = R.stage1Profit, p2 = p1 + R.stage2Add, p3 = p2 + R.stage3Add;
+  const i1 = R.stage1Invest, i2 = i1 + R.stage2Invest, i3 = i2 + R.stage3Invest;
+  const cols = [
+    { n: '1단계', t: '숙박만', c: 'var(--s1)', rev: R.lodging, profit: p1, inv: i1, add: '기본 매출' },
+    { n: '1+2단계', t: '+ 장비 대여', c: 'var(--s2)', rev: R.lodging + R.rentalRev, profit: p2, inv: i2, add: `+${man(R.stage2Add)} 남는 돈` },
+    { n: '1+2+3단계', t: '+ 체험·콘텐츠', c: 'var(--s3)', rev: R.revenue, profit: p3, inv: i3, add: `+${man(R.stage3Add)} 남는 돈` },
+  ];
+  document.getElementById('stageCols').innerHTML = cols.map(c => `<div class="card" style="border-top:5px solid ${c.c}">
+    <div class="eyebrow" style="color:${c.c}">${c.n}</div><h3 style="margin:2px 0 10px">${c.t}</h3>
+    <table class="exec-table"><tr><td>1년 매출</td><td>${man(c.rev)}</td></tr>
+    <tr><td>1년 남는 돈</td><td style="color:${c.profit >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(c.profit)}</td></tr>
+    <tr><td>처음 드는 돈</td><td>${man(c.inv)}</td></tr>
+    <tr><td>본전 찾는 기간</td><td>${monthsTxt(c.profit > 0 ? c.inv / c.profit * 12 : Infinity)}</td></tr></table>
+    <div class="small" style="margin-top:8px;color:${c.c};font-weight:800">${c.add}</div></div>`).join('');
+  document.getElementById('stageStair').innerHTML = bars([
+    { label: '① 숙박만', v: p1, color: 'var(--s1)' }, { label: '② + 장비 대여', v: p2, color: 'var(--s2)' }, { label: '③ + 체험·콘텐츠', v: p3, color: 'var(--s3)' }],
+    { max: Math.max(1, Math.abs(p1), Math.abs(p2), Math.abs(p3)) }) +
+    `<p class="small muted" style="margin-top:8px">2·3단계가 1년 남는 돈의 <b>${pct(p3 > 0 ? (R.stage2Add + R.stage3Add) / p3 * 100 : 0)}</b>를 만듭니다. ${p1 < 0 ? '<b style="color:var(--bad)">숙박만으로는 적자</b>이므로 2·3단계가 꼭 필요합니다.' : ''}</p>`;
+}
+
+function renderInvest({ R }) {
+  const parts = [
+    { label: '공사비', v: R.inv.construction, color: '#64748b' },
+    { label: '외부 시설 · 상시', v: R.inv.outdoorFixed, color: '#0f766e' },
+    { label: '외부 시설 · 대여', v: R.inv.outdoorRental, color: '#a78bfa' },
+    { label: '내부 장비 · 상시', v: R.inv.indoorFixed, color: '#14b8a6' },
+    { label: '내부 장비 · 대여', v: R.inv.indoorRental, color: '#7c3aed' },
+    { label: `여유분 ${R.m.buffer}%`, v: R.investBuffer, color: '#fbbf24' },
+  ];
+  const tot = R.investTotal || 1;
+  let acc = 0;
+  const grad = parts.map(p => { const a = acc / tot * 360; acc += p.v; return `${p.color} ${a}deg ${acc / tot * 360}deg`; }).join(',');
+  const d = document.getElementById('investDonut');
+  d.style.background = `conic-gradient(${grad})`;
+  d.innerHTML = `<div class="center"><span class="small muted">처음 드는 돈</span><b>${man(R.investTotal)}</b></div>`;
+  document.getElementById('investLegend').innerHTML = parts.map(p => `<div class="bar-row" style="grid-template-columns:16px 1fr 90px 46px;margin:9px 0">
+    <i style="width:14px;height:14px;border-radius:4px;background:${p.color}"></i><span>${p.label}</span><b class="num" style="text-align:right">${man(p.v)}</b><span class="small muted" style="text-align:right">${pct(p.v / tot * 100)}</span></div>`).join('');
+  const all = [
+    ...VIEW.construction.map(i => ({ ...i, g: '공사' })), ...VIEW.outdoorFixed.map(i => ({ ...i, g: '외부·상시' })),
+    ...VIEW.outdoorRental.map(i => ({ ...i, g: '외부·대여' })), ...VIEW.indoorFixed.map(i => ({ ...i, g: '내부·상시' })),
+    ...VIEW.indoorRental.map(i => ({ ...i, g: '내부·대여' }))].map(i => ({ label: `${esc(i.name)} <span class="tiny muted">${i.g}</span>`, v: num(i.price) * num(i.qty) }))
+    .sort((a, b) => b.v - a.v).slice(0, 8);
+  document.getElementById('investTop').innerHTML = bars(all, { color: 'var(--brand)', labelW: 230 });
+  const find = (list, kw) => VIEW[list].find(i => i.name.includes(kw));
+  const exc = find('construction', '포크레인'), dust = VIEW.construction.filter(i => i.name.includes('석분')).reduce((a, i) => a + num(i.price) * num(i.qty), 0);
+  document.getElementById('investNotes').innerHTML = `
+    <div class="card"><h3>🚜 포크레인 ${exc ? man(num(exc.price) * num(exc.qty)) : '-'}</h3><div class="small muted" contenteditable="true" data-k="s8.n1">바닥 정지·석분 포설까지 하루로는 부족합니다. 최소 2~3일 작업을 잡았습니다.</div></div>
+    <div class="card"><h3>🪨 석분 바닥 ${man(dust)}</h3><div class="small muted" contenteditable="true" data-k="s8.n2">파쇄석 위에 고운 석분을 깔고 다져야 텐트 팩이 잘 박히고 바닥이 평평해집니다.</div></div>
+    <div class="card"><h3>🛟 여유분 ${man(R.investBuffer)}</h3><div class="small muted" contenteditable="true" data-k="s8.n3">자재값 상승·추가 공사에 대비한 안전 여유분입니다. 대시보드에서 % 를 바꿀 수 있습니다.</div></div>`;
+  applyTexts(document.getElementById('investNotes'));
+}
+
+function renderCost({ R, contrib, avgPrice }) {
+  const varM = R.varAnnual / 12;
+  document.getElementById('costBars').innerHTML = bars([
+    { label: '👥 인건비', v: R.fixedM.labor, color: '#f97316' }, { label: '🏠 임대료', v: R.fixedM.rent, color: '#fb923c' },
+    { label: '⚡ 운영비 (전기·수도 등)', v: R.fixedM.utility, color: '#fdba74' }, { label: '🧹 잡비', v: R.fixedM.misc, color: '#fed7aa' },
+    { label: '🧺 손님당 비용 (월 평균)', v: varM, color: '#94a3b8' }], { labelW: 190 }) +
+    `<div class="note-box warn small" style="margin-top:12px">매달 꼭 나가는 돈 <b>${man(R.fixedMonthly)}</b> + 손님 올 때마다 드는 돈 월 평균 <b>${man(varM)}</b> = 월 평균 <b>${man(R.fixedMonthly + varM)}</b></div>`;
+  const labels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  document.getElementById('monthChart').innerHTML = columnChart([R.monthRev, R.monthVar.map(v => v + R.fixedMonthly)], labels,
+    { colors: ['#2563eb', '#ea580c'] });
+  document.getElementById('unitEcon').innerHTML = `
+    <div class="card kpi rev"><div class="k">🛏 1박 팔면 받는 돈 (평균)</div><div class="v">${man(avgPrice)}</div><div class="d">숙박 + 대여 + 체험을 객실 1박 기준으로 나눈 값</div></div>
+    <div class="card kpi cost"><div class="k">🧺 1박마다 드는 돈 (평균)</div><div class="v">${man(avgPrice - contrib)}</div><div class="d">청소·세탁·재료비·대여 관리비</div></div>
+    <div class="card kpi good"><div class="k">➕ 1박 팔면 월급·임대료에 보태는 돈</div><div class="v">${man(contrib)}</div><div class="d">이 돈이 한 달에 ${fmt(R.fixedMonthly / Math.max(contrib, 1))}박 모이면 월 고정비를 다 냅니다</div></div>`;
+}
+
+function renderPnl({ R, cum, pbMonth }) {
+  const rows = [
+    ['① 숙박 매출', R.lodging, 'var(--s1)'], ['② 장비 대여 매출', R.rentalRev, 'var(--s2)'], ['③ 체험 매출', R.expRev, 'var(--s3)'],
+    ['= 1년 번 돈', R.revenue, 'var(--rev)', 1],
+    ['− 인건비', -R.fixedM.labor * 12, '#f97316'], ['− 임대료', -R.fixedM.rent * 12, '#fb923c'], ['− 운영비', -R.fixedM.utility * 12, '#fdba74'],
+    ['− 잡비', -R.fixedM.misc * 12, '#fed7aa'], ['− 손님당 비용', -R.varAnnual, '#94a3b8'],
+    ['= 1년 남는 돈', R.profit, R.profit >= 0 ? 'var(--good)' : 'var(--bad)', 1]];
+  const mx = Math.max(1, R.revenue);
+  document.getElementById('pnl').innerHTML = rows.map(([l, v, c, strong]) => `<div class="bar-row" style="grid-template-columns:130px 1fr 100px;${strong ? 'font-weight:900;border-top:1px solid var(--line);padding-top:6px' : ''}">
+    <div>${l}</div><div class="bar-track" style="height:14px"><div class="bar-fill" style="width:${Math.abs(v) / mx * 100}%;background:${c}"></div></div><div class="val" style="color:${v < 0 ? 'var(--cost)' : 'inherit'}">${man(Math.abs(v))}</div></div>`).join('');
+  document.getElementById('cumChart').innerHTML = lineChart(cum, { marker: pbMonth > 0 ? pbMonth : null }) +
+    `<div class="small muted">${pbMonth > 0 ? `시작 후 <b style="color:var(--good)">${pbMonth}개월째</b>에 처음 넣은 돈을 모두 메웁니다. 5년 뒤 통장에 남는 돈은 <b>${man(cum[60])}</b>입니다.` : '<b style="color:var(--bad)">5년 안에 본전을 찾지 못합니다.</b>'}</div>`;
+  let t = `<table class="ed"><thead><tr><th>연차</th><th style="text-align:right">1년 번 돈</th><th style="text-align:right">1년 나간 돈</th><th style="text-align:right">1년 남는 돈</th><th style="text-align:right">남는 돈 누적</th><th style="text-align:right">처음 넣은 돈을 빼면</th></tr></thead><tbody>`;
+  for (let y = 1; y <= 5; y++) { const net = R.profit * y - R.investTotal;
+    t += `<tr><td>${y}년차</td><td class="calc">${man(R.revenue)}</td><td class="calc">${man(R.expense)}</td><td class="calc">${man(R.profit)}</td><td class="calc">${man(R.profit * y)}</td><td class="calc" style="color:${net >= 0 ? 'var(--good)' : 'var(--bad)'}">${net >= 0 ? '+' : ''}${man(net)}</td></tr>`; }
+  document.getElementById('yearTable').innerHTML = t + '</tbody></table>';
+}
+
+function renderRisk({ R, bepWe, targetWe, minNightsMonth, minOccMonth, minWeekendOnly }) {
+  const cur = num(state.meta.weekendRate);
+  const marks = [{ v: cur, label: `지금 ${cur}%`, pos: 'top' }];
+  if (isFinite(bepWe)) marks.push({ v: bepWe, label: `본전 ${bepWe.toFixed(1)}%`, pos: 'bot', color: 'var(--bad)' });
+  if (isFinite(targetWe)) marks.push({ v: targetWe, label: `${state.meta.targetMonths}개월 회수 ${targetWe.toFixed(1)}%`, pos: 'bot', color: 'var(--good)' });
+  const room = isFinite(bepWe) ? cur - bepWe : -Infinity;
+  document.getElementById('riskGauge').innerHTML = gauge(cur, 100, { color: room >= 15 ? 'var(--good)' : room >= 0 ? 'var(--warn)' : 'var(--bad)', marks }) +
+    `<div class="small">${isFinite(bepWe) ? (room >= 0 ? `✅ 주말 손님 비율이 <b>${bepWe.toFixed(1)}%</b> 밑으로 떨어지기 전까지는 손해가 나지 않습니다. 지금보다 <b>${room.toFixed(1)}%p</b> 여유가 있습니다.` : `⚠️ 지금 조건으로는 손해입니다. 주말 손님 비율을 <b>${bepWe.toFixed(1)}%</b> 이상으로 올려야 본전입니다.`) : '⚠️ 주말이 100% 차도 손해입니다. 비용 구조를 다시 봐야 합니다.'} <span class="muted">(평일 ${state.meta.weekdayRate}% 고정)</span></div>`;
+  document.getElementById('defense').innerHTML = `
+    <div class="card kpi cost"><div class="k">🛡 방어선 ① 한 달 최소 판매</div><div class="v">${isFinite(minNightsMonth) ? fmt(Math.ceil(minNightsMonth)) + '박' : '-'}</div><div class="d">객실 ${R.units}개 합계 · 객실당 월 ${isFinite(minNightsMonth) ? (minNightsMonth / R.units).toFixed(1) : '-'}박 · 이보다 적게 팔면 그 달은 적자</div></div>
+    <div class="card kpi cost"><div class="k">🛡 방어선 ② 월 최소 가동률 (전체 날짜 기준)</div><div class="v">${isFinite(minOccMonth) ? pct(minOccMonth, 1) : '-'}</div><div class="d">한 달 모든 날 중 객실이 팔려야 하는 비율 · 지금 계획 ${pct(R.nights / 365 * 100, 1)}</div></div>
+    <div class="card kpi cost"><div class="k">🛡 방어선 ③ 주말만 판다면</div><div class="v">${isFinite(minWeekendOnly) ? (minWeekendOnly > 100 ? '100% 초과' : pct(minWeekendOnly, 1)) : '-'}</div><div class="d">평일 손님이 0명일 때 주말(금·토)에 필요한 최소 가동률</div></div>`;
+  const rates = [30, 40, 50, 60, 70, 80, 90, 100];
+  const profits = rates.map(r => calc(state, { weekendRate: r }).profit);
+  document.getElementById('sensChart').innerHTML = columnChart([profits], rates.map(r => `주말 ${r}%${r === cur ? ' ◀' : ''}`),
+    { colors: [v => v >= 0 ? '#16a34a' : '#dc2626'], zeroLine: true, h: 250, w: 1500 }) +
+    `<div class="tablebox"><table class="ed"><thead><tr><th>주말 손님 비율</th>${rates.map(r => `<th style="text-align:right">${r}%</th>`).join('')}</tr></thead><tbody>
+     <tr><td>1년 남는 돈</td>${profits.map(p => `<td class="calc" style="color:${p >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(p)}</td>`).join('')}</tr>
+     <tr><td>본전 찾는 기간</td>${profits.map(p => `<td class="calc">${monthsTxt(p > 0 ? R.investTotal / p * 12 : Infinity)}</td>`).join('')}</tr></tbody></table></div>`;
+}
+
+function renderExec({ R, V, bepWe, targetWe, minNightsMonth, minOccMonth, minWeekendOnly, curOcc, cum, pbMonth }) {
+  const roi = R.investTotal ? R.profit / R.investTotal * 100 : 0;
+  const bepRevenue = (1 - R.varAnnual / Math.max(R.revenue, 1)) > 0 ? R.fixedAnnual / (1 - R.varAnnual / R.revenue) : Infinity;
+  document.getElementById('execVerdict').innerHTML = `<div class="verdict-card ${V.cls}" style="flex-direction:row;align-items:center;gap:24px;padding:18px 24px">
+    <div><div class="small" style="opacity:.85">종합 판정</div><div class="v" style="font-size:30px">${V.label}</div></div>
+    <div style="flex:1;font-size:16px">처음 <b>${man(R.investTotal)}</b>을 넣어 1년에 <b>${man(R.profit)}</b>이 남고, <b>${monthsTxt(R.payback)}</b> 만에 본전을 찾습니다.
+     주말 손님 비율이 <b>${isFinite(bepWe) ? bepWe.toFixed(1) + '%' : '100% 이상'}</b>까지 떨어져도 손해는 나지 않습니다.</div></div>`;
+  const row = (k, v, c) => `<tr><td>${k}</td><td${c ? ` style="color:${c}"` : ''}>${v}</td></tr>`;
+  document.getElementById('exec1').innerHTML =
+    row('총 투자비 (처음 드는 돈)', man(R.investTotal)) + row('1년 매출', man(R.revenue)) + row('1년 영업이익 (남는 돈)', man(R.profit), R.profit >= 0 ? 'var(--good)' : 'var(--bad)') +
+    row('투자 수익률 ROI (1년)', pct(roi, 1)) + row('투자 회수 기간', monthsTxt(R.payback)) + row('5년 누적 순이익 (투자비 차감)', man(R.profit * 5 - R.investTotal), R.profit * 5 - R.investTotal >= 0 ? 'var(--good)' : 'var(--bad)') +
+    row('5년 ROI', pct(R.investTotal ? (R.profit * 5 - R.investTotal) / R.investTotal * 100 : 0));
+  document.getElementById('exec2').innerHTML =
+    row('본전 1년 매출 (BEP 매출)', isFinite(bepRevenue) ? man(bepRevenue) : '-') + row('지금 계획 대비', isFinite(bepRevenue) ? pct(bepRevenue / R.revenue * 100) + ' 수준' : '-') +
+    row('본전 주말 가동률 (평일 고정)', isFinite(bepWe) ? pct(bepWe, 1) : '100% 초과', 'var(--bad)') + row('지금 주말 가동률', pct(num(state.meta.weekendRate))) +
+    row(`${state.meta.targetMonths}개월 회수에 필요한 주말 가동률`, isFinite(targetWe) ? pct(targetWe, 1) : '100% 초과') +
+    row('객실당 본전 판매 박수 (1년)', isFinite(minNightsMonth) ? fmt(minNightsMonth * 12 / R.units) + '박' : '-');
+  document.getElementById('exec3').innerHTML =
+    row('매달 꼭 나가는 돈', man(R.fixedMonthly)) + row('한 달 최소 판매 (전체 객실)', isFinite(minNightsMonth) ? fmt(Math.ceil(minNightsMonth)) + '박' : '-', 'var(--cost)') +
+    row('월 최소 가동률 (전체 날짜)', isFinite(minOccMonth) ? pct(minOccMonth, 1) : '-', 'var(--cost)') + row('지금 계획 가동률', pct(curOcc, 1)) +
+    row('주말만 팔 때 최소 가동률', isFinite(minWeekendOnly) ? (minWeekendOnly > 100 ? '100% 초과' : pct(minWeekendOnly, 1)) : '-') +
+    row('적자 나는 달', R.monthProfit.filter(v => v < 0).length + '개월');
+  document.querySelectorAll('#decide button').forEach(b => b.classList.toggle('sel', b.dataset.d === decision.pick));
+  document.getElementById('decideStamp').textContent = decision.pick ? `선택: ${{ go: '추진', cond: '조건부 추진', hold: '보류 · 재검토' }[decision.pick]} · ${decision.at}` : '';
+}
+
+/* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
+function buildReport({ R }) {
+  const m = state.meta, PAGES = 6, HYPO = 20;
+  const gc = v => v >= 0 ? 'rp-good' : 'rp-bad';
+  const head = (n, sub) => `<div class="rp-head"><span><b>크루캠 인 양평 몽</b> · ${sub || '숙박 기준 핵심요약'}</span><span>${new Date().toLocaleDateString('ko-KR')} · ${n} / ${PAGES}</span></div>`;
+  const title = (no, t) => `<div class="rp-title"><span class="no">${no}</span><h2>${t}</h2></div>`;
+  const kv = rows => `<table class="rp kv">${rows.map(([k, v, c]) => `<tr><td>${k}</td><td class="${c || ''}">${v}</td></tr>`).join('')}</table>`;
+  const table = (cols, rows, foot) => `<table class="rp"><thead><tr>${cols.map(c => `<th class="${c.r ? 'r' : ''}">${c.t}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(r => `<tr class="${r.cls || ''}">${r.c.map((v, i) => `<td class="${cols[i].r ? 'r' : ''}">${v}</td>`).join('')}</tr>`).join('')}
+    ${foot ? `<tr class="tot">${foot.map((v, i) => `<td class="${cols[i].r ? 'r' : ''}">${v}</td>`).join('')}</tr>` : ''}</tbody></table>`;
+  const disc = (items, lines = 2) => `<div class="rp-disc"><h3>💬 같이 의논할 점</h3><ol>${items.map(i => `<li>${i}</li>`).join('')}</ol>
+    <div class="lines">${Array.from({ length: lines }, (_, i) => `<div>${i === 0 ? '메모' : ''}</div>`).join('')}</div></div>`;
+  const mt = v => monthsTxt(v);
+  const amt = i => num(i.price) * num(i.qty);
+  const fracM = it => clamp(num(it.months ?? 12), 0, 12) / 12;
+  const solveLodge = target => {
+    const f = x => calc(state, { weekendRate: x, continuous: true }).stage1Profit - target;
+    if (f(100) < 0) return Infinity;
+    if (f(0) >= 0) return 0;
+    let lo = 0, hi = 100;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (f(mid) >= 0) hi = mid; else lo = mid; }
+    return hi;
+  };
+
+  const lodgeList = [
+    ...VIEW.construction.map(i => ({ ...i, g: '공사' })),
+    ...VIEW.outdoorFixed.map(i => ({ ...i, g: '바깥 시설' })),
+    ...VIEW.indoorFixed.filter(i => Number(i.stage) !== 3).map(i => ({ ...i, g: '안쪽 장비' })),
+  ];
+  const gSum = g => lodgeList.filter(i => i.g === g).reduce((a, i) => a + amt(i), 0);
+  const lodgeBase = lodgeList.reduce((a, i) => a + amt(i), 0);
+  const mkt = lodgeBase * (R.B - 1);
+  const lodgeInv = lodgeBase + mkt;
+  const costRows = [
+    ['인건비 (매니저·알바 월급)', R.fixedM.labor * 12, m.bufferLabor ? '시세변동 포함' : '시세변동 없음'],
+    ['임대료', R.fixedM.rent * 12, '시세변동 포함'],
+    ['운영비 (전기·수도·가스)', R.fixedM.utility * 12, '시세변동 포함'],
+    ['잡비 (방역·청소·소모품 등)', R.fixedM.misc * 12, '시세변동 포함'],
+    ['청소비 (손님이 올 때마다)', R.lodgingVar, '시세변동 포함'],
+  ];
+  const yearCost = costRows.reduce((a, r) => a + r[1], 0);
+  const yearLeft = R.lodging - yearCost;
+  const pay = yearLeft > 0 ? lodgeInv / yearLeft * 12 : Infinity;
+  const LV = !isFinite(pay) ? { cls: 'bad', label: '숙박만으로는 적자', t: '1년 매출이 1년 비용보다 적습니다. 요금이나 손님 수를 다시 봐야 합니다.' }
+    : pay <= 24 ? { cls: 'good', label: '숙박만으로 진행 검토', t: `처음 ${man(lodgeInv)}을 넣으면 1년에 ${man(yearLeft)}이 남고, ${mt(pay)} 만에 본전입니다.` }
+    : pay <= 36 ? { cls: 'warn', label: '조건을 더 봐야 함', t: `본전까지 ${mt(pay)} 걸립니다. 2~3년입니다.` }
+    : { cls: 'bad', label: '숙박 계획 재검토', t: `본전까지 ${mt(pay)} 걸립니다. 3년이 넘습니다.` };
+  const ex = VIEW.rooms[0];
+  const exTxt = ex ? `${esc(ex.name)}는 주말 ${man(num(ex.we))} × ${fmt(R.nWe)}일 + 평일 ${man(num(ex.wd))} × ${fmt(R.nWd)}일 = <b>${man(R.roomMap[ex.id] || 0)}</b>` : '';
+
+  const rents = R.rentalAll.map(it => {
+    const f = fracM(it);
+    const demand = R.unitNights * HYPO / 100 * f, cap = num(it.qty) * R.nights * f, count = Math.min(demand, cap);
+    const rev = count * num(it.fee), care = count * num(it.care);
+    return { it, count, rev, care, capped: demand > cap + 0.5 };
+  });
+  const rRev = rents.reduce((a, x) => a + x.rev, 0);
+  const rVar = (rents.reduce((a, x) => a + x.care, 0) + rRev * num(m.lossRate) / 100) * R.B;
+  const rNet = rRev - rVar;
+  const rBuy = (R.inv.outdoorRental + R.inv.indoorRental) * R.B;
+  const progs = VIEW.programs.map(p => {
+    const qty = R.unitNights * fracM(p) * HYPO / 100 * num(p.perTeam);
+    const rev = qty * num(p.price), cost = rev * num(p.costRate) / 100 * R.B;
+    return { p, qty, rev, cost, net: rev - cost };
+  });
+  const eRev = progs.reduce((a, x) => a + x.rev, 0);
+  const eCost = progs.reduce((a, x) => a + x.cost, 0);
+  const eNet = eRev - eCost;
+
+  const showRooms = VIEW.rooms.slice(0, 10);
+  const page1 = `<section class="rp-page rp-sum">${head(1)}
+    <div class="rp-verdict ${LV.cls}"><div><div class="lb">판단 기준은 숙박뿐입니다</div><div class="v">${LV.label}</div></div>
+      <div style="font-size:12px">${LV.t} 대여·체험 숫자는 아래쪽 <b>가상 값</b>이라 이 판단에 넣지 않았습니다.</div></div>
+    <div class="rp-steps">
+      <div><b>1. 1년 매출</b>객실 요금 × 손님이 온 날</div>
+      <div><b>2. 1년 비용</b>월급·임대료·운영비·잡비·청소</div>
+      <div><b>3. 1년 남는 돈</b>매출 − 비용</div>
+      <div><b>4. 본전 기간</b>처음 넣는 돈 ÷ 남는 돈 × 12</div></div>
+    <div class="rp-kpis">
+      <div class="rp-kpi"><div class="k">① 처음 넣는 돈</div><div class="v" style="color:#0d7a6f">${man(lodgeInv)}</div><div class="d">숙박 시설만 · 시세변동 ${man(mkt)} 포함</div></div>
+      <div class="rp-kpi"><div class="k">② 1년 매출</div><div class="v" style="color:#2f6bff">${man(R.lodging)}</div><div class="d">객실 ${R.units}개 × 1개당 ${fmt(R.nights)}박</div></div>
+      <div class="rp-kpi"><div class="k">③ 1년 나가는 돈</div><div class="v" style="color:#f06a2a">${man(yearCost)}</div><div class="d">한 달 평균 ${man(yearCost / 12)}</div></div>
+      <div class="rp-kpi"><div class="k">④ 1년 남는 돈</div><div class="v ${gc(yearLeft)}">${man(yearLeft)}</div><div class="d">② − ③</div></div>
+      <div class="rp-kpi"><div class="k">⑤ 본전 (돈 회수)</div><div class="v">${mt(pay)}</div><div class="d">① ÷ ④ × 12개월</div></div></div>
+    <div class="rp-grid2">
+      <div class="rp-box"><h3>② 1년 매출은 이렇게 구했습니다</h3>
+        <div class="rp-mut" style="font-size:9.5px;margin-bottom:3px">주말(금·토) ${m.weekendDays}일 × ${m.weekendRate}% = <b>${fmt(R.nWe)}일</b> · 평일 ${m.weekdayDays}일 × ${m.weekdayRate}% = <b>${fmt(R.nWd)}일</b> · 객실 하나당 <b>${fmt(R.nights)}박</b><br>${exTxt}. 객실 ${R.units}개를 같은 방법으로 더하면 <b>${man(R.lodging)}</b>.</div>
+        ${table([{ t: '객실' }, { t: '주말 1박', r: 1 }, { t: '평일 1박', r: 1 }, { t: '1년 매출', r: 1 }],
+          showRooms.map(r => ({ c: [esc(r.name), won(num(r.we)), won(num(r.wd)), man(R.roomMap[r.id] || 0)] })),
+          ['합계' + (VIEW.rooms.length > showRooms.length ? ` 외 ${VIEW.rooms.length - showRooms.length}` : ''), '', '', man(R.lodging)])}</div>
+      <div class="rp-box"><h3>③ 1년에 나가는 돈</h3>
+        ${table([{ t: '항목' }, { t: '1년', r: 1 }, { t: '시세변동' }],
+          costRows.map(([k, v, n]) => ({ c: [k, man(v), n] })),
+          ['합계', man(yearCost), ''])}
+        <div class="rp-mut" style="font-size:8.7px">시세변동 ${m.buffer}% = 물건값·임대료가 오를 수 있어서 그 비용에 ${m.buffer}%를 더해 둔 값입니다. 인건비는 ${m.bufferLabor ? '포함' : '이미 높은 금액이라 더하지 않았습니다'}.</div></div></div>
+    <div class="rp-box"><h3>① 처음에 한 번 넣는 돈 — 숙박 시설만</h3>
+      ${table([{ t: '공사 (바닥·포크레인)' }, { t: '바깥 시설 (풀타프 등)' }, { t: '안쪽 장비 (냉난방 등)' }, { t: `시세변동 ${m.buffer}%` }, { t: '합계' }],
+        [{ c: [man(gSum('공사')), man(gSum('바깥 시설')), man(gSum('안쪽 장비')), man(mkt), `<b>${man(lodgeInv)}</b>`] }])}
+      <div class="rp-mut" style="font-size:8.7px">대여 장비와 체험 도구 구입비는 여기 넣지 않았습니다. 품목별 금액은 3쪽.</div></div>
+    <div class="rp-side"><h3>참고 · 가상 숫자 <span class="rp-tag">사업을 할지 판단하는 숫자가 아닙니다</span></h3>
+      <div class="rp-mut" style="font-size:9px;margin-bottom:4px">감만 잡으려고, <b>숙박 손님의 ${HYPO}%</b>가 대여 품목마다 빌리고, 체험 항목마다 <b>${HYPO}%</b>가 한다고 <b>가정</b>해 뽑아 본 값입니다. 실제로 정한 목표가 아닙니다.</div>
+      <div class="rp-grid2">
+        <div>${kv([['대여 1년 매출 (가상)', man(rRev)], ['세탁·파손을 빼면', man(rNet), gc(rNet)], ['장비를 사려면 따로', man(rBuy)]])}</div>
+        <div>${kv([['체험 1년 매출 (가상)', man(eRev)], ['재료비를 빼면', man(eNet), gc(eNet)], ['체험 도구를 사려면 따로', man(R.stage3Invest)]])}</div></div>
+      <div class="rp-mut" style="font-size:8.7px">품목별 가상 계산은 5쪽. 이 돈을 사더라도 위 ① 합계에는 더하지 않았습니다.</div></div>
+    <div class="rp-foot">2~6쪽은 위 숫자의 계산 과정입니다. 대시보드 값을 바꾼 뒤 📄 요약 PDF를 다시 누르면 이 표도 바뀝니다. 물가 상승분 중 시세변동 ${m.buffer}% 외에 대출 이자·판매 수수료는 넣지 않았습니다.</div></section>`;
+
+  const page2 = `<section class="rp-page">${head(2, '세부 · 매출 계산')}${title('세부 1', '1년 매출은 객실마다 이렇게 더했습니다')}
+    <p class="rp-lead">계산은 네 칸입니다. <b>주말 1박 요금 × 주말에 손님이 온 날</b> 과 <b>평일 1박 요금 × 평일에 손님이 온 날</b>을 객실마다 구한 뒤 모두 더합니다.</p>
+    <div class="rp-grid3">
+      <div class="rp-box"><h3>주말</h3><div style="font-size:16px;font-weight:900;color:#2f6bff">${fmt(R.nWe)}일</div><div class="rp-mut">1년 주말 ${m.weekendDays}일 × ${m.weekendRate}%</div></div>
+      <div class="rp-box"><h3>평일</h3><div style="font-size:16px;font-weight:900;color:#2f6bff">${fmt(R.nWd)}일</div><div class="rp-mut">1년 평일 ${m.weekdayDays}일 × ${m.weekdayRate}%</div></div>
+      <div class="rp-box"><h3>객실 하나당</h3><div style="font-size:16px;font-weight:900;color:#0d7a6f">${fmt(R.nights)}박</div><div class="rp-mut">365일 중 ${pct(R.nights / 365 * 100)}만 판다고 본 것입니다</div></div></div>
+    <div class="rp-box"><h3>객실별 계산</h3>
+      ${table([{ t: '객실' }, { t: '종류' }, { t: '정원', r: 1 }, { t: '주말 요금 × 날', r: 1 }, { t: '평일 요금 × 날', r: 1 }, { t: '1년 매출', r: 1 }],
+        VIEW.rooms.map(r => ({ c: [esc(r.name), esc(r.kind), num(r.cap) + '명', `${won(num(r.we))} × ${fmt(R.nWe)}`, `${won(num(r.wd))} × ${fmt(R.nWd)}`, `<b>${man(R.roomMap[r.id] || 0)}</b>`] })),
+        ['합계', `${R.units}개`, VIEW.rooms.reduce((a, r) => a + num(r.cap), 0) + '명', '', '', man(R.lodging)])}
+      <div class="rp-mut" style="font-size:9px;margin-top:3px">예) ${exTxt}</div></div>
+    ${disc(['주말 ' + m.weekendRate + '% · 평일 ' + m.weekdayRate + '%가 현실적인가 (주변 캠핑장과 비교)',
+      '요금이 적당한가, 평일을 더 싸게 받을 것인가',
+      '예약 사이트 수수료는 아직 빼지 않았습니다. 빼면 매출이 줄어듭니다'], 2)}</section>`;
+
+  const top = [...lodgeList].sort((a, b) => amt(b) - amt(a));
+  const page3 = `<section class="rp-page">${head(3, '세부 · 처음 넣는 돈')}${title('세부 2', '처음에 넣는 돈 — 숙박에 필요한 것만')}
+    <p class="rp-lead">바닥 공사, 풀타프, 냉난방처럼 <b>잠자리를 팔려면 꼭 사는 것</b>만 모았습니다. 대여로 빌려 줄 장비와 체험 도구는 5쪽에서 따로 봅니다.</p>
+    <div class="rp-box"><h3>묶음별 금액</h3>
+      ${table([{ t: '묶음' }, { t: '품목 수', r: 1 }, { t: '금액', r: 1 }, { t: '시세변동 ' + m.buffer + '% 를 더하면', r: 1 }],
+        [['공사 (바닥·포크레인)', '공사'], ['바깥 시설 (풀타프·울타리 등)', '바깥 시설'], ['안쪽 장비 (냉난방·소화기 등)', '안쪽 장비']].map(([l, g]) => ({ c: [l, lodgeList.filter(i => i.g === g).length + '개', won(gSum(g)), man(gSum(g) * R.B)] })),
+        ['합계', lodgeList.length + '개', won(lodgeBase), man(lodgeInv)])}
+      <div class="rp-mut" style="font-size:9px">시세변동 값 ${man(mkt)} = 지금 금액 ${man(lodgeBase)}의 ${m.buffer}%. 자재값이 오를 때를 대비해 미리 더해 둔 돈입니다.</div></div>
+    <div class="rp-box"><h3>품목별 금액 (큰 것부터)</h3>
+      ${table([{ t: '품목' }, { t: '묶음' }, { t: '단가', r: 1 }, { t: '수량', r: 1 }, { t: '금액', r: 1 }, { t: '메모' }],
+        top.map(i => ({ c: [esc(i.name), i.g, won(num(i.price)), fmt(num(i.qty)), `<b>${man(amt(i))}</b>`, `<span class="rp-mut">${esc(i.note || '')}</span>`] })))}</div>
+    ${disc(['시세변동 ' + m.buffer + '%로 충분한가 (견적이 확정되면 줄일 수 있음)', '풀타프처럼 큰 품목은 견적을 더 받아 볼 것인가', '포크레인 며칠, 바닥(파쇄석·석분) 범위'], 2)}</section>`;
+
+  const monthlyRows = [['인건비', 'labor', !!m.bufferLabor], ['임대료', 'rent', true], ['운영비', 'utility', true], ['잡비', 'misc', true]]
+    .flatMap(([g, k, buf]) => VIEW[k].map((it, idx) => ({ c: [idx === 0 ? g : '', esc(it.name), `${won(num(it.amount))} / ${it.cycle || '월'}`, won(monthlyOf(it)), won(monthlyOf(it) * (buf ? R.B : 1))] })));
+  const cleanBase = R.zoneCount * R.nights * num(m.zoneClean) + R.pensionCount * R.nights * num(m.pensionClean);
+  const page4 = `<section class="rp-page">${head(4, '세부 · 1년 비용과 남는 돈')}${title('세부 3', '1년 동안 나가는 돈과, 그래서 남는 돈')}
+    <div class="rp-grid2" style="grid-template-columns:1.45fr 1fr">
+      <div class="rp-box"><h3>매달 나가는 돈 — 항목별</h3>
+        ${table([{ t: '구분' }, { t: '항목' }, { t: '금액 / 주기', r: 1 }, { t: '시세변동 반영 월', r: 1 }],
+          monthlyRows.map(r => ({ c: [r.c[0], r.c[1], r.c[2], r.c[4]] })),
+          ['', '합계 (청소 제외)', '', won(R.fixedMonthly)])}
+        <div class="rp-mut" style="font-size:8.7px">청소비는 따로입니다. 구역 ${won(num(m.zoneClean))} × ${R.zoneCount}개 × ${fmt(R.nights)}박 + 펜션 ${won(num(m.pensionClean))} × ${R.pensionCount}실 × ${fmt(R.nights)}박 = ${man(cleanBase)}. 시세변동을 더하면 <b>${man(R.lodgingVar)}</b>.</div></div>
+      <div>
+        <div class="rp-box"><h3>1년 손익 (숙박만)</h3>${kv([
+          ['1년 매출', man(R.lodging)], ['− 인건비', man(R.fixedM.labor * 12)], ['− 임대료', man(R.fixedM.rent * 12)],
+          ['− 운영비', man(R.fixedM.utility * 12)], ['− 잡비', man(R.fixedM.misc * 12)], ['− 청소비', man(R.lodgingVar)],
+          ['= 1년 남는 돈', man(yearLeft), gc(yearLeft)], ['처음 넣는 돈', man(lodgeInv)], ['본전', mt(pay)]])}</div>
+        <div class="rp-box"><h3>5년 뒤 (매년 똑같다고 보면)</h3>
+          ${table([{ t: '연차' }, { t: '처음 넣은 돈을 빼면', r: 1 }],
+            [1, 2, 3, 4, 5].map(y => { const n = yearLeft * y - lodgeInv; return { c: [y + '년차', `<span class="${gc(n)}">${n >= 0 ? '+' : ''}${man(n)}</span>`] }; }))}</div>
+      </div></div>
+    ${disc(['매니저 4대보험·퇴직금(월 약 45만원)을 더할 것인가', '임대료 계약 (보증금, 오르는 비율, 기간)', '개업 직후 손님이 적을 때 쓸 돈은 몇 달치인가'], 2)}</section>`;
+
+  const page5 = `<section class="rp-page">${head(5, '세부 · 가상 참고')}${title('참고', '대여 · 체험은 가상 값입니다')}
+    <div class="rp-verdict warn"><div><div class="lb">가정</div><div class="v" style="font-size:15px">손님의 ${HYPO}%만 한다고 본 값</div></div>
+      <div>숙박 손님 <b>${fmt(R.unitNights)}팀</b>(객실 ${R.units}개 × ${fmt(R.nights)}박) 중 <b>${HYPO}%</b>가 대여 품목마다 빌리고, 체험도 항목마다 <b>${HYPO}%</b>가 한다고 가정했습니다. 대시보드에 넣어 둔 대여율·참여율과는 다른, 감을 위한 숫자입니다.</div></div>
+    <div class="rp-grid2">
+      <div class="rp-box"><h3>🎒 대여 — 1년 가상 매출 ${man(rRev)}</h3>
+        ${rents.length ? table([{ t: '위치' }, { t: '품목' }, { t: '1박', r: 1 }, { t: '빌린 횟수', r: 1 }, { t: '1년 매출', r: 1 }],
+          rents.map(x => ({ c: [x.it.cat, esc(x.it.name) + (x.capped ? ' *' : ''), won(num(x.it.fee)), fmt(Math.round(x.count)) + (num(x.it.months) < 12 ? `<span class="rp-mut"> (${num(x.it.months)}개월)</span>` : ''), man(x.rev)] })),
+          ['합계', '', '', '', man(rRev)]) : '<div class="rp-mut">대여 품목이 없습니다.</div>'}
+        <div class="rp-mut" style="font-size:9px">세탁·관리·파손(${m.lossRate}%)을 빼면 <b class="${gc(rNet)}">${man(rNet)}</b>. 장비를 사려면 따로 ${man(rBuy)} (시세변동 포함). ${rents.some(x => x.capped) ? '* 가진 수량보다 많이 빌릴 수 없어 수량에서 잘랐습니다.' : ''}</div></div>
+      <div class="rp-box"><h3>🎣 체험 — 1년 가상 매출 ${man(eRev)}</h3>
+        ${progs.length ? table([{ t: '항목' }, { t: '단가', r: 1 }, { t: '가상 수량', r: 1 }, { t: '1년 매출', r: 1 }, { t: '재료비 빼면', r: 1 }],
+          progs.map(x => ({ c: [esc(x.p.name), won(num(x.p.price)), fmt(Math.round(x.qty)) + esc(x.p.unit), man(x.rev), man(x.net)] })),
+          ['합계', '', '', man(eRev), man(eNet)]) : '<div class="rp-mut">체험 항목이 없습니다.</div>'}
+        <div class="rp-mut" style="font-size:9px">체험 도구를 사려면 따로 ${man(R.stage3Invest)} (시세변동 포함). 재료비 비율은 항목에 넣어 둔 값을 그대로 썼습니다.</div></div></div>
+    <div class="rp-box"><h3>이 가상 값을 실제 계획과 섞지 않는 이유</h3>
+      <div>대여 매출 ${man(rRev)}, 체험 매출 ${man(eRev)}은 <b>손님이 정말 20% 참여할 때</b>의 그림입니다. 1쪽의 처음 넣는 돈 ${man(lodgeInv)}, 1년 남는 돈 ${man(yearLeft)}, 본전 ${mt(pay)}에는 <b>1원도 들어 있지 않습니다.</b> 대여·체험을 하기로 정하면, 장비 구입비(대여 ${man(rBuy)} + 체험 ${man(R.stage3Invest)})를 그때 더해 다시 계산하면 됩니다.</div></div>
+    ${disc(['대여 수량을 지금처럼 둘지, 더 적게 사서 시작할지', '팬히터는 석유식이면 전기식으로 바꿀지 (일산화탄소)', '빙어 체험은 얼음이 어는 곳이 있는지, 식품 판매 신고가 필요한지'], 2)}</section>`;
+
+  const bepLodge = solveLodge(0);
+  const tgt = num(m.targetMonths) || 24;
+  const tgtWe = solveLodge(lodgeInv / tgt * 12);
+  const rates = [30, 40, 50, 60, 70, 80, 90, 100];
+  const sens = rates.map(r => calc(state, { weekendRate: r }).stage1Profit);
+  const perStay = R.unitNights > 0 ? (R.lodging - R.lodgingVar) / R.unitNights : 0;
+  const minNights = perStay > 0 ? R.fixedMonthly / perStay : Infinity;
+  const memo = (document.querySelector('[data-k="s12.memo"]')?.innerText || '').trim();
+  const pick = decision.pick;
+  const page6 = `<section class="rp-page">${head(6, '세부 · 리스크와 결정')}${title('세부 4', '손님이 줄어도 숙박만으로 버틸까')}
+    <p class="rp-lead">아래 표도 <b>숙박만</b> 계산입니다. 평일 손님 비율 ${m.weekdayRate}%는 그대로 두고 주말만 바꿨습니다.</p>
+    <div class="rp-grid3">
+      <div class="rp-box"><h3>본전 줄</h3>${kv([
+        ['지금 주말 손님', pct(num(m.weekendRate))],
+        ['본전이 되는 주말 손님', isFinite(bepLodge) ? pct(bepLodge, 1) : '100%로도 부족', 'rp-bad'],
+        ['지금과의 차이', isFinite(bepLodge) ? (num(m.weekendRate) - bepLodge).toFixed(1) + '%p' : '-'],
+        [tgt + '개월 안에 회수하려면', isFinite(tgtWe) ? '주말 ' + pct(tgtWe, 1) : '주말 100%로도 부족']])}</div>
+      <div class="rp-box"><h3>한 달을 버티는 선</h3>${kv([
+        ['매달 꼭 나가는 돈', man(R.fixedMonthly)],
+        ['1박을 팔면 남는 돈', man(perStay)],
+        ['한 달 최소 판매', isFinite(minNights) ? fmt(Math.ceil(minNights)) + '박' : '-', 'rp-bad'],
+        ['객실 하나당', isFinite(minNights) ? (minNights / Math.max(R.units, 1)).toFixed(1) + '박' : '-']])}
+        <div class="rp-mut" style="font-size:8.7px">이보다 적게 팔면 그 달은 적자입니다.</div></div>
+      <div class="rp-box"><h3>한 줄로</h3>
+        <div style="font-size:12.5px">처음 <b>${man(lodgeInv)}</b> → 1년 매출 <b>${man(R.lodging)}</b> → 비용 <b>${man(yearCost)}</b> → 남는 돈 <b class="${gc(yearLeft)}">${man(yearLeft)}</b> → 본전 <b>${mt(pay)}</b></div></div></div>
+    <div class="rp-box"><h3>주말 손님이 달라지면 (숙박만)</h3>
+      <table class="rp"><thead><tr><th></th>${rates.map(r => `<th class="r" style="${r === num(m.weekendRate) ? 'background:#e7f6f3;color:#0d7a6f' : ''}">${r}%${r === num(m.weekendRate) ? ' 지금' : ''}</th>`).join('')}</tr></thead><tbody>
+        <tr><td>1년 남는 돈</td>${sens.map(p => `<td class="r ${gc(p)}">${man(p)}</td>`).join('')}</tr>
+        <tr><td>본전</td>${sens.map(p => `<td class="r">${p > 0 ? mt(lodgeInv / p * 12) : '회수 불가'}</td>`).join('')}</tr></tbody></table></div>
+    <div class="rp-grid2">
+      ${disc(['주말 ' + m.weekendRate + '%를 채울 방법이 있는가', '시세변동 ' + m.buffer + '%를 유지할지', '대여·체험(5쪽)은 가상임을 기억하고, 하기로 정하면 구입비를 따로 더해 다시 계산'], 2)}
+      <div class="rp-box" style="margin:0"><h3>✅ 결정 (숙박 기준으로)</h3>
+        <div class="rp-check"><span class="${pick === 'go' ? 'on' : ''}">진행</span><span class="${pick === 'cond' ? 'on' : ''}">조건을 달고 진행</span><span class="${pick === 'hold' ? 'on' : ''}">보류</span></div>
+        <div style="border:1px solid #e7e9f0;border-radius:8px;padding:6px 8px;min-height:46px;white-space:pre-wrap">${esc(memo)}</div>
+        <div class="rp-disc" style="border:none;padding:6px 0 0;background:none"><div class="lines"><div>회의 메모</div><div></div></div></div></div></div>
+  </section>`;
+
+  document.getElementById('report').innerHTML = page1 + page2 + page3 + page4 + page5 + page6;
+}
+
+/* ═══════════════════════ 편집 텍스트 ═══════════════════════ */
+const defaultTexts = {};
+function applyTexts(root = document) {
+  root.querySelectorAll('[contenteditable][data-k]').forEach(el => {
+    if (!(el.dataset.k in defaultTexts)) defaultTexts[el.dataset.k] = el.innerHTML;
+    if (texts[el.dataset.k] != null && el.innerHTML !== texts[el.dataset.k]) el.innerHTML = texts[el.dataset.k];
+    el.contentEditable = document.body.classList.contains('editing') ? 'true' : 'false';
+  });
+}
+document.addEventListener('input', e => {
+  const el = e.target.closest && e.target.closest('[data-k]');
+  if (el && el.isContentEditable) { texts[el.dataset.k] = el.innerHTML; save(); }
+});
+
+/* ═══════════════════════ 이벤트 ═══════════════════════ */
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.meta) { state.meta[t.dataset.meta] = num(t.value); renderAll(); save(); return; }
+  if (t.dataset.metaNum) { state.meta[t.dataset.metaNum] = num(t.value); renderAll(); save(); return; }
+  if (t.dataset.list && t.dataset.f && t.type !== 'checkbox') {
+    const it = state[t.dataset.list].find(x => x.id === t.dataset.id); if (!it) return;
+    const isNum = t.classList.contains('n');
+    if (!isNum && t.tagName === 'INPUT') t.title = t.value;
+    it[t.dataset.f] = isNum ? num(t.value) : (t.dataset.f === 'stage' ? Number(t.value) : t.value);
+    renderAll(); save();
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.metaCheck) { state.meta[t.dataset.metaCheck] = t.checked; renderAll(); save(); }
+  if (t.dataset.loc) {
+    const from = t.dataset.loc, to = t.value + from.replace(/^(outdoor|indoor)/, '');
+    if (to !== from) moveItem(from, to, t.dataset.id);
+    return;
+  }
+  if (t.type === 'checkbox' && t.dataset.list && t.dataset.f === 'on') {
+    const it = state[t.dataset.list].find(x => x.id === t.dataset.id); if (!it) return;
+    it.on = t.checked;
+    t.closest('tr').classList.toggle('off', !t.checked);
+    renderAll(); save();
+    toast(`'${it.name}' ${t.checked ? '계산에 다시 포함' : '계산에서 제외'}했습니다`);
+    return;
+  }
+  if (t.tagName === 'SELECT' && t.dataset.list) {
+    const it = state[t.dataset.list].find(x => x.id === t.dataset.id);
+    if (it) { it[t.dataset.f] = t.dataset.f === 'stage' ? Number(t.value) : t.value; renderAll(); save(); }
+  }
+});
+document.addEventListener('focusout', e => {
+  const t = e.target;
+  if (t.classList && t.classList.contains('n') && t.tagName === 'INPUT') {
+    const v = num(t.value); t.value = Number.isInteger(v) ? fmt(v) : v;
+  }
+});
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.step) {
+    const inp = t.parentElement.querySelector('input');
+    inp.value = fmt(Math.max(0, num(inp.value) + Number(t.dataset.step)));
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+    return;
+  }
+  if (t.dataset.tab) { activeTab = t.dataset.tab; renderTabs(); renderAll(); return; }
+  if (t.dataset.add) {
+    state[t.dataset.add].push(NEW_ITEM[t.dataset.schema]());
+    rerender(t.dataset.add);
+    const inputs = document.querySelectorAll(`[data-list="${t.dataset.add}"][data-f="name"]`);
+    const last = inputs[inputs.length - 1]; if (last) { last.focus(); last.select(); }
+    return;
+  }
+  if (t.dataset.del) {
+    const list = t.dataset.del, arr = state[list], idx = arr.findIndex(x => x.id === t.dataset.id);
+    if (idx < 0) return;
+    const [item] = arr.splice(idx, 1);
+    rerender(list);
+    toast(`'${item.name}' 삭제했습니다`, '되돌리기', () => { state[list].splice(Math.min(idx, state[list].length), 0, item); rerender(list); });
+    return;
+  }
+  if (t.dataset.move) { moveItem(t.dataset.move, MOVE[t.dataset.move], t.dataset.id); return; }
+  if (t.dataset.d) {
+    decision = { pick: t.dataset.d, at: new Date().toLocaleString('ko-KR') };
+    renderAll(); save(); return;
+  }
+});
+
+/* 상단 버튼 */
+let toastTimer;
+function toast(msg, actionLabel, action) {
+  const el = document.getElementById('toast');
+  el.innerHTML = `<span>${esc(msg)}</span>${actionLabel ? `<button type="button">${actionLabel}</button>` : ''}`;
+  if (actionLabel) el.querySelector('button').onclick = () => { el.classList.remove('show'); action(); };
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), actionLabel ? 5000 : 1800);
+}
+document.getElementById('btnDash').onclick = () => go(0);
+document.getElementById('btnReport').onclick = () => { renderAll(); toast("인쇄 창에서 대상을 'PDF로 저장'으로 고르세요"); setTimeout(() => window.print(), 300); };
+window.addEventListener('beforeprint', renderAll);
+document.getElementById('btnEdit').onclick = e => {
+  document.body.classList.toggle('editing');
+  const on = document.body.classList.contains('editing');
+  e.currentTarget.classList.toggle('on', on); e.currentTarget.textContent = on ? '✏️ 편집 ON' : '✏️ 편집 OFF';
+  applyTexts();
+};
+document.getElementById('btnReset').onclick = () => {
+  if (!confirm('숫자와 글씨를 모두 PDF 기본값으로 되돌릴까요?')) return;
+  state = makeDefault(); texts = {}; decision = { pick: null, at: null };
+  document.querySelectorAll('[contenteditable][data-k]').forEach(el => { if (defaultTexts[el.dataset.k] != null) el.innerHTML = defaultTexts[el.dataset.k]; });
+  renderRoomsTable(); renderTabs(); renderAll(); save(); toast('기본값으로 되돌렸습니다');
+};
+document.getElementById('btnExport').onclick = () => {
+  const blob = new Blob([JSON.stringify({ state, texts, decision }, null, 1)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `크루캠_시뮬레이션_${new Date().toISOString().slice(0, 10)}.json`; a.click(); URL.revokeObjectURL(a.href);
+  toast('저장 파일을 내려받았습니다');
+};
+document.getElementById('btnImport').onclick = () => document.getElementById('fileIn').click();
+document.getElementById('fileIn').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try { const d = JSON.parse(rd.result); if (!d.state) throw 0; state = d.state; texts = d.texts || {}; decision = d.decision || { pick: null, at: null };
+      applyTexts(); renderRoomsTable(); renderTabs(); renderAll(); save(); toast('불러오기 완료'); }
+    catch (err) { alert('올바른 저장 파일이 아닙니다.'); }
+  };
+  rd.readAsText(f); e.target.value = '';
+};
+document.getElementById('btnFull').onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+
+/* ═══════════════════════ 슬라이드 이동 ═══════════════════════ */
+const slides = [...document.querySelectorAll('.slide')];
+let cur = 0;
+function go(i) {
+  cur = clamp(i, 0, slides.length - 1);
+  slides.forEach((s, k) => { s.classList.toggle('active', k === cur); s.classList.toggle('prev', k < cur); });
+  document.querySelectorAll('.dot').forEach((d, k) => d.classList.toggle('active', k === cur));
+  document.getElementById('pageno').textContent = `${cur + 1} / ${slides.length}`;
+  document.getElementById('prog').style.width = `${(cur + 1) / slides.length * 100}%`;
+  document.getElementById('crumb').textContent = `전수창업 운영 시뮬레이션 · ${slides[cur].dataset.title}`;
+  if (location.hash !== '#' + (cur + 1)) history.replaceState(null, '', '#' + (cur + 1));
+}
+document.getElementById('dots').innerHTML = slides.map((s, i) => `<button class="dot" data-go="${i}" title="${s.dataset.title}"><span class="n">${i + 1}</span><span class="t">${s.dataset.title}</span></button>`).join('');
+document.getElementById('dots').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(Number(b.dataset.go)); });
+document.getElementById('prev').onclick = () => go(cur - 1);
+document.getElementById('next').onclick = () => go(cur + 1);
+document.addEventListener('keydown', e => {
+  const a = document.activeElement;
+  if (a && (a.isContentEditable || ['INPUT', 'SELECT', 'TEXTAREA'].includes(a.tagName))) return;
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+  else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End') go(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') document.getElementById('btnFull').click();
+});
+
+/* ═══════════════════════ 시작 ═══════════════════════ */
+load();
+applyTexts();
+renderRoomsTable();
+renderTabs();
+renderAll();
+go((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>
