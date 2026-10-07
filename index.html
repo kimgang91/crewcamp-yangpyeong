@@ -78,7 +78,7 @@ h3 { font-size: 16.5px; margin: 0 0 12px; letter-spacing: -.3px; font-weight: 80
 .kpi .v { font-size: 29px; font-weight: 900; letter-spacing: -1px; margin: 8px 0 2px; transition: color .3s; }
 .kpi .v.bump { animation: bump .5s ease; }
 @keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.05); } 100% { transform: scale(1); } }
-.kpi .d { font-size: 12.5px; color: var(--sub); }
+.kpi .d { font-size: 12.5px; color: var(--sub); line-height: 1.45; }
 .kpi.rev .v { color: var(--rev); } .kpi.cost .v { color: var(--cost); } .kpi.good .v { color: var(--good); } .kpi.brand .v { color: var(--brand); }
 .kpi .ic { font-size: 20px; }
 .pill { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: 13px; font-weight: 800; }
@@ -329,7 +329,7 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
      <div class="ctl"><label>평일 손님 비율 <output data-out="weekdayRate"></output></label>
       <input type="range" min="0" max="100" step="1" data-meta="weekdayRate"><div class="help">평일 261일 중 손님이 오는 날의 비율</div></div>
      <div class="ctl"><label>비용 여유분 (보수 할증) <output data-out="buffer"></output></label>
-      <input type="range" min="0" max="30" step="1" data-meta="buffer"><div class="help">예상 비용에 덧붙이는 안전 여유분. 20%는 적자 위험이 커서 기본 15%</div></div>
+      <input type="range" min="0" max="30" step="1" data-meta="buffer"><div class="help">자재값 상승·추가 공사에 대비한 안전 여유분입니다. 대시보드에서 % 를 바꿀 수 있습니다.</div></div>
      <label class="small" style="display:flex;gap:6px;align-items:center;margin-top:4px"><input type="checkbox" data-meta-check="bufferLabor"> 인건비에도 여유분 적용 (기본: 미적용, 상한값 사용)</label>
      <div class="mini-inputs">
       <div>1박 구역 청소비 (원)<input class="in n" data-meta-num="zoneClean"></div>
@@ -1095,9 +1095,9 @@ function bumpChanged(root) {
 
 function renderKpi({ R, V }) {
   document.getElementById('kpiStrip').innerHTML =
-    kpiCard('brand', '🏗', '처음 드는 돈', man(R.investTotal), `여유분 ${R.m.buffer}% ${man(R.investBuffer)} 포함`) +
+    kpiCard('brand', '🏗', '처음 드는 돈', man(R.investTotal), `공사비 ${man(R.inv.construction * R.B)} + 외부시설 ${man((R.inv.outdoorFixed + R.inv.outdoorRental) * R.B)} + 내부장비 ${man((R.inv.indoorFixed + R.inv.indoorRental) * R.B)}`) +
     kpiCard('rev', '💵', '1년 번 돈 (매출)', man(R.revenue), `숙박 ${man(R.lodging)} · 대여 ${man(R.rentalRev)} · 체험 ${man(R.expRev)}`) +
-    kpiCard('cost', '🧾', '1년 나간 돈 (지출)', man(R.expense), `매달 꼭 ${man(R.fixedMonthly)} · 손님당 ${man(R.varAnnual)}/년`) +
+    kpiCard('cost', '🧾', '1년 나간 돈 (지출)', man(R.expense), `인건비 ${man(R.fixedM.labor * 12)} + 월 임대료 ${man(R.fixedM.rent * 12)} + 운영비 ${man(R.fixedM.utility * 12)} + 잡비 ${man(R.fixedM.misc * 12)}`) +
     kpiCard(R.profit >= 0 ? 'good' : 'cost', '💰', '1년 남는 돈', man(R.profit), `한 달 평균 ${man(R.profit / 12)} · 이익률 ${pct(R.revenue ? R.profit / R.revenue * 100 : 0, 1)}`) +
     kpiCard('brand', '⏱', '본전 찾는 기간', monthsTxt(R.payback), `객실당 1년 ${fmt(R.nights)}박 판매 기준`) +
     `<div class="verdict-card ${V.cls}"><div class="small" style="opacity:.85">판정</div><div class="v">${V.label}</div><div class="small">${V.text}</div></div>`;
