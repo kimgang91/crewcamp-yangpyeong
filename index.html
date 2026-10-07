@@ -303,7 +303,7 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
    <button class="tbtn" id="btnReport" title="지금 값으로 핵심요약 PDF 만들기 (인쇄 창에서 'PDF로 저장' 선택)">📄 요약 PDF</button>
    <button class="tbtn" id="btnExport" title="현재 숫자·글씨를 파일로 저장">💾 저장</button>
    <button class="tbtn" id="btnImport" title="저장 파일 불러오기">📂 불러오기</button>
-   <button class="tbtn" id="btnReset" title="모든 값을 PDF 기본값으로">↺ 기본값</button>
+   <button class="tbtn" id="btnReset" title="모든 값을 저장해 둔 기준값으로">↺ 기본값</button>
    <button class="tbtn" id="btnFull" title="전체 화면 (F)">⛶ 전체화면</button>
   </div>
   <input type="file" id="fileIn" accept=".json" hidden>
@@ -570,94 +570,13 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
 <script>
 'use strict';
 /* ═══════════════════════ 기본값 (수정본 PDF 기준) ═══════════════════════ */
-const STORE_KEY = 'crewcamp-yangpyeong-sim-v1';
+const STORE_KEY = 'crewcamp-yangpyeong-sim-v2';
 let seq = 0;
 const uid = () => 'i' + (Date.now().toString(36)) + (seq++).toString(36);
 const withIds = arr => arr.map(o => ({ id: uid(), ...o }));
 
 function makeDefault() {
-  return {
-    meta: { weekendRate: 70, weekdayRate: 10, weekendDays: 104, weekdayDays: 261, buffer: 15, bufferLabor: false,
-            lossRate: 10, zoneClean: 10000, pensionClean: 30000, targetMonths: 24 },
-    rooms: withIds([
-      { name: '1구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 16·15' },
-      { name: '2구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 14·13·12' },
-      { name: '3구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 11·10·9·8 (큰 구역)' },
-      { name: '4구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 7·6·5' },
-      { name: '5구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 4·3·2·1 (큰 구역)' },
-      { name: '6구역', kind: '구역', cap: 12, wd: 300000, we: 300000, note: '기존 19·20·방갈로 (단체 12인)' },
-      { name: '7구역', kind: '구역', cap: 8, wd: 200000, we: 200000, note: '기존 17·18' },
-      { name: '펜션', kind: '펜션', cap: 8, wd: 200000, we: 200000, note: '8인 단체 객실 (단체 대여 공간)' },
-    ]),
-    construction: withIds([
-      { name: '파쇄석(쇄석) 포설', price: 700000, qty: 10, stage: 1, note: '25t 1대 70만원 · 5cm 도포 약 900평' },
-      { name: '석분 상부 포설', price: 600000, qty: 6, stage: 1, note: '텐트 피칭면 3cm · 25t 1대 60만원' },
-      { name: '석분 포설·다짐', price: 1500000, qty: 1, stage: 1, note: '인력 2명 × 3일 + 진동롤러' },
-      { name: '포크레인 (중장비)', price: 1000000, qty: 3, stage: 1, note: '1일 100만원 × 3일 · 정지·포설 최소 2~3일' },
-    ]),
-    outdoorFixed: withIds([
-      { name: '프레임형 풀타프 (게이블·일체형)', price: 3636000, qty: 7, stage: 1, note: '구역마다 1동' },
-      { name: '1.5×6m 모듈형 울타리', price: 400000, qty: 4, stage: 1, note: '3·5구역 각 2모듈' },
-      { name: '헬로닷 줄조명 파티라이트 6구', price: 77000, qty: 7, stage: 1, note: '야간 분위기' },
-      { name: '영라이즌 접이식 캠핑화로대', price: 24900, qty: 7, stage: 1, note: '불멍·숯불' },
-    ]),
-    outdoorRental: withIds([
-      { name: '스위스마운틴 헥사돔 원터치텐트', price: 93800, qty: 5, fee: 20000, rate: 30, months: 12, care: 1000, note: '4인용' },
-      { name: '이너텐트', price: 60000, qty: 5, fee: 5000, rate: 30, months: 12, care: 0, note: '단가 추정' },
-    ]),
-    indoorFixed: withIds([
-      { name: '스탠드형 냉난방기', price: 1500000, qty: 7, stage: 1, note: '4계절 기본 냉난방' },
-      { name: '사이트 분전반 + 케이블 릴', price: 41070, qty: 7, stage: 1, note: '누전차단기 포함' },
-      { name: 'ABC 분말 소화기 3.3kg', price: 17900, qty: 7, stage: 1, note: '화기 구역 필수' },
-      { name: '일산화탄소(CO) 경보기', price: 30000, qty: 7, stage: 1, note: '안전 · 단가 추정' },
-      { name: '하이그라운즈 카고박스', price: 57560, qty: 7, stage: 1, note: '수납' },
-      { name: '펜션 비품 (침구 8인분 등)', price: 1000000, qty: 1, stage: 1, note: '추정' },
-      { name: '팝콘 기기', price: 19500, qty: 1, stage: 3, note: '팝콘 판매' },
-      { name: '핸드드립 세트 (그라인더 포함)', price: 59000, qty: 2, stage: 3, note: '커피 체험' },
-      { name: '로스팅 도구', price: 59000, qty: 1, stage: 3, note: '커피 체험' },
-      { name: '207L 냉장고 (바베큐 식자재)', price: 265000, qty: 1, stage: 3, note: '바베큐 패키지' },
-      { name: '낚시 도구 세트', price: 30000, qty: 10, stage: 3, note: '빙어·송어 · 추정' },
-      { name: '송어 잡기 간이 수조·그물', price: 1000000, qty: 1, stage: 3, note: '동절기 · 추정' },
-    ]),
-    indoorRental: withIds([
-      { name: '팬히터 (전기·안전형)', price: 403200, qty: 4, fee: 20000, rate: 60, months: 5, care: 4000, note: '11~3월 · 신일 SFH-CC910MVP 가격' },
-      { name: '포레바 자충매트리스 (더블)', price: 169000, qty: 10, fee: 7500, rate: 30, months: 12, care: 3000, note: '2인용' },
-      { name: '블랙독 침낭', price: 25800, qty: 24, fee: 2500, rate: 25, months: 12, care: 2000, note: '세탁 순환분 포함' },
-      { name: '로티캠프 로우체어', price: 99800, qty: 20, fee: 2500, rate: 30, months: 12, care: 0, note: '' },
-      { name: '빈슨메시프 롤테이블', price: 45400, qty: 5, fee: 5000, rate: 30, months: 12, care: 0, note: '4인용' },
-      { name: '207L 냉장고', price: 265000, qty: 2, fee: 10000, rate: 30, months: 12, care: 0, note: '' },
-      { name: '버너 세트 (스토브·그리들·키친툴)', price: 105940, qty: 5, fee: 10000, rate: 30, months: 12, care: 3000, note: '부탄가스 포함' },
-    ]),
-    labor: withIds([
-      { name: '메인 매니저 (평일·주말 상주)', amount: 2500000, cycle: '월', note: '200~250만원 중 상한' },
-      { name: '주말 보조 알바 2명', amount: 1500000, cycle: '월', note: '시급 10,320원 × 2명 × 금·토 약 8.5시간' },
-    ]),
-    rent: withIds([
-      { name: '임대료 · 지대', amount: 2500000, cycle: '월', note: '' },
-    ]),
-    utility: withIds([
-      { name: '전기 · 수도 · 가스', amount: 1500000, cycle: '월', note: '냉난방기 상시 가동' },
-    ]),
-    misc: withIds([
-      { name: '저수조 청소', amount: 110000, cycle: '연', note: '' },
-      { name: '방역 · 소독', amount: 100000, cycle: '월', note: '월 1회' },
-      { name: '정화조 청소 · 수질검사', amount: 420000, cycle: '연', note: '추정' },
-      { name: '쓰레기 · 음식물 처리', amount: 300000, cycle: '월', note: '' },
-      { name: '공용 소모품', amount: 200000, cycle: '월', note: '화장실·샤워장 휴지·세제' },
-      { name: '시설 수선 · 유지보수', amount: 200000, cycle: '월', note: '' },
-      { name: '야영장 배상책임 · 화재보험', amount: 1200000, cycle: '연', note: '의무 가입' },
-      { name: '통신 · 인터넷 · CCTV', amount: 100000, cycle: '월', note: '' },
-      { name: '예초 · 조경 관리', amount: 50000, cycle: '월', note: '' },
-      { name: '소방시설 점검', amount: 300000, cycle: '연', note: '' },
-      { name: '온라인 홍보 · 광고', amount: 200000, cycle: '월', note: '' },
-    ]),
-    programs: withIds([
-      { name: '바베큐 패키지 (4인)', icon: '🍖', price: 80000, uptake: 20, perTeam: 1, unit: '팀', costRate: 60, months: 12 },
-      { name: '커피 만들기 체험', icon: '☕', price: 15000, uptake: 15, perTeam: 2, unit: '명', costRate: 30, months: 12 },
-      { name: '팝콘 판매', icon: '🍿', price: 3000, uptake: 100, perTeam: 1, unit: '봉', costRate: 35, months: 12 },
-      { name: '빙어 · 송어 잡기', icon: '🎣', price: 20000, uptake: 30, perTeam: 3, unit: '명', costRate: 50, months: 3 },
-    ]),
-  };
+  return JSON.parse(JSON.stringify({"meta":{"weekendRate":70,"weekdayRate":10,"weekendDays":104,"weekdayDays":261,"buffer":15,"bufferLabor":false,"lossRate":10,"zoneClean":10000,"pensionClean":30000,"targetMonths":24},"rooms":[{"id":"imuy8nu4z0","name":"1구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 16·15"},{"id":"imuy8nu4z1","name":"2구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 14·13·12"},{"id":"imuy8nu4z2","name":"3구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 11·10·9·8 (큰 구역)"},{"id":"imuy8nu4z3","name":"4구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 7·6·5"},{"id":"imuy8nu4z4","name":"5구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 4·3·2·1 (큰 구역)"},{"id":"imuy8nu4z5","name":"6구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 19·20·방갈로 (단체 12인)"},{"id":"imuy8nu4z6","name":"7구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 17·18"},{"id":"imuy8nu4z7","name":"펜션","kind":"펜션","cap":8,"wd":150000,"we":200000,"note":"8인 단체 객실 (단체 대여 공간)"}],"construction":[{"id":"imuy8nu4z8","name":"파쇄석(쇄석) 포설","price":700000,"qty":10,"stage":1,"note":"25t 1대 70만원 · 5cm 도포 약 900평"},{"id":"imuy8nu4za","name":"석분 포설·다짐","price":1500000,"qty":1,"stage":1,"note":"인력 2명 × 3일 + 진동롤러"},{"id":"imuy8nu4zb","name":"포크레인 (중장비)","price":1000000,"qty":3,"stage":1,"note":"1일 100만원 × 3일 · 정지·포설 최소 2~3일"}],"outdoorFixed":[{"id":"imuy8nu4zc","name":"프레임형 풀타프 (게이블·일체형)","price":3636000,"qty":7,"stage":1,"note":"구역마다 1동"},{"id":"imuy8nu4zd","name":"1.5×6m 모듈형 울타리","price":400000,"qty":4,"stage":1,"note":"3·5구역 각 2모듈"},{"id":"imuy8nu4ze","name":"헬로닷 줄조명 파티라이트 6구","price":77000,"qty":7,"stage":1,"note":"야간 분위기"}],"outdoorRental":[],"indoorFixed":[{"id":"imuy8nu4zi","name":"스탠드형 냉난방기","price":1500000,"qty":7,"stage":1,"note":"4계절 기본 냉난방"},{"id":"imuy8nu4zj","name":"사이트 분전반 + 케이블 릴","price":41070,"qty":7,"stage":1,"note":"누전차단기 포함"},{"id":"imuy8nu4zk","name":"ABC 분말 소화기 3.3kg","price":17900,"qty":7,"stage":1,"note":"화기 구역 필수"},{"id":"imuy8nu4zl","name":"일산화탄소(CO) 경보기","price":30000,"qty":7,"stage":1,"note":"안전 · 단가 추정"},{"id":"imuy8nu4zm","name":"하이그라운즈 카고박스","price":57560,"qty":7,"stage":1,"note":"수납"},{"id":"imuy8nu4zr","name":"207L 냉장고 (바베큐 식자재)","price":265000,"qty":7,"stage":1,"note":"바베큐 패키지"},{"id":"imuy8nu4zf","name":"영라이즌 접이식 캠핑화로대","price":24900,"qty":7,"stage":1,"note":"불멍·숯불"},{"id":"imuy8nu4zx","name":"로티캠프 로우체어 4개","price":99800,"qty":12,"fee":2500,"rate":30,"months":12,"care":0,"note":"2팀 8개 / 3팀 12개 ","stage":1},{"id":"imuy8nu4zy","name":"빈슨메시프 롤테이블","price":45400,"qty":14,"fee":5000,"rate":30,"months":12,"care":0,"note":"4인용","stage":1},{"id":"imuya2wlv1","name":"메세타 화목난로","price":251000,"qty":7,"stage":1,"note":"화목난로"},{"id":"imuya5d5q2","name":"스마트 폴더블쉘프 3단(블루)","price":78900,"qty":7,"stage":1,"note":"선반"},{"id":"imuy8nu4z10","name":"썬토치 스토브 ","price":40340,"qty":14,"fee":10000,"rate":20,"months":12,"care":3000,"note":"1개동 다 2개씩 비치","stage":1}],"indoorRental":[{"id":"imuy8nu4zu","name":"팬히터 (전기·안전형)","price":403200,"qty":4,"fee":20000,"rate":20,"months":5,"care":4000,"note":"11~3월 · 신일 SFH-CC910MVP 가격"},{"id":"imuy8nu4zv","name":"포레바 자충매트리스 (더블)","price":169000,"qty":10,"fee":7500,"rate":20,"months":12,"care":3000,"note":"2인용"},{"id":"imuy8nu4zw","name":"블랙독 침낭","price":25800,"qty":24,"fee":2500,"rate":20,"months":12,"care":2000,"note":"세탁 순환분 포함"},{"id":"imuy8nu4zs","name":"낚시 도구 세트","price":30000,"qty":10,"stage":3,"note":"빙어·송어 · 추정","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zq","name":"로스팅 도구","price":59000,"qty":1,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zp","name":"핸드드립 세트 (그라인더 포함)","price":59000,"qty":2,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zo","name":"팝콘 기기","price":19500,"qty":1,"stage":3,"note":"팝콘 판매","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuya07du0","name":"로우체어 2개","price":49900,"qty":1,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuya979i3","name":"스위스마운틴 헥사돔 원터치텐트","price":93800,"qty":7,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuy8nu4zh","name":"이너텐트","price":40000,"qty":7,"fee":10000,"rate":30,"months":12,"care":0,"note":"단가 추정"}],"labor":[{"id":"imuy8nu4z11","name":"메인 매니저 (평일·주말 상주)","amount":2500000,"cycle":"월","note":"200~250만원 중 상한"},{"id":"imuy8nu4z12","name":"주말 보조 알바 1명","amount":1500000,"cycle":"월","note":"시급 10,320원 × 2명 × 금·토 약 8.5시간"}],"rent":[{"id":"imuy8nu4z13","name":"임대료 · 지대","amount":2500000,"cycle":"월","note":""}],"utility":[{"id":"imuy8nu4z14","name":"전기 · 수도 · 가스","amount":1500000,"cycle":"월","note":"냉난방기 상시 가동"}],"misc":[{"id":"imuy8nu4z15","name":"저수조 청소","amount":110000,"cycle":"연","note":""},{"id":"imuy8nu4z16","name":"방역 · 소독","amount":100000,"cycle":"월","note":"월 1회"},{"id":"imuy8nu4z17","name":"정화조 청소 · 수질검사","amount":420000,"cycle":"연","note":"추정"},{"id":"imuy8nu4z18","name":"쓰레기 · 음식물 처리","amount":300000,"cycle":"월","note":""},{"id":"imuy8nu4z19","name":"공용 소모품","amount":200000,"cycle":"월","note":"화장실·샤워장 휴지·세제"},{"id":"imuy8nu4z1a","name":"시설 수선 · 유지보수","amount":200000,"cycle":"월","note":""},{"id":"imuy8nu4z1b","name":"야영장 배상책임 · 화재보험","amount":1200000,"cycle":"연","note":"의무 가입"},{"id":"imuy8nu4z1c","name":"통신 · 인터넷 · CCTV","amount":100000,"cycle":"월","note":""},{"id":"imuy8nu4z1d","name":"예초 · 조경 관리","amount":50000,"cycle":"월","note":""},{"id":"imuy8nu4z1e","name":"소방시설 점검","amount":300000,"cycle":"연","note":""},{"id":"imuy8nu4z1f","name":"온라인 홍보 · 광고","amount":200000,"cycle":"월","note":""}],"programs":[{"id":"imuy8nu4z1g","name":"바베큐 패키지 (4인)","icon":"🍖","price":80000,"uptake":20,"perTeam":1,"unit":"팀","costRate":60,"months":12},{"id":"imuy8nu4z1h","name":"커피 만들기 체험","icon":"☕","price":15000,"uptake":20,"perTeam":2,"unit":"명","costRate":30,"months":12},{"id":"imuy8nu4z1i","name":"팝콘 판매","icon":"🍿","price":3000,"uptake":20,"perTeam":1,"unit":"봉","costRate":35,"months":12},{"id":"imuy8nu4z1j","name":"빙어 · 송어 잡기","icon":"🎣","price":20000,"uptake":30,"perTeam":3,"unit":"명","costRate":50,"months":3}]}));
 }
 
 /* ═══════════════════════ 상태 저장 ═══════════════════════ */
@@ -1646,7 +1565,7 @@ document.getElementById('btnEdit').onclick = e => {
   applyTexts();
 };
 document.getElementById('btnReset').onclick = () => {
-  if (!confirm('숫자와 글씨를 모두 PDF 기본값으로 되돌릴까요?')) return;
+  if (!confirm('숫자와 글씨를 모두 저장해 둔 기준값으로 되돌릴까요?')) return;
   state = makeDefault(); texts = {}; decision = { pick: null, at: null };
   document.querySelectorAll('[contenteditable][data-k]').forEach(el => { if (defaultTexts[el.dataset.k] != null) el.innerHTML = defaultTexts[el.dataset.k]; });
   renderRoomsTable(); renderTabs(); renderAll(); save(); toast('기본값으로 되돌렸습니다');
