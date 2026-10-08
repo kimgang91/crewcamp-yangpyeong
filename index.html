@@ -286,6 +286,43 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
 .rp-side { background: #faf8ff; border: 1.5px dashed #c4b5fd; border-radius: 10px; padding: 7px 10px; }
 .rp-side h3 { margin: 0 0 2px; font-size: 12px; color: #6d28d9; }
 .rp-tag { display: inline-block; background: #ede9fe; color: #6d28d9; border-radius: 99px; padding: 0 7px; font-size: 9px; font-weight: 800; }
+
+/* ── 피코 · 캠핏 분배 ── */
+.slide[data-title="수익 분배"] { padding-top: 22px; }
+.slide[data-title="수익 분배"] h1.title { font-size: 30px; margin: 6px 0 4px; }
+.slide[data-title="수익 분배"] .lead { font-size: 15px; margin-bottom: 12px; }
+.split-src { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.split-src .src { background: var(--card); border: 1px solid rgba(15,23,42,.06); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 16px; }
+.split-src .k { font-size: 13px; color: var(--sub); font-weight: 800; }
+.split-src .v { font-size: 26px; font-weight: 900; letter-spacing: -.8px; margin-top: 2px; }
+.split-src .s { font-size: 12.5px; color: var(--sub); }
+.split-main { grid-template-columns: 320px minmax(0, 1fr); align-items: stretch; margin-top: 12px; }
+.split-ctl h3 { margin-bottom: 4px; }
+.split-ctl .ctl { margin: 8px 0; }
+.split-formula { margin-top: 12px; padding: 14px 18px; }
+#splitTable.card { margin-top: 12px; }
+.partner { border-radius: var(--radius); padding: 16px 18px; color: #fff; box-shadow: var(--shadow-lg); min-height: 100%; }
+.partner.pico { background: linear-gradient(160deg, #14b8a6, #0d7a6f 55%, #0b5f58); }
+.partner.camp { background: linear-gradient(160deg, #8b6cff, #6d28d9 58%, #4c1d95); }
+.partner .role { font-size: 12.5px; font-weight: 800; letter-spacing: .3px; opacity: .85; }
+.partner h3 { color: #fff; font-size: 22px; margin: 0 0 6px; }
+.partner .share { font-size: 34px; font-weight: 900; letter-spacing: -1.2px; line-height: 1; }
+.partner .share span, .partner .take span { font-size: 13px; font-weight: 700; opacity: .8; letter-spacing: 0; margin-left: 6px; }
+.partner .take { font-size: 16px; font-weight: 800; margin: 4px 0 10px; }
+.partner .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.partner .metric { background: rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; }
+.partner .metric .k { font-size: 12.5px; font-weight: 800; opacity: .85; }
+.partner .metric .v { font-size: 20px; font-weight: 900; letter-spacing: -.5px; line-height: 1.25; }
+.partner .metric .s { font-size: 12px; opacity: .78; margin-top: 2px; }
+#campfitFeeRange { accent-color: #6d28d9; }
+#feeCtl.is-locked #campfitFeeRange, #feeCtl.is-locked #campfitFee { opacity: .55; }
+table.split th.numc, table.split td.numc { text-align: right; }
+table.split td.pico { color: var(--brand); font-weight: 900; }
+table.split td.camp { color: #6d28d9; font-weight: 900; }
+table.split th.pico { color: var(--brand); }
+table.split th.camp { color: #6d28d9; }
+@media (max-width: 1100px) { .split-main { grid-template-columns: 1fr; } }
+@media (max-width: 800px) { .split-src, .partner .metrics { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body class="editing">
@@ -538,6 +575,45 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
  </div>
 </section>
 
+<!-- ═════════ 12. 피코 vs 캠핏 수익 분배 ═════════ -->
+<section class="slide" data-title="수익 분배">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">별첨</span> 피코(운영사) vs 캠핏(지원사)</div>
+  <h1 class="title" contenteditable="true" data-k="s13.title">투자금과 수수료율로, 두 회사가 가져가는 돈을 나눕니다</h1>
+  <p class="lead" contenteditable="true" data-k="s13.lead">총 투자비와 1년 남는 돈은 메인 대시보드의 사업 전체 숫자입니다. 여기서는 그 남는 돈을 캠핏 수수료율로 나누고, 각자 넣은 돈으로 회수 기간과 수익률을 계산합니다.</p>
+
+  <div class="split-src" id="splitSource"></div>
+
+  <div class="grid split-main">
+   <div class="card split-ctl">
+    <h3>🎛 분배 조건</h3>
+    <div class="ctl">
+     <label>캠핏(Campfit) 투자 금액 <output id="campfitInvestOut"></output></label>
+     <input class="in n" id="campfitInvest" data-partner="invest" inputmode="numeric" autocomplete="off" placeholder="0">
+     <div class="help">0원이면 투자 없이 기본 수수료 16.5%. 예: 10,000,000 = 1,000만 원</div>
+    </div>
+    <div class="ctl" id="feeCtl">
+     <label>캠핏 수수료율 <output id="campfitFeeOut"></output></label>
+     <input type="range" id="campfitFeeRange" data-partner="fee" min="0" max="100" step="0.1" value="16.5">
+     <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+      <input class="in" id="campfitFee" data-partner="fee" inputmode="decimal" autocomplete="off" value="16.5" style="width:120px;text-align:right;font-weight:800">
+      <span class="small muted">% · 1년 남는 돈 기준</span>
+     </div>
+     <div class="help" id="feeHelp"></div>
+    </div>
+   </div>
+   <div class="grid g2" id="splitCards"></div>
+  </div>
+
+  <div id="splitWarn"></div>
+  <div class="card split-formula">
+   <div id="splitFormula"></div>
+   <div id="splitBar" style="margin-top:10px"></div>
+  </div>
+  <div class="card" id="splitTable"></div>
+ </div>
+</section>
+
 </main>
 
 <nav class="nav">
@@ -559,7 +635,7 @@ const uid = () => 'i' + (Date.now().toString(36)) + (seq++).toString(36);
 const withIds = arr => arr.map(o => ({ id: uid(), ...o }));
 
 function makeDefault() {
-  return JSON.parse(JSON.stringify({"meta":{"weekendRate":70,"weekdayRate":10,"weekendDays":104,"weekdayDays":261,"buffer":15,"bufferLabor":false,"lossRate":10,"zoneClean":10000,"pensionClean":30000,"targetMonths":24},"rooms":[{"id":"imuy8nu4z0","name":"1구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 16·15"},{"id":"imuy8nu4z1","name":"2구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 14·13·12"},{"id":"imuy8nu4z2","name":"3구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 11·10·9·8 (큰 구역)"},{"id":"imuy8nu4z3","name":"4구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 7·6·5"},{"id":"imuy8nu4z4","name":"5구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 4·3·2·1 (큰 구역)"},{"id":"imuy8nu4z5","name":"6구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 19·20·방갈로 (단체 12인)"},{"id":"imuy8nu4z6","name":"7구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 17·18"},{"id":"imuy8nu4z7","name":"펜션","kind":"펜션","cap":8,"wd":150000,"we":200000,"note":"8인 단체 객실 (단체 대여 공간)"}],"construction":[{"id":"imuy8nu4z8","name":"파쇄석(쇄석) 포설","price":700000,"qty":10,"stage":1,"note":"25t 1대 70만원 · 5cm 도포 약 900평"},{"id":"imuy8nu4za","name":"석분 포설·다짐","price":1500000,"qty":1,"stage":1,"note":"인력 2명 × 3일 + 진동롤러"},{"id":"imuy8nu4zb","name":"포크레인 (중장비)","price":1000000,"qty":3,"stage":1,"note":"1일 100만원 × 3일 · 정지·포설 최소 2~3일"}],"outdoorFixed":[{"id":"imuy8nu4zc","name":"프레임형 풀타프 (게이블·일체형)","price":3636000,"qty":7,"stage":1,"note":"구역마다 1동"},{"id":"imuy8nu4zd","name":"1.5×6m 모듈형 울타리","price":400000,"qty":4,"stage":1,"note":"3·5구역 각 2모듈"},{"id":"imuy8nu4ze","name":"헬로닷 줄조명 파티라이트 6구","price":77000,"qty":7,"stage":1,"note":"야간 분위기"}],"outdoorRental":[],"indoorFixed":[{"id":"imuy8nu4zi","name":"스탠드형 냉난방기","price":1500000,"qty":7,"stage":1,"note":"4계절 기본 냉난방"},{"id":"imuy8nu4zj","name":"사이트 분전반 + 케이블 릴","price":41070,"qty":7,"stage":1,"note":"누전차단기 포함"},{"id":"imuy8nu4zk","name":"ABC 분말 소화기 3.3kg","price":17900,"qty":7,"stage":1,"note":"화기 구역 필수"},{"id":"imuy8nu4zl","name":"일산화탄소(CO) 경보기","price":30000,"qty":7,"stage":1,"note":"안전 · 단가 추정"},{"id":"imuy8nu4zm","name":"하이그라운즈 카고박스","price":57560,"qty":7,"stage":1,"note":"수납"},{"id":"imuy8nu4zr","name":"207L 냉장고 (바베큐 식자재)","price":265000,"qty":7,"stage":1,"note":"바베큐 패키지"},{"id":"imuy8nu4zf","name":"영라이즌 접이식 캠핑화로대","price":24900,"qty":7,"stage":1,"note":"불멍·숯불"},{"id":"imuy8nu4zx","name":"로티캠프 로우체어 4개","price":99800,"qty":12,"fee":2500,"rate":30,"months":12,"care":0,"note":"2팀 8개 / 3팀 12개 ","stage":1},{"id":"imuy8nu4zy","name":"빈슨메시프 롤테이블","price":45400,"qty":14,"fee":5000,"rate":30,"months":12,"care":0,"note":"4인용","stage":1},{"id":"imuya2wlv1","name":"메세타 화목난로","price":251000,"qty":7,"stage":1,"note":"화목난로"},{"id":"imuya5d5q2","name":"스마트 폴더블쉘프 3단(블루)","price":78900,"qty":7,"stage":1,"note":"선반"},{"id":"imuy8nu4z10","name":"썬토치 스토브 ","price":40340,"qty":14,"fee":10000,"rate":20,"months":12,"care":3000,"note":"1개동 다 2개씩 비치","stage":1}],"indoorRental":[{"id":"imuy8nu4zu","name":"팬히터 (전기·안전형)","price":403200,"qty":4,"fee":20000,"rate":20,"months":5,"care":4000,"note":"11~3월 · 신일 SFH-CC910MVP 가격"},{"id":"imuy8nu4zv","name":"포레바 자충매트리스 (더블)","price":169000,"qty":10,"fee":7500,"rate":20,"months":12,"care":3000,"note":"2인용"},{"id":"imuy8nu4zw","name":"블랙독 침낭","price":25800,"qty":24,"fee":2500,"rate":20,"months":12,"care":2000,"note":"세탁 순환분 포함"},{"id":"imuy8nu4zs","name":"낚시 도구 세트","price":30000,"qty":10,"stage":3,"note":"빙어·송어 · 추정","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zq","name":"로스팅 도구","price":59000,"qty":1,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zp","name":"핸드드립 세트 (그라인더 포함)","price":59000,"qty":2,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zo","name":"팝콘 기기","price":19500,"qty":1,"stage":3,"note":"팝콘 판매","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuya07du0","name":"로우체어 2개","price":49900,"qty":1,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuya979i3","name":"스위스마운틴 헥사돔 원터치텐트","price":93800,"qty":7,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuy8nu4zh","name":"이너텐트","price":40000,"qty":7,"fee":10000,"rate":30,"months":12,"care":0,"note":"단가 추정"}],"labor":[{"id":"imuy8nu4z11","name":"메인 매니저 (평일·주말 상주)","amount":2500000,"cycle":"월","note":"200~250만원 중 상한"},{"id":"imuy8nu4z12","name":"주말 보조 알바 1명","amount":1500000,"cycle":"월","note":"시급 10,320원 × 2명 × 금·토 약 8.5시간"}],"rent":[{"id":"imuy8nu4z13","name":"임대료 · 지대","amount":2500000,"cycle":"월","note":""}],"utility":[{"id":"imuy8nu4z14","name":"전기 · 수도 · 가스","amount":1500000,"cycle":"월","note":"냉난방기 상시 가동"}],"misc":[{"id":"imuy8nu4z15","name":"저수조 청소","amount":110000,"cycle":"연","note":""},{"id":"imuy8nu4z16","name":"방역 · 소독","amount":100000,"cycle":"월","note":"월 1회"},{"id":"imuy8nu4z17","name":"정화조 청소 · 수질검사","amount":420000,"cycle":"연","note":"추정"},{"id":"imuy8nu4z18","name":"쓰레기 · 음식물 처리","amount":300000,"cycle":"월","note":""},{"id":"imuy8nu4z19","name":"공용 소모품","amount":200000,"cycle":"월","note":"화장실·샤워장 휴지·세제"},{"id":"imuy8nu4z1a","name":"시설 수선 · 유지보수","amount":200000,"cycle":"월","note":""},{"id":"imuy8nu4z1b","name":"야영장 배상책임 · 화재보험","amount":1200000,"cycle":"연","note":"의무 가입"},{"id":"imuy8nu4z1c","name":"통신 · 인터넷 · CCTV","amount":100000,"cycle":"월","note":""},{"id":"imuy8nu4z1d","name":"예초 · 조경 관리","amount":50000,"cycle":"월","note":""},{"id":"imuy8nu4z1e","name":"소방시설 점검","amount":300000,"cycle":"연","note":""},{"id":"imuy8nu4z1f","name":"온라인 홍보 · 광고","amount":200000,"cycle":"월","note":""}],"programs":[{"id":"imuy8nu4z1g","name":"바베큐 패키지 (4인)","icon":"🍖","price":80000,"uptake":20,"perTeam":1,"unit":"팀","costRate":60,"months":12},{"id":"imuy8nu4z1h","name":"커피 만들기 체험","icon":"☕","price":15000,"uptake":20,"perTeam":2,"unit":"명","costRate":30,"months":12},{"id":"imuy8nu4z1i","name":"팝콘 판매","icon":"🍿","price":3000,"uptake":20,"perTeam":1,"unit":"봉","costRate":35,"months":12},{"id":"imuy8nu4z1j","name":"빙어 · 송어 잡기","icon":"🎣","price":20000,"uptake":30,"perTeam":3,"unit":"명","costRate":50,"months":3}]}));
+  return JSON.parse(JSON.stringify({"meta":{"campfitInvest":0,"campfitFee":16.5,"weekendRate":70,"weekdayRate":10,"weekendDays":104,"weekdayDays":261,"buffer":15,"bufferLabor":false,"lossRate":10,"zoneClean":10000,"pensionClean":30000,"targetMonths":24},"rooms":[{"id":"imuy8nu4z0","name":"1구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 16·15"},{"id":"imuy8nu4z1","name":"2구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 14·13·12"},{"id":"imuy8nu4z2","name":"3구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 11·10·9·8 (큰 구역)"},{"id":"imuy8nu4z3","name":"4구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 7·6·5"},{"id":"imuy8nu4z4","name":"5구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 4·3·2·1 (큰 구역)"},{"id":"imuy8nu4z5","name":"6구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 19·20·방갈로 (단체 12인)"},{"id":"imuy8nu4z6","name":"7구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 17·18"},{"id":"imuy8nu4z7","name":"펜션","kind":"펜션","cap":8,"wd":150000,"we":200000,"note":"8인 단체 객실 (단체 대여 공간)"}],"construction":[{"id":"imuy8nu4z8","name":"파쇄석(쇄석) 포설","price":700000,"qty":10,"stage":1,"note":"25t 1대 70만원 · 5cm 도포 약 900평"},{"id":"imuy8nu4za","name":"석분 포설·다짐","price":1500000,"qty":1,"stage":1,"note":"인력 2명 × 3일 + 진동롤러"},{"id":"imuy8nu4zb","name":"포크레인 (중장비)","price":1000000,"qty":3,"stage":1,"note":"1일 100만원 × 3일 · 정지·포설 최소 2~3일"}],"outdoorFixed":[{"id":"imuy8nu4zc","name":"프레임형 풀타프 (게이블·일체형)","price":3636000,"qty":7,"stage":1,"note":"구역마다 1동"},{"id":"imuy8nu4zd","name":"1.5×6m 모듈형 울타리","price":400000,"qty":4,"stage":1,"note":"3·5구역 각 2모듈"},{"id":"imuy8nu4ze","name":"헬로닷 줄조명 파티라이트 6구","price":77000,"qty":7,"stage":1,"note":"야간 분위기"}],"outdoorRental":[],"indoorFixed":[{"id":"imuy8nu4zi","name":"스탠드형 냉난방기","price":1500000,"qty":7,"stage":1,"note":"4계절 기본 냉난방"},{"id":"imuy8nu4zj","name":"사이트 분전반 + 케이블 릴","price":41070,"qty":7,"stage":1,"note":"누전차단기 포함"},{"id":"imuy8nu4zk","name":"ABC 분말 소화기 3.3kg","price":17900,"qty":7,"stage":1,"note":"화기 구역 필수"},{"id":"imuy8nu4zl","name":"일산화탄소(CO) 경보기","price":30000,"qty":7,"stage":1,"note":"안전 · 단가 추정"},{"id":"imuy8nu4zm","name":"하이그라운즈 카고박스","price":57560,"qty":7,"stage":1,"note":"수납"},{"id":"imuy8nu4zr","name":"207L 냉장고 (바베큐 식자재)","price":265000,"qty":7,"stage":1,"note":"바베큐 패키지"},{"id":"imuy8nu4zf","name":"영라이즌 접이식 캠핑화로대","price":24900,"qty":7,"stage":1,"note":"불멍·숯불"},{"id":"imuy8nu4zx","name":"로티캠프 로우체어 4개","price":99800,"qty":12,"fee":2500,"rate":30,"months":12,"care":0,"note":"2팀 8개 / 3팀 12개 ","stage":1},{"id":"imuy8nu4zy","name":"빈슨메시프 롤테이블","price":45400,"qty":14,"fee":5000,"rate":30,"months":12,"care":0,"note":"4인용","stage":1},{"id":"imuya2wlv1","name":"메세타 화목난로","price":251000,"qty":7,"stage":1,"note":"화목난로"},{"id":"imuya5d5q2","name":"스마트 폴더블쉘프 3단(블루)","price":78900,"qty":7,"stage":1,"note":"선반"},{"id":"imuy8nu4z10","name":"썬토치 스토브 ","price":40340,"qty":14,"fee":10000,"rate":20,"months":12,"care":3000,"note":"1개동 다 2개씩 비치","stage":1}],"indoorRental":[{"id":"imuy8nu4zu","name":"팬히터 (전기·안전형)","price":403200,"qty":4,"fee":20000,"rate":20,"months":5,"care":4000,"note":"11~3월 · 신일 SFH-CC910MVP 가격"},{"id":"imuy8nu4zv","name":"포레바 자충매트리스 (더블)","price":169000,"qty":10,"fee":7500,"rate":20,"months":12,"care":3000,"note":"2인용"},{"id":"imuy8nu4zw","name":"블랙독 침낭","price":25800,"qty":24,"fee":2500,"rate":20,"months":12,"care":2000,"note":"세탁 순환분 포함"},{"id":"imuy8nu4zs","name":"낚시 도구 세트","price":30000,"qty":10,"stage":3,"note":"빙어·송어 · 추정","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zq","name":"로스팅 도구","price":59000,"qty":1,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zp","name":"핸드드립 세트 (그라인더 포함)","price":59000,"qty":2,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zo","name":"팝콘 기기","price":19500,"qty":1,"stage":3,"note":"팝콘 판매","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuya07du0","name":"로우체어 2개","price":49900,"qty":1,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuya979i3","name":"스위스마운틴 헥사돔 원터치텐트","price":93800,"qty":7,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuy8nu4zh","name":"이너텐트","price":40000,"qty":7,"fee":10000,"rate":30,"months":12,"care":0,"note":"단가 추정"}],"labor":[{"id":"imuy8nu4z11","name":"메인 매니저 (평일·주말 상주)","amount":2500000,"cycle":"월","note":"200~250만원 중 상한"},{"id":"imuy8nu4z12","name":"주말 보조 알바 1명","amount":1500000,"cycle":"월","note":"시급 10,320원 × 2명 × 금·토 약 8.5시간"}],"rent":[{"id":"imuy8nu4z13","name":"임대료 · 지대","amount":2500000,"cycle":"월","note":""}],"utility":[{"id":"imuy8nu4z14","name":"전기 · 수도 · 가스","amount":1500000,"cycle":"월","note":"냉난방기 상시 가동"}],"misc":[{"id":"imuy8nu4z15","name":"저수조 청소","amount":110000,"cycle":"연","note":""},{"id":"imuy8nu4z16","name":"방역 · 소독","amount":100000,"cycle":"월","note":"월 1회"},{"id":"imuy8nu4z17","name":"정화조 청소 · 수질검사","amount":420000,"cycle":"연","note":"추정"},{"id":"imuy8nu4z18","name":"쓰레기 · 음식물 처리","amount":300000,"cycle":"월","note":""},{"id":"imuy8nu4z19","name":"공용 소모품","amount":200000,"cycle":"월","note":"화장실·샤워장 휴지·세제"},{"id":"imuy8nu4z1a","name":"시설 수선 · 유지보수","amount":200000,"cycle":"월","note":""},{"id":"imuy8nu4z1b","name":"야영장 배상책임 · 화재보험","amount":1200000,"cycle":"연","note":"의무 가입"},{"id":"imuy8nu4z1c","name":"통신 · 인터넷 · CCTV","amount":100000,"cycle":"월","note":""},{"id":"imuy8nu4z1d","name":"예초 · 조경 관리","amount":50000,"cycle":"월","note":""},{"id":"imuy8nu4z1e","name":"소방시설 점검","amount":300000,"cycle":"연","note":""},{"id":"imuy8nu4z1f","name":"온라인 홍보 · 광고","amount":200000,"cycle":"월","note":""}],"programs":[{"id":"imuy8nu4z1g","name":"바베큐 패키지 (4인)","icon":"🍖","price":80000,"uptake":20,"perTeam":1,"unit":"팀","costRate":60,"months":12},{"id":"imuy8nu4z1h","name":"커피 만들기 체험","icon":"☕","price":15000,"uptake":20,"perTeam":2,"unit":"명","costRate":30,"months":12},{"id":"imuy8nu4z1i","name":"팝콘 판매","icon":"🍿","price":3000,"uptake":20,"perTeam":1,"unit":"봉","costRate":35,"months":12},{"id":"imuy8nu4z1j","name":"빙어 · 송어 잡기","icon":"🎣","price":20000,"uptake":30,"perTeam":3,"unit":"명","costRate":50,"months":3}]}));
 }
 
 /* ═══════════════════════ 상태 저장 ═══════════════════════ */
@@ -567,9 +643,51 @@ let state, texts = {}, decision = { pick: null, at: null };
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; return; }
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ensurePartner(); return; }
   } catch (e) {}
   state = makeDefault();
+  ensurePartner();
+}
+const CAMPFIT_BASE_FEE = 16.5;
+function feeTxt(n) {
+  const x = Math.round(num(n) * 100) / 100;
+  return String(x);
+}
+function ensurePartner() {
+  const m = state.meta || (state.meta = {});
+  m.campfitInvest = Math.max(0, num(m.campfitInvest));
+  if (m.campfitFee == null || m.campfitFee === '') m.campfitFee = CAMPFIT_BASE_FEE;
+  m.campfitFee = Math.round(clamp(num(m.campfitFee), 0, 100) * 100) / 100;
+}
+function partnerOf(R) {
+  const investTotal = R.investTotal;
+  const profit = R.profit;
+  const campfitInvest = Math.max(0, num(state.meta.campfitInvest));
+  const feeLocked = campfitInvest === 0;
+  const fee = feeLocked ? CAMPFIT_BASE_FEE : Math.round(clamp(num(state.meta.campfitFee), 0, 100) * 100) / 100;
+  const campfitProfit = profit * fee / 100;
+  const picoProfit = profit - campfitProfit;
+  const excess = Math.max(0, campfitInvest - investTotal);
+  const picoInvest = Math.max(0, investTotal - campfitInvest);
+  return { investTotal, profit, campfitInvest, picoInvest, excess, fee, feeLocked, campfitProfit, picoProfit };
+}
+function partnerMonths(invest, annual) {
+  if (invest <= 0) return annual > 0 ? '0개월' : '—';
+  if (!(annual > 0)) return '회수 불가';
+  return monthsTxt(invest / annual * 12);
+}
+function partnerRoi(invest, annual) {
+  if (invest <= 0) return annual > 0 ? '—' : '0%';
+  return pct(annual / invest * 100, 1);
+}
+function partnerPeriodNote(invest, annual) {
+  if (invest <= 0) return annual > 0 ? '투자금이 없어 회수할 원금이 없습니다' : '나눌 수익이 없습니다';
+  if (!(annual > 0)) return '1년 수익이 없어 회수할 수 없습니다';
+  return '투자금 ÷ 1년 수익 × 12';
+}
+function partnerRoiNote(invest, annual) {
+  if (invest <= 0) return annual > 0 ? '투자금 0원 · 수수료만 수취' : '수익률 없음';
+  return '1년 수익 ÷ 투자금';
 }
 let saveTimer;
 function save() {
@@ -983,7 +1101,7 @@ function renderAll() {
   updateCalcCells(R);
   syncMetaInputs();
   renderKpi(X); renderOverview(X); renderFlow(X); renderStage1(X); renderStage2(X); renderStage3(X);
-  renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderExec(X);
+  renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderExec(X); renderPartner(X);
   buildReport(X);
 }
 
@@ -1201,6 +1319,100 @@ function renderExec({ R, V, bepWe, targetWe, minNightsMonth }) {
     row('객실당 본전 판매 박수 (1년)', isFinite(minNightsMonth) ? fmt(minNightsMonth * 12 / R.units) + '박' : '-');
   document.querySelectorAll('#decide button').forEach(b => b.classList.toggle('sel', b.dataset.d === decision.pick));
   document.getElementById('decideStamp').textContent = decision.pick ? `선택: ${{ go: '추진', cond: '조건부 추진', hold: '보류 · 재검토' }[decision.pick]} · ${decision.at}` : '';
+}
+
+function syncPartnerInputs(P) {
+  const inv = document.getElementById('campfitInvest');
+  const fee = document.getElementById('campfitFee');
+  const range = document.getElementById('campfitFeeRange');
+  const shown = P.feeLocked ? CAMPFIT_BASE_FEE : state.meta.campfitFee;
+  if (inv && document.activeElement !== inv) inv.value = fmt(P.campfitInvest);
+  if (fee && document.activeElement !== fee) fee.value = feeTxt(shown);
+  if (range && document.activeElement !== range) range.value = shown;
+  if (fee) fee.disabled = P.feeLocked;
+  if (range) range.disabled = P.feeLocked;
+  const feeCtl = document.getElementById('feeCtl');
+  if (feeCtl) feeCtl.classList.toggle('is-locked', P.feeLocked);
+  const invOut = document.getElementById('campfitInvestOut');
+  const feeOut = document.getElementById('campfitFeeOut');
+  const help = document.getElementById('feeHelp');
+  if (invOut) invOut.textContent = man(P.campfitInvest);
+  if (feeOut) feeOut.textContent = feeTxt(P.fee) + '%';
+  if (help) help.textContent = P.feeLocked
+    ? '투자금이 0원이면 수수료율은 16.5%로 고정됩니다. 금액을 입력하면 비율을 직접 바꿀 수 있습니다.'
+    : '투자금이 있으면 수수료율을 직접 정합니다. 숫자를 바꾸면 회수 기간과 수익률이 바로 다시 계산됩니다.';
+}
+function profitSplitBar(pico, camp) {
+  const total = Math.max(pico, 0) + Math.max(camp, 0) || 1;
+  const pp = Math.max(pico, 0) / total * 100;
+  const cp = Math.max(camp, 0) / total * 100;
+  const lab = p => (p >= 12 ? feeTxt(Math.round(p * 10) / 10) + '%' : '');
+  return `<div class="stack">
+      <div style="width:${pp}%;background:var(--brand)">${lab(pp)}</div>
+      <div style="width:${cp}%;background:#7c4dff">${lab(cp)}</div>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--brand)"></i>피코 <b>${feeTxt(pp)}%</b> · ${man(pico)}</span>
+      <span><i style="background:#7c4dff"></i>캠핏 <b>${feeTxt(cp)}%</b> · ${man(camp)}</span>
+    </div>`;
+}
+function partnerCard({ cls, role, name, share, profit, invest, totalInvest }) {
+  const invPct = totalInvest > 0 ? invest / totalInvest * 100 : 0;
+  return `<div class="partner ${cls}">
+    <div class="role">${role}</div>
+    <h3>${name}</h3>
+    <div class="share">${feeTxt(share)}%<span>· 1년 남는 돈 중</span></div>
+    <div class="take">${man(profit)}<span>· 1년에 가져가는 돈</span></div>
+    <div class="metrics">
+      <div class="metric"><div class="k">투자금</div><div class="v">${man(invest)}</div><div class="s">${totalInvest > 0 ? '총 투자비의 ' + pct(invPct, 1) : '총 투자비 0원'}</div></div>
+      <div class="metric"><div class="k">한 달 평균</div><div class="v">${man(profit / 12)}</div><div class="s">1년 수익 ÷ 12</div></div>
+      <div class="metric"><div class="k">회수 기간</div><div class="v">${partnerMonths(invest, profit)}</div><div class="s">${partnerPeriodNote(invest, profit)}</div></div>
+      <div class="metric"><div class="k">수익률 (1년)</div><div class="v">${partnerRoi(invest, profit)}</div><div class="s">${partnerRoiNote(invest, profit)}</div></div>
+    </div>
+  </div>`;
+}
+function renderPartner({ R }) {
+  ensurePartner();
+  const P = partnerOf(R);
+  syncPartnerInputs(P);
+  const box = document.getElementById('splitSource');
+  if (!box) return;
+  box.innerHTML = `
+    <div class="src"><div class="k">총 투자비</div><div class="v">${man(P.investTotal)}</div><div class="s">대시보드 · 처음 드는 돈</div></div>
+    <div class="src"><div class="k">1년 남는 돈</div><div class="v" style="color:${P.profit >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(P.profit)}</div><div class="s">사업 전체 순이익 · 이 장표에서만 나눔</div></div>
+    <div class="src"><div class="k">적용 수수료율</div><div class="v" style="color:#6d28d9">${feeTxt(P.fee)}%</div><div class="s">${P.feeLocked ? '투자금 0원 · 기본 16.5%' : '직접 입력한 수수료율'}</div></div>`;
+  document.getElementById('splitFormula').innerHTML = `
+    <div class="formula">
+      <div class="box"><span class="small muted">1년 남는 돈</span><b>${man(P.profit)}</b></div>
+      <span class="op">×</span>
+      <div class="box"><span class="small muted">캠핏 수수료</span><b>${feeTxt(P.fee)}%</b></div>
+      <span class="op">=</span>
+      <div class="box" style="background:#f5f3ff;border-color:#ddd6fe"><span class="small muted">캠핏이 가져가는 돈</span><b style="color:#6d28d9">${man(P.campfitProfit)}</b></div>
+    </div>
+    <p class="small" style="margin:12px 0 0">피코가 가져가는 돈 = 1년 남는 돈 − 캠핏 수익 = <b style="color:var(--brand)">${man(P.picoProfit)}</b> <span class="muted">(${feeTxt(100 - P.fee)}%)</span></p>`;
+  const barHost = document.getElementById('splitBar');
+  barHost.innerHTML = P.profit > 0
+    ? profitSplitBar(P.picoProfit, P.campfitProfit)
+    : `<div class="note-box bad">1년 남는 돈이 0원 이하라 나눌 수익이 없습니다. 대시보드 숫자를 바꾸면 이 장표도 바로 다시 계산됩니다.</div>`;
+  document.getElementById('splitWarn').innerHTML = P.excess > 0
+    ? `<div class="note-box warn" style="margin-top:16px">캠핏 투자금(${man(P.campfitInvest)})이 총 투자비(${man(P.investTotal)})보다 ${man(P.excess)} 많습니다. 피코 투자금은 0원으로 보고, 캠핏의 회수 기간·수익률은 입력한 투자금 전체로 계산합니다.</div>`
+    : '';
+  document.getElementById('splitCards').innerHTML =
+    partnerCard({ cls: 'pico', role: '운영사', name: '피코', share: 100 - P.fee, profit: P.picoProfit, invest: P.picoInvest, totalInvest: P.investTotal }) +
+    partnerCard({ cls: 'camp', role: '지원사', name: '캠핏', share: P.fee, profit: P.campfitProfit, invest: P.campfitInvest, totalInvest: P.investTotal });
+  const invPct = v => P.investTotal > 0 ? pct(v / P.investTotal * 100, 1) : '—';
+  const row = (k, a, b, c) => `<tr><td>${k}</td><td class="numc pico">${a}</td><td class="numc camp">${b}</td><td class="numc">${c}</td></tr>`;
+  document.getElementById('splitTable').innerHTML = `<table class="ed split">
+    <thead><tr><th>항목</th><th class="numc pico">피코 · 운영사</th><th class="numc camp">캠핏 · 지원사</th><th class="numc">합계 · 사업 전체</th></tr></thead>
+    <tbody>
+      ${row('투자금', man(P.picoInvest), man(P.campfitInvest), man(P.investTotal))}
+      ${row('투자 비중', invPct(P.picoInvest), P.excess > 0 ? '총투자 초과' : invPct(P.campfitInvest), '100%')}
+      ${row('1년 수익', man(P.picoProfit), man(P.campfitProfit), man(P.profit))}
+      ${row('수익 비중', feeTxt(100 - P.fee) + '%', feeTxt(P.fee) + '%', '100%')}
+      ${row('회수 기간', partnerMonths(P.picoInvest, P.picoProfit), partnerMonths(P.campfitInvest, P.campfitProfit), monthsTxt(R.payback))}
+      ${row('수익률 (1년)', partnerRoi(P.picoInvest, P.picoProfit), partnerRoi(P.campfitInvest, P.campfitProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
+    </tbody></table>
+    <p class="small muted" style="margin:10px 0 0">회수 기간 = 투자금 ÷ 1년 수익 × 12개월 · 수익률 = 1년 수익 ÷ 투자금. 대시보드의 손님 비율·요금·비용을 바꾸면 총 투자비와 1년 남는 돈이 바뀌고, 이 표도 같이 바뀝니다.</p>`;
 }
 
 /* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
@@ -1434,6 +1646,20 @@ document.addEventListener('input', e => {
 /* ═══════════════════════ 이벤트 ═══════════════════════ */
 document.addEventListener('input', e => {
   const t = e.target;
+  if (t.dataset && t.dataset.partner === 'invest') {
+    state.meta.campfitInvest = Math.max(0, num(t.value));
+    renderAll(); save(); return;
+  }
+  if (t.dataset && t.dataset.partner === 'fee') {
+    if (num(state.meta.campfitInvest) === 0) { t.value = feeTxt(CAMPFIT_BASE_FEE); return; }
+    const raw = String(t.value).trim();
+    let v = num(raw);
+    if (!isFinite(v)) v = 0;
+    v = Math.round(clamp(v, 0, 100) * 100) / 100;
+    state.meta.campfitFee = v;
+    if (t.type !== 'range' && num(raw) > 100) t.value = feeTxt(v);
+    renderAll(); save(); return;
+  }
   if (t.dataset.meta) { state.meta[t.dataset.meta] = num(t.value); renderAll(); save(); return; }
   if (t.dataset.metaNum) { state.meta[t.dataset.metaNum] = num(t.value); renderAll(); save(); return; }
   if (t.dataset.list && t.dataset.f && t.type !== 'checkbox') {
@@ -1467,6 +1693,10 @@ document.addEventListener('change', e => {
 });
 document.addEventListener('focusout', e => {
   const t = e.target;
+  if (t.dataset && t.dataset.partner === 'fee') {
+    t.value = feeTxt(num(state.meta.campfitInvest) === 0 ? CAMPFIT_BASE_FEE : state.meta.campfitFee);
+    return;
+  }
   if (t.classList && t.classList.contains('n') && t.tagName === 'INPUT') {
     const v = num(t.value); t.value = Number.isInteger(v) ? fmt(v) : v;
   }
@@ -1539,6 +1769,7 @@ document.getElementById('fileIn').onchange = e => {
   const rd = new FileReader();
   rd.onload = () => {
     try { const d = JSON.parse(rd.result); if (!d.state) throw 0; state = d.state; texts = d.texts || {}; decision = d.decision || { pick: null, at: null };
+      ensurePartner();
       applyTexts(); renderRoomsTable(); renderTabs(); renderAll(); save(); toast('불러오기 완료'); }
     catch (err) { alert('올바른 저장 파일이 아닙니다.'); }
   };
