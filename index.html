@@ -510,32 +510,15 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
  </div>
 </section>
 
-<!-- ═════════ 11. 리스크 ═════════ -->
-<section class="slide" data-title="리스크 방어선">
- <div class="wrap">
-  <div class="eyebrow"><span class="chip" style="background:var(--bad)">07</span> 리스크 방어선 (최소 가동률)</div>
-  <h1 class="title" contenteditable="true" data-k="s11.title">손님이 얼마나 줄어도 버틸 수 있을까?</h1>
-  <p class="lead" contenteditable="true" data-k="s11.lead">가장 큰 위험은 '손님이 예상보다 적게 오는 것'입니다. 아래 슬라이더로 주말 손님 비율을 바꿔 보면서, 어디까지 떨어지면 손해가 나는지 확인하세요.</p>
-  <div class="card">
-   <div class="ctl" style="margin:0"><label style="font-size:15px">주말 손님 비율 (지금 값으로 전체 재계산) <output data-out="weekendRate"></output></label>
-    <input type="range" min="0" max="100" step="1" data-meta="weekendRate"></div>
-   <div id="riskGauge"></div>
-  </div>
-  <div class="grid g3" style="margin-top:16px" id="defense"></div>
-  <div class="card" style="margin-top:16px"><h3>📉 주말 손님 비율에 따른 1년 남는 돈</h3><div id="sensChart"></div></div>
- </div>
-</section>
-
-<!-- ═════════ 12. 경영진 의사결정 요약 ═════════ -->
+<!-- ═════════ 11. 경영진 의사결정 요약 ═════════ -->
 <section class="slide" data-title="의사결정 요약">
  <div class="wrap">
   <div class="eyebrow"><span class="chip" style="background:#0f172a">EXECUTIVE SUMMARY</span> 경영진 의사결정 요약</div>
   <h1 class="title" contenteditable="true" data-k="s12.title">결론과 토론할 것</h1>
   <div id="execVerdict"></div>
-  <div class="grid g3" style="margin-top:16px">
+  <div class="grid g2" style="margin-top:16px">
    <div class="card"><h3>💵 투자와 회수</h3><table class="exec-table" id="exec1"></table></div>
    <div class="card"><h3>⚖️ 본전 라인 (손익분기점 · BEP)</h3><table class="exec-table" id="exec2"></table></div>
-   <div class="card"><h3>🛡 월별 리스크 방어선</h3><table class="exec-table" id="exec3"></table></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
    <div class="card"><h3>🗣 토론 포인트</h3>
@@ -1000,7 +983,7 @@ function renderAll() {
   updateCalcCells(R);
   syncMetaInputs();
   renderKpi(X); renderOverview(X); renderFlow(X); renderStage1(X); renderStage2(X); renderStage3(X);
-  renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderRisk(X); renderExec(X);
+  renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderExec(X);
   buildReport(X);
 }
 
@@ -1199,28 +1182,7 @@ function renderPnl({ R, cum, pbMonth }) {
   document.getElementById('yearTable').innerHTML = t + '</tbody></table>';
 }
 
-function renderRisk({ R, bepWe, targetWe, minNightsMonth, minOccMonth, minWeekendOnly }) {
-  const cur = num(state.meta.weekendRate);
-  const marks = [{ v: cur, label: `지금 ${cur}%`, pos: 'top' }];
-  if (isFinite(bepWe)) marks.push({ v: bepWe, label: `본전 ${bepWe.toFixed(1)}%`, pos: 'bot', color: 'var(--bad)' });
-  if (isFinite(targetWe)) marks.push({ v: targetWe, label: `${state.meta.targetMonths}개월 회수 ${targetWe.toFixed(1)}%`, pos: 'bot', color: 'var(--good)' });
-  const room = isFinite(bepWe) ? cur - bepWe : -Infinity;
-  document.getElementById('riskGauge').innerHTML = gauge(cur, 100, { color: room >= 15 ? 'var(--good)' : room >= 0 ? 'var(--warn)' : 'var(--bad)', marks }) +
-    `<div class="small">${isFinite(bepWe) ? (room >= 0 ? `✅ 주말 손님 비율이 <b>${bepWe.toFixed(1)}%</b> 밑으로 떨어지기 전까지는 손해가 나지 않습니다. 지금보다 <b>${room.toFixed(1)}%p</b> 여유가 있습니다.` : `⚠️ 지금 조건으로는 손해입니다. 주말 손님 비율을 <b>${bepWe.toFixed(1)}%</b> 이상으로 올려야 본전입니다.`) : '⚠️ 주말이 100% 차도 손해입니다. 비용 구조를 다시 봐야 합니다.'} <span class="muted">(평일 ${state.meta.weekdayRate}% 고정)</span></div>`;
-  document.getElementById('defense').innerHTML = `
-    <div class="card kpi cost"><div class="k">🛡 방어선 ① 한 달 최소 판매</div><div class="v">${isFinite(minNightsMonth) ? fmt(Math.ceil(minNightsMonth)) + '박' : '-'}</div><div class="d">객실 ${R.units}개 합계 · 객실당 월 ${isFinite(minNightsMonth) ? (minNightsMonth / R.units).toFixed(1) : '-'}박 · 이보다 적게 팔면 그 달은 적자</div></div>
-    <div class="card kpi cost"><div class="k">🛡 방어선 ② 월 최소 가동률 (전체 날짜 기준)</div><div class="v">${isFinite(minOccMonth) ? pct(minOccMonth, 1) : '-'}</div><div class="d">한 달 모든 날 중 객실이 팔려야 하는 비율 · 지금 계획 ${pct(R.nights / 365 * 100, 1)}</div></div>
-    <div class="card kpi cost"><div class="k">🛡 방어선 ③ 주말만 판다면</div><div class="v">${isFinite(minWeekendOnly) ? (minWeekendOnly > 100 ? '100% 초과' : pct(minWeekendOnly, 1)) : '-'}</div><div class="d">평일 손님이 0명일 때 주말(금·토)에 필요한 최소 가동률</div></div>`;
-  const rates = [30, 40, 50, 60, 70, 80, 90, 100];
-  const profits = rates.map(r => calc(state, { weekendRate: r }).profit);
-  document.getElementById('sensChart').innerHTML = columnChart([profits], rates.map(r => `주말 ${r}%${r === cur ? ' ◀' : ''}`),
-    { colors: [v => v >= 0 ? '#16a34a' : '#dc2626'], zeroLine: true, h: 250, w: 1500 }) +
-    `<div class="tablebox"><table class="ed"><thead><tr><th>주말 손님 비율</th>${rates.map(r => `<th style="text-align:right">${r}%</th>`).join('')}</tr></thead><tbody>
-     <tr><td>1년 남는 돈</td>${profits.map(p => `<td class="calc" style="color:${p >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(p)}</td>`).join('')}</tr>
-     <tr><td>본전 찾는 기간</td>${profits.map(p => `<td class="calc">${monthsTxt(p > 0 ? R.investTotal / p * 12 : Infinity)}</td>`).join('')}</tr></tbody></table></div>`;
-}
-
-function renderExec({ R, V, bepWe, targetWe, minNightsMonth, minOccMonth, minWeekendOnly, curOcc, cum, pbMonth }) {
+function renderExec({ R, V, bepWe, targetWe, minNightsMonth }) {
   const roi = R.investTotal ? R.profit / R.investTotal * 100 : 0;
   const bepRevenue = (1 - R.varAnnual / Math.max(R.revenue, 1)) > 0 ? R.fixedAnnual / (1 - R.varAnnual / R.revenue) : Infinity;
   document.getElementById('execVerdict').innerHTML = `<div class="verdict-card ${V.cls}" style="flex-direction:row;align-items:center;gap:24px;padding:18px 24px">
@@ -1237,11 +1199,6 @@ function renderExec({ R, V, bepWe, targetWe, minNightsMonth, minOccMonth, minWee
     row('본전 주말 가동률 (평일 고정)', isFinite(bepWe) ? pct(bepWe, 1) : '100% 초과', 'var(--bad)') + row('지금 주말 가동률', pct(num(state.meta.weekendRate))) +
     row(`${state.meta.targetMonths}개월 회수에 필요한 주말 가동률`, isFinite(targetWe) ? pct(targetWe, 1) : '100% 초과') +
     row('객실당 본전 판매 박수 (1년)', isFinite(minNightsMonth) ? fmt(minNightsMonth * 12 / R.units) + '박' : '-');
-  document.getElementById('exec3').innerHTML =
-    row('매달 꼭 나가는 돈', man(R.fixedMonthly)) + row('한 달 최소 판매 (전체 객실)', isFinite(minNightsMonth) ? fmt(Math.ceil(minNightsMonth)) + '박' : '-', 'var(--cost)') +
-    row('월 최소 가동률 (전체 날짜)', isFinite(minOccMonth) ? pct(minOccMonth, 1) : '-', 'var(--cost)') + row('지금 계획 가동률', pct(curOcc, 1)) +
-    row('주말만 팔 때 최소 가동률', isFinite(minWeekendOnly) ? (minWeekendOnly > 100 ? '100% 초과' : pct(minWeekendOnly, 1)) : '-') +
-    row('적자 나는 달', R.monthProfit.filter(v => v < 0).length + '개월');
   document.querySelectorAll('#decide button').forEach(b => b.classList.toggle('sel', b.dataset.d === decision.pick));
   document.getElementById('decideStamp').textContent = decision.pick ? `선택: ${{ go: '추진', cond: '조건부 추진', hold: '보류 · 재검토' }[decision.pick]} · ${decision.at}` : '';
 }
