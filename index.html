@@ -655,21 +655,22 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 13. A/B 단가 비교 ═════════ -->
-<section class="slide" data-title="단가 비교">
+<!-- ═════════ 13. A/B 3년 비교 ═════════ -->
+<section class="slide" data-title="3년 비교">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">13</span> 단가 · 숙박 매출</div>
-  <h1 class="title" contenteditable="true" data-k="s15.title">같은 가동률의 A안 · B안 숙박 매출</h1>
-  <p class="lead" contenteditable="true" data-k="s15.lead">A안은 사이트 20개 × 6만 원, 펜션 1개 × 20만 원(주말·평일 동일 단가)입니다. B안은 대시보드 객실 수와 주말·평일 단가입니다. 판매 일수는 두 안이 같습니다.</p>
+  <div class="eyebrow"><span class="chip">13</span> A안 · B안, 3년</div>
+  <h1 class="title" contenteditable="true" data-k="s15b.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
+  <p class="lead" contenteditable="true" data-k="s15b.lead">A안은 예전 요금이고, 캠핏 수수료는 16.5%입니다. B안은 지금 대시보드 요금이고, 캠핏이 5,000만 원을 넣은 뒤 수수료 20%를 가져갑니다. 손님이 오는 날 수는 두 안이 같습니다.</p>
   <div id="abCompare"></div>
  </div>
 </section>
 
 <!-- ═════════ 14. 장비 투자 ═════════ -->
-<section class="slide" data-title="장비 투자">
+<section class="slide" data-title="장비 구입">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">14</span> 외부 시설 · 내부 대여 장비</div>
-  <h1 class="title" contenteditable="true" data-k="s16.title">외부 시설비와 내부 대여 장비 구입비</h1>
+  <div class="eyebrow"><span class="chip">14</span> 장비 사는 돈</div>
+  <h1 class="title" contenteditable="true" data-k="s16b.title">빌려 줄 장비를 사려면, 처음에 얼마가 드나</h1>
+  <p class="lead" contenteditable="true" data-k="s16b.lead">가운데 큰 숫자는 밖에 설치하는 것과, 손님에게 빌려 주는 장비를 사는 돈입니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
   <div id="gearHero"></div>
   <div class="grid g2" id="gearLists"></div>
   <div class="card gear-other" id="gearOther"></div>
@@ -677,16 +678,16 @@ table.split th.camp { color: #6d28d9; }
 </section>
 
 <!-- ═════════ 15. 변동 수수료 ═════════ -->
-<section class="slide" data-title="변동 수수료">
+<section class="slide" data-title="수수료 변화">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">15</span> 매출 달성률 · 수수료</div>
-  <h1 class="title" contenteditable="true" data-k="s17.title">매출 달성률에 따른 수수료와 정산 금액</h1>
-  <p class="lead" contenteditable="true" data-k="s17.lead">적용 수수료율 = 12번 장표의 기준 수수료율 × 매출 달성률 ÷ 100. 달성 매출 = 대시보드 1년 매출 × 달성률. 변동비는 달성률과 같이 움직이고, 고정비는 그대로입니다.</p>
+  <div class="eyebrow"><span class="chip">15</span> 매출이 달라지면</div>
+  <h1 class="title" contenteditable="true" data-k="s17b.title">매출이 달라지면, 수수료도 같이 바뀝니다</h1>
+  <p class="lead" contenteditable="true" data-k="s17b.lead">막대를 움직여 보세요. 100%는 대시보드에서 계산한 1년 매출입니다. 막대를 내리면 캠핏 수수료도 내려가고, 올리면 수수료도 올라갑니다.</p>
   <div class="card">
    <div class="ctl">
-    <label>매출 달성률 <output data-out="achieveRate"></output></label>
+    <label>예상한 매출의 몇 %가 들어왔나 <output data-out="achieveRate"></output></label>
     <input type="range" min="50" max="150" step="1" data-meta="achieveRate">
-    <div class="help">50% ~ 150%. 100%는 대시보드 1년 매출과 같습니다.</div>
+    <div class="help">50%는 절반, 100%는 그대로, 150%는 1.5배입니다. 수수료 = 12번 장표의 기준 수수료 × 이 숫자 ÷ 100.</div>
    </div>
   </div>
   <div id="scaleResult" style="margin-top:16px"></div>
@@ -722,7 +723,7 @@ let state, texts = {}, decision = { pick: null, at: null };
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ensurePartner(); return; }
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s16.title','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
   } catch (e) {}
   state = makeDefault();
   ensurePartner();
@@ -1511,6 +1512,7 @@ function renderPartner({ R }) {
 }
 
 /* ═══════════════════════ 13·14·15 의사결정 장표 ═══════════════════════ */
+const AB_A_FEE = 16.5, AB_B_FEE = 20, AB_B_INVEST = 50000000, AB_YEARS = 3;
 function planA(R) {
   const nights = R.nWe + R.nWd;
   const sites = 20, sitePrice = 60000, pensions = 1, pensionPrice = 200000;
@@ -1522,42 +1524,70 @@ function signedMan(n) {
   if (Math.abs(n) < 1) return man(0);
   return (n > 0 ? '+' : '') + man(n);
 }
+function abSide(sales, fee, invest) {
+  const yearFee = sales * fee / 100;
+  const yearStay = sales - yearFee;
+  return {
+    sales, fee, invest, yearFee, yearStay,
+    y3sales: sales * AB_YEARS,
+    y3fee: yearFee * AB_YEARS,
+    y3stay: yearStay * AB_YEARS,
+    after: yearFee * AB_YEARS - invest,
+  };
+}
 function renderAb({ R }) {
   const host = document.getElementById('abCompare');
   if (!host) return;
-  const A = planA(R);
-  const B = R.lodging;
-  const diff = B - A.total;
-  const avg = (total, units) => units && A.nights ? total / (units * A.nights) : 0;
-  const roomRows = VIEW.rooms.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.kind)}</td><td class="calc">${fmt(num(r.cap))}</td><td class="calc">${man(num(r.wd))}</td><td class="calc">${man(num(r.we))}</td><td class="calc">${man(R.roomMap[r.id] || 0)}</td></tr>`).join('');
+  const A0 = planA(R);
+  const a = abSide(A0.total, AB_A_FEE, 0);
+  const b = abSide(R.lodging, AB_B_FEE, AB_B_INVEST);
+  const pay = partnerMonths(AB_B_INVEST, b.yearFee);
+  const row = (k, av, bv) => `<tr><td>${k}</td><td class="calc">${av}</td><td class="calc">${bv}</td></tr>`;
   host.innerHTML = `
-    <div class="card" style="margin-bottom:16px">
-     <div class="small">주말 판매 ${fmt(R.nWe)}일 (주말 ${R.m.weekendDays}일 × ${R.m.weekendRate}%) · 평일 판매 ${fmt(R.nWd)}일 (평일 ${R.m.weekdayDays}일 × ${R.m.weekdayRate}%) · 객실당 ${fmt(A.nights)}박</div>
-     <div style="margin-top:12px">${bars([
-       { label: 'A안 1년 숙박 매출', v: A.total, color: '#64748b' },
-       { label: 'B안 1년 숙박 매출', v: B, color: 'var(--s1)' },
-     ], { labelW: 160 })}</div>
+    <div class="small" style="margin-bottom:12px">객실 하나당 손님이 오는 날 ${fmt(A0.nights)}박 · 주말 ${fmt(R.nWe)}일 + 평일 ${fmt(R.nWd)}일. 두 안이 같습니다. 3년은 매년 매출이 똑같다고 보고 1년 × 3입니다.</div>
+    <div class="grid g2" style="margin-bottom:16px">
+     <div class="card">
+      <h3>A안 · 예전 요금</h3>
+      <div class="small muted">사이트 20개 × 1박 6만 원 + 펜션 1개 × 1박 20만 원. 주말·평일 요금이 같습니다. 캠핏이 넣은 돈은 0원.</div>
+      <div class="small" style="margin-top:10px;font-weight:800;color:#64748b">캠핏이 3년 동안 가져가는 돈 · 16.5%</div>
+      <div class="scale-amt" style="color:#334155">${man(a.y3fee)}</div>
+      <div class="small muted">1년 ${man(a.yearFee)} × 3년</div>
+     </div>
+     <div class="card" style="background:#f5f3ff;border-color:#ddd6fe">
+      <h3>B안 · 지금 요금</h3>
+      <div class="small muted">대시보드 객실 ${R.units}개의 평일·주말 요금. 캠핏이 처음에 5,000만 원을 넣고, 잠자리 판 돈의 20%를 가져갑니다.</div>
+      <div class="small" style="margin-top:10px;font-weight:800;color:#6d28d9">캠핏이 3년 동안 가져가는 돈 · 20%</div>
+      <div class="scale-amt" style="color:#6d28d9">${man(b.y3fee)}</div>
+      <div class="small muted">1년 ${man(b.yearFee)} × 3년</div>
+     </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;text-align:center">
+     <div class="small" style="font-weight:800;color:#6d28d9">B안 · 넣은 5,000만 원을 수수료로 다 찾는 기간</div>
+     <div class="gear-hero" style="padding:6px 0"><div class="amt">${pay}</div></div>
+     <div class="small">5,000만 원 ÷ 1년 수수료 ${man(b.yearFee)} × 12개월</div>
+     <div class="small muted">3년 동안 가져온 수수료 ${man(b.y3fee)} · 가져온 돈 − 넣은 돈 ${signedMan(b.after)}</div>
     </div>
     <div class="card" style="margin-bottom:16px"><div class="tablebox"><table class="ed">
-     <thead><tr><th></th><th>A안</th><th>B안</th><th style="text-align:right">B − A</th></tr></thead>
+     <thead><tr><th>항목</th><th style="text-align:right">A안 · 수수료 16.5%</th><th style="text-align:right">B안 · 투자 5,000만 원 · 수수료 20%</th></tr></thead>
      <tbody>
-      <tr><td>구성</td><td>사이트 ${A.sites} + 펜션 ${A.pensions}</td><td>대시보드 객실 ${R.units}개</td><td class="calc">${(R.units - A.units > 0 ? '+' : '') + fmt(R.units - A.units)}개</td></tr>
-      <tr><td>1박 단가</td><td>사이트 ${man(A.sitePrice)} · 펜션 ${man(A.pensionPrice)}<div class="tiny muted">주말·평일 동일</div></td><td>객실별 주말·평일 단가</td><td class="calc">—</td></tr>
-      <tr><td>판매 일수</td><td>주말 ${fmt(R.nWe)} + 평일 ${fmt(R.nWd)}</td><td>주말 ${fmt(R.nWe)} + 평일 ${fmt(R.nWd)}</td><td class="calc">0일</td></tr>
-      <tr><td>1년 숙박 매출</td><td class="calc">${man(A.total)}</td><td class="calc">${man(B)}</td><td class="calc">${signedMan(diff)}</td></tr>
-      <tr><td>객실 1박 평균</td><td class="calc">${man(avg(A.total, A.units))}</td><td class="calc">${man(avg(B, R.units))}</td><td class="calc">${signedMan(avg(B, R.units) - avg(A.total, A.units))}</td></tr>
-     </tbody></table></div></div>
-    <div class="grid g2">
-     <div class="card"><h3>A안 산출</h3><table class="ed"><tbody>
-      <tr><td>사이트 ${A.sites} × ${man(A.sitePrice)} × ${fmt(A.nights)}박</td><td class="calc">${man(A.siteRev)}</td></tr>
-      <tr><td>펜션 ${A.pensions} × ${man(A.pensionPrice)} × ${fmt(A.nights)}박</td><td class="calc">${man(A.pensionRev)}</td></tr>
-      <tr><td>합계</td><td class="calc">${man(A.total)}</td></tr>
+      ${row('잠자리를 어떻게 파나', `사이트 ${A0.sites}개 × ${man(A0.sitePrice)}<br>펜션 ${A0.pensions}개 × ${man(A0.pensionPrice)}`, `객실 ${R.units}개 · 대시보드 요금`)}
+      ${row('캠핏이 넣은 돈', '0원', man(AB_B_INVEST))}
+      ${row('1년 잠자리 매출', man(a.sales), man(b.sales))}
+      ${row('1년 캠핏', man(a.yearFee), man(b.yearFee))}
+      ${row('1년 피코 (수수료를 뺀 잠자리 매출)', man(a.yearStay), man(b.yearStay))}
+      ${row('3년 잠자리 매출', man(a.y3sales), man(b.y3sales))}
+      ${row('3년 캠핏', man(a.y3fee), man(b.y3fee))}
+      ${row('3년 피코 (수수료를 뺀 잠자리 매출)', man(a.y3stay), man(b.y3stay))}
+      ${row('3년 뒤 캠핏 (가져온 돈 − 넣은 돈)', signedMan(a.after), signedMan(b.after))}
+      ${row('넣은 돈을 찾는 기간', '넣은 돈 없음', pay)}
      </tbody></table></div>
-     <div class="card"><h3>B안 객실별 숙박 매출</h3><div class="tablebox"><table class="ed"><thead><tr><th>객실</th><th>구분</th><th style="text-align:right">인원</th><th style="text-align:right">평일</th><th style="text-align:right">주말</th><th style="text-align:right">1년 매출</th></tr></thead><tbody>
-      ${roomRows}
-      <tr><td>합계</td><td></td><td></td><td></td><td></td><td class="calc">${man(B)}</td></tr>
-     </tbody></table></div></div>
-    </div>`;
+     <p class="small muted" style="margin:10px 0 0">수수료 = 잠자리 판 돈 × 비율. 장비 대여·체험 매출, 월급·월세·전기요금은 이 표에서 빼지 않았습니다. 이 페이지 수수료는 12번 장표와 따로, A 16.5% · B 20%로 고정입니다.</p>
+     <p class="small muted" style="margin:6px 0 0">A안 1년 = 사이트 ${A0.sites} × ${man(A0.sitePrice)} × ${fmt(A0.nights)}박 (${man(A0.siteRev)}) + 펜션 ${A0.pensions} × ${man(A0.pensionPrice)} × ${fmt(A0.nights)}박 (${man(A0.pensionRev)}).</p>
+    </div>
+    <div>${bars([
+      { label: 'A안 캠핏 3년', v: a.y3fee, color: '#64748b' },
+      { label: 'B안 캠핏 3년', v: b.y3fee, color: '#7c4dff' },
+    ], { labelW: 130 })}</div>`;
 }
 function gearLines(list, B) {
   const rows = list.map(it => {
@@ -1576,24 +1606,25 @@ function renderGear({ R }) {
   const i = gearLines(rental, R.B);
   const sum = o.total + i.total;
   hero.innerHTML = `<div class="gear-hero">
-    <div class="k">외부 시설비 + 내부 대여 장비</div>
+    <div class="k">밖에 설치하는 것 + 손님에게 빌려 주는 장비</div>
     <div class="amt">${man(sum)}</div>
-    <div class="sub">구입비 ${man(o.base + i.base)} + 여유분 ${R.m.buffer}% ${man(sum - o.base - i.base)}</div>
-    <div class="sub">외부 시설 ${man(o.total)} · 내부 대여 장비 ${man(i.total)} · 품목 ${outdoor.length + rental.length}개</div>
+    <div class="sub">물건값 ${man(o.base + i.base)} + 값이 오를 수 있어서 더해 둔 ${R.m.buffer}% ${man(sum - o.base - i.base)}</div>
+    <div class="sub">밖에 설치 ${man(o.total)} · 빌려 주는 장비 ${man(i.total)} · 종류 ${outdoor.length + rental.length}가지</div>
   </div>`;
-  const head = `<thead><tr><th>품목</th><th style="text-align:right">수량</th><th style="text-align:right">단가</th><th style="text-align:right">구입비</th><th style="text-align:right">여유분 포함</th></tr></thead>`;
+  const head = `<thead><tr><th>이름</th><th style="text-align:right">개수</th><th style="text-align:right">하나 가격</th><th style="text-align:right">물건값</th><th style="text-align:right">더해 둔 값까지</th></tr></thead>`;
   document.getElementById('gearLists').innerHTML = `
-    <div class="card"><h3>외부 시설비 ${man(o.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
-    <div class="card"><h3>내부 대여 장비 ${man(i.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
-  const month = (label, v) => `<div class="src"><div class="k">${label}</div><div class="v" style="font-size:18px">${man(v)}</div><div class="s">월</div></div>`;
-  document.getElementById('gearOther').innerHTML = `<h3>기타 부대비용</h3>
+    <div class="card"><h3>밖에 설치하는 것 ${man(o.total)}</h3><p class="small muted" style="margin-top:-4px">풀타프·울타리·조명처럼 자리에 고정하는 것</p><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
+    <div class="card"><h3>빌려 주는 장비 ${man(i.total)}</h3><p class="small muted" style="margin-top:-4px">텐트·침낭·팬히터처럼 손님이 빌려 가는 것</p><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
+  const month = (label, v) => `<div class="src"><div class="k">${label}</div><div class="v" style="font-size:18px">${man(v)}</div><div class="s">한 달</div></div>`;
+  document.getElementById('gearOther').innerHTML = `<h3>그 밖에 드는 돈</h3>
     <div class="split-src" style="grid-template-columns:repeat(5,1fr)">
-      <div class="src"><div class="k">공사비</div><div class="v" style="font-size:18px">${man(R.inv.construction * R.B)}</div><div class="s">1회 · 여유분 포함</div></div>
-      ${month('인건비', R.fixedM.labor)}
-      ${month('임대료', R.fixedM.rent)}
-      ${month('운영비', R.fixedM.utility)}
+      <div class="src"><div class="k">공사</div><div class="v" style="font-size:18px">${man(R.inv.construction * R.B)}</div><div class="s">한 번 · 오른 값 포함</div></div>
+      ${month('월급', R.fixedM.labor)}
+      ${month('월세', R.fixedM.rent)}
+      ${month('전기·수도·가스', R.fixedM.utility)}
       ${month('잡비', R.fixedM.misc)}
-    </div>`;
+    </div>
+    <p class="small muted" style="margin:8px 0 0">위 다섯 칸은 단위가 달라서 하나로 더하지 않았습니다. 공사는 시작할 때 한 번, 나머지는 한 달 금액입니다.</p>`;
 }
 function scaleOf(R) {
   const baseFee = partnerOf(R).fee;
@@ -1617,36 +1648,37 @@ function renderScale({ R }) {
     const camp = rev * fee / 100;
     const pico = (rev - R.varAnnual * p / 100 - R.fixedAnnual) - camp;
     const on = p === S.achieve;
-    return `<tr${on ? ' style="background:#f5f3ff"' : ''}><td>${p}%</td><td class="calc">${feeTxt(fee)}%</td><td class="calc">${man(rev)}</td><td class="calc">${man(camp)}</td><td class="calc">${man(camp / 12)}</td><td class="calc">${man(pico)}</td><td class="calc">${man(pico / 12)}</td></tr>`;
+    return `<tr${on ? ' style="background:#f5f3ff"' : ''}><td>${p}%</td><td class="calc">${feeTxt(fee)}%</td><td class="calc">${man(rev)}</td><td class="calc">${man(camp)}</td><td class="calc">${man(pico)}</td></tr>`;
   }).join('');
   host.innerHTML = `
     <div class="grid g2">
      <div class="card" style="background:#f5f3ff;border-color:#ddd6fe">
-      <div class="small" style="font-weight:800;color:#6d28d9">캠핏 정산 · 달성 매출 × ${feeTxt(S.appliedFee)}%</div>
+      <div class="small" style="font-weight:800;color:#6d28d9">캠핏이 1년에 가져가는 돈</div>
       <div class="scale-amt" style="color:#6d28d9">${man(S.camp)}</div>
-      <div class="small muted">1년 · 한 달 ${man(S.camp / 12)} (1년 ÷ 12)</div>
+      <div class="small muted">들어온 매출 ${man(S.revenue)} × ${feeTxt(S.appliedFee)}% · 한 달 ${man(S.camp / 12)}</div>
      </div>
      <div class="card">
-      <div class="small" style="font-weight:800;color:var(--brand)">피코 정산 · 달성 손익 − 캠핏 정산</div>
+      <div class="small" style="font-weight:800;color:var(--brand)">피코에게 1년에 남는 돈</div>
       <div class="scale-amt" style="color:${S.pico >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(S.pico)}</div>
-      <div class="small muted">1년 · 한 달 ${man(S.pico / 12)} (1년 ÷ 12)</div>
+      <div class="small muted">번 돈에서 쓴 돈과 캠핏 수수료를 뺀 금액 · 한 달 ${man(S.pico / 12)}</div>
      </div>
     </div>
-    <div class="card" style="margin-top:16px"><table class="ed"><tbody>
-     <tr><td>기준 수수료율 (12번)</td><td class="calc">${feeTxt(S.baseFee)}%</td></tr>
-     <tr><td>매출 달성률</td><td class="calc">${S.achieve}%</td></tr>
-     <tr><td>적용 수수료율 = ${feeTxt(S.baseFee)}% × ${S.achieve} ÷ 100</td><td class="calc">${feeTxt(S.appliedFee)}%</td></tr>
-     <tr><td>대시보드 1년 매출</td><td class="calc">${man(R.revenue)}</td></tr>
-     <tr><td>달성 매출 = 1년 매출 × ${S.achieve}%</td><td class="calc">${man(S.revenue)}</td></tr>
-     <tr><td>변동비 × ${S.achieve}%</td><td class="calc">${man(S.variable)}</td></tr>
-     <tr><td>고정비 (변동 없음)</td><td class="calc">${man(S.fixed)}</td></tr>
-     <tr><td>달성 손익 = 달성 매출 − 변동비 − 고정비</td><td class="calc">${man(S.profit)}</td></tr>
-    </tbody></table></div>
-    <div class="card" style="margin-top:16px"><h3>달성률별 정산</h3><div class="tablebox"><table class="ed"><thead><tr><th>달성률</th><th style="text-align:right">적용 수수료</th><th style="text-align:right">달성 매출</th><th style="text-align:right">캠핏 1년</th><th style="text-align:right">캠핏 한 달</th><th style="text-align:right">피코 1년</th><th style="text-align:right">피코 한 달</th></tr></thead><tbody>${marks}</tbody></table></div></div>
+    <div class="card" style="margin-top:16px"><h3>이 숫자는 이렇게 구했습니다</h3><table class="ed"><tbody>
+     <tr><td>12번 장표의 기준 수수료</td><td class="calc">${feeTxt(S.baseFee)}%</td></tr>
+     <tr><td>막대 (예상 매출 대비)</td><td class="calc">${S.achieve}%</td></tr>
+     <tr><td>이번 수수료 = ${feeTxt(S.baseFee)}% × ${S.achieve} ÷ 100</td><td class="calc">${feeTxt(S.appliedFee)}%</td></tr>
+     <tr><td>대시보드 1년 매출 (100%)</td><td class="calc">${man(R.revenue)}</td></tr>
+     <tr><td>실제로 들어온 매출</td><td class="calc">${man(S.revenue)}</td></tr>
+     <tr><td>손님 따라 드는 돈 (청소·재료, 막대와 같이 움직임)</td><td class="calc">${man(S.variable)}</td></tr>
+     <tr><td>매달 나가는 돈 (월급·월세, 그대로)</td><td class="calc">${man(S.fixed)}</td></tr>
+     <tr><td>쓰고 남은 돈</td><td class="calc">${man(S.profit)}</td></tr>
+    </tbody></table>
+    <p class="small muted" style="margin:10px 0 0">예) 기준 수수료가 16.5%일 때, 막대 50%면 수수료는 8.25%, 막대 150%면 24.75%입니다. 100%를 넘어도 수수료는 100%에서 멈춥니다.</p></div>
+    <div class="card" style="margin-top:16px"><h3>막대 위치에 따른 1년 금액</h3><div class="tablebox"><table class="ed"><thead><tr><th>막대</th><th style="text-align:right">수수료</th><th style="text-align:right">들어온 매출</th><th style="text-align:right">캠핏</th><th style="text-align:right">피코</th></tr></thead><tbody>${marks}</tbody></table></div></div>
     <div style="margin-top:16px">${bars([
-      { label: '캠핏 1년 정산', v: Math.max(0, S.camp), color: '#7c4dff' },
-      { label: '피코 1년 정산', v: Math.max(0, S.pico), color: 'var(--brand)' },
-    ], { labelW: 140 })}</div>`;
+      { label: '캠핏 1년', v: Math.max(0, S.camp), color: '#7c4dff' },
+      { label: '피코 1년', v: Math.max(0, S.pico), color: 'var(--brand)' },
+    ], { labelW: 110 })}</div>`;
 }
 
 /* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
