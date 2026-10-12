@@ -362,6 +362,11 @@ table.split th.camp { color: #6d28d9; }
 .gear-other { margin-top: 14px; }
 .gear-other h3 { font-size: 14px; color: var(--sub); }
 .scale-amt { font-size: 42px; font-weight: 900; letter-spacing: -1.4px; line-height: 1; }
+.ab-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.ab-metrics .cell { background: #fff; border-radius: 14px; padding: 12px 14px; }
+.ab-metrics .k { font-size: 12.5px; font-weight: 800; color: var(--sub); }
+.ab-metrics .v { font-size: 28px; font-weight: 900; letter-spacing: -.7px; line-height: 1.15; margin-top: 2px; }
+.ab-metrics .s { font-size: 12.5px; color: var(--ink2); margin-top: 3px; }
 @media (max-width: 1100px) { .gear-hero .amt { font-size: 46px; } .scale-amt { font-size: 32px; } }
 </style>
 </head>
@@ -659,8 +664,8 @@ table.split th.camp { color: #6d28d9; }
 <section class="slide" data-title="3년 비교">
  <div class="wrap">
   <div class="eyebrow"><span class="chip">13</span> A안 · B안, 3년</div>
-  <h1 class="title" contenteditable="true" data-k="s15b.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
-  <p class="lead" contenteditable="true" data-k="s15b.lead">A안은 예전 요금이고, 캠핏 수수료는 16.5%입니다. B안은 지금 대시보드 요금이고, 캠핏이 5,000만 원을 넣은 뒤 수수료 20%를 가져갑니다. 손님이 오는 날 수는 두 안이 같습니다.</p>
+  <h1 class="title" contenteditable="true" data-k="s15c.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
+  <p class="lead" contenteditable="true" data-k="s15c.lead">A안은 예전 요금이고 수수료는 16.5%입니다. B안은 캠핏이 5,000만 원을 넣고, 대시보드 1년 매출의 20%를 가져갑니다. 손님이 오는 날 수는 같습니다.</p>
   <div id="abCompare"></div>
  </div>
 </section>
@@ -723,7 +728,7 @@ let state, texts = {}, decision = { pick: null, at: null };
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s16.title','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s15b.title','s15b.lead','s16.title','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
   } catch (e) {}
   state = makeDefault();
   ensurePartner();
@@ -1540,54 +1545,34 @@ function renderAb({ R }) {
   if (!host) return;
   const A0 = planA(R);
   const a = abSide(A0.total, AB_A_FEE, 0);
-  const b = abSide(R.lodging, AB_B_FEE, AB_B_INVEST);
+  const b = abSide(R.revenue, AB_B_FEE, AB_B_INVEST);
   const pay = partnerMonths(AB_B_INVEST, b.yearFee);
-  const row = (k, av, bv) => `<tr><td>${k}</td><td class="calc">${av}</td><td class="calc">${bv}</td></tr>`;
+  const cell = (k, v, s, color) => `<div class="cell"><div class="k">${k}</div><div class="v" style="color:${color}">${v}</div><div class="s">${s}</div></div>`;
   host.innerHTML = `
-    <div class="small" style="margin-bottom:12px">객실 하나당 손님이 오는 날 ${fmt(A0.nights)}박 · 주말 ${fmt(R.nWe)}일 + 평일 ${fmt(R.nWd)}일. 두 안이 같습니다. 3년은 매년 매출이 똑같다고 보고 1년 × 3입니다.</div>
-    <div class="grid g2" style="margin-bottom:16px">
+    <div class="small" style="margin-bottom:12px">손님이 오는 날 ${fmt(A0.nights)}박 (주말 ${fmt(R.nWe)}일 + 평일 ${fmt(R.nWd)}일). 두 안이 같습니다. 3년 매출 = 1년 매출 × 3.</div>
+    <div class="grid g2">
      <div class="card">
       <h3>A안 · 예전 요금</h3>
-      <div class="small muted">사이트 20개 × 1박 6만 원 + 펜션 1개 × 1박 20만 원. 주말·평일 요금이 같습니다. 캠핏이 넣은 돈은 0원.</div>
-      <div class="small" style="margin-top:10px;font-weight:800;color:#64748b">캠핏이 3년 동안 가져가는 돈 · 16.5%</div>
-      <div class="scale-amt" style="color:#334155">${man(a.y3fee)}</div>
-      <div class="small muted">1년 ${man(a.yearFee)} × 3년</div>
+      <div class="small muted">사이트 20개 × 1박 6만 원, 펜션 1개 × 1박 20만 원. 수수료 16.5%. 캠핏이 넣은 돈 없음.</div>
+      <div class="ab-metrics">
+       ${cell('3년 매출', man(a.y3sales), `1년 ${man(a.sales)}`, '#0f172a')}
+       ${cell('3년 캠핏', man(a.y3fee), `매출의 16.5% · 1년 ${man(a.yearFee)}`, '#334155')}
+       ${cell('3년 피코', man(a.y3stay), `매출 − 수수료 · 1년 ${man(a.yearStay)}`, 'var(--brand)')}
+       ${cell('넣은 돈을 찾는 기간', '없음', '넣은 돈 0원', '#64748b')}
+      </div>
      </div>
      <div class="card" style="background:#f5f3ff;border-color:#ddd6fe">
-      <h3>B안 · 지금 요금</h3>
-      <div class="small muted">대시보드 객실 ${R.units}개의 평일·주말 요금. 캠핏이 처음에 5,000만 원을 넣고, 잠자리 판 돈의 20%를 가져갑니다.</div>
-      <div class="small" style="margin-top:10px;font-weight:800;color:#6d28d9">캠핏이 3년 동안 가져가는 돈 · 20%</div>
-      <div class="scale-amt" style="color:#6d28d9">${man(b.y3fee)}</div>
-      <div class="small muted">1년 ${man(b.yearFee)} × 3년</div>
+      <h3>B안 · 5,000만 원 투자</h3>
+      <div class="small muted">대시보드 1년 매출. 수수료 20%. 캠핏이 처음에 5,000만 원을 넣습니다.</div>
+      <div class="ab-metrics">
+       ${cell('3년 매출', man(b.y3sales), `1년 ${man(b.sales)}`, '#0f172a')}
+       ${cell('3년 캠핏', man(b.y3fee), `매출의 20% · 1년 ${man(b.yearFee)}`, '#6d28d9')}
+       ${cell('3년 피코', man(b.y3stay), `매출 − 수수료 · 1년 ${man(b.yearStay)}`, 'var(--brand)')}
+       ${cell('넣은 돈을 찾는 기간', pay, `5,000만 원 ÷ 1년 수수료 ${man(b.yearFee)} × 12<br>3년 가져온 돈 − 5,000만 원 = ${signedMan(b.after)}`, '#6d28d9')}
+      </div>
      </div>
     </div>
-    <div class="card" style="margin-bottom:16px;text-align:center">
-     <div class="small" style="font-weight:800;color:#6d28d9">B안 · 넣은 5,000만 원을 수수료로 다 찾는 기간</div>
-     <div class="gear-hero" style="padding:6px 0"><div class="amt">${pay}</div></div>
-     <div class="small">5,000만 원 ÷ 1년 수수료 ${man(b.yearFee)} × 12개월</div>
-     <div class="small muted">3년 동안 가져온 수수료 ${man(b.y3fee)} · 가져온 돈 − 넣은 돈 ${signedMan(b.after)}</div>
-    </div>
-    <div class="card" style="margin-bottom:16px"><div class="tablebox"><table class="ed">
-     <thead><tr><th>항목</th><th style="text-align:right">A안 · 수수료 16.5%</th><th style="text-align:right">B안 · 투자 5,000만 원 · 수수료 20%</th></tr></thead>
-     <tbody>
-      ${row('잠자리를 어떻게 파나', `사이트 ${A0.sites}개 × ${man(A0.sitePrice)}<br>펜션 ${A0.pensions}개 × ${man(A0.pensionPrice)}`, `객실 ${R.units}개 · 대시보드 요금`)}
-      ${row('캠핏이 넣은 돈', '0원', man(AB_B_INVEST))}
-      ${row('1년 잠자리 매출', man(a.sales), man(b.sales))}
-      ${row('1년 캠핏', man(a.yearFee), man(b.yearFee))}
-      ${row('1년 피코 (수수료를 뺀 잠자리 매출)', man(a.yearStay), man(b.yearStay))}
-      ${row('3년 잠자리 매출', man(a.y3sales), man(b.y3sales))}
-      ${row('3년 캠핏', man(a.y3fee), man(b.y3fee))}
-      ${row('3년 피코 (수수료를 뺀 잠자리 매출)', man(a.y3stay), man(b.y3stay))}
-      ${row('3년 뒤 캠핏 (가져온 돈 − 넣은 돈)', signedMan(a.after), signedMan(b.after))}
-      ${row('넣은 돈을 찾는 기간', '넣은 돈 없음', pay)}
-     </tbody></table></div>
-     <p class="small muted" style="margin:10px 0 0">수수료 = 잠자리 판 돈 × 비율. 장비 대여·체험 매출, 월급·월세·전기요금은 이 표에서 빼지 않았습니다. 이 페이지 수수료는 12번 장표와 따로, A 16.5% · B 20%로 고정입니다.</p>
-     <p class="small muted" style="margin:6px 0 0">A안 1년 = 사이트 ${A0.sites} × ${man(A0.sitePrice)} × ${fmt(A0.nights)}박 (${man(A0.siteRev)}) + 펜션 ${A0.pensions} × ${man(A0.pensionPrice)} × ${fmt(A0.nights)}박 (${man(A0.pensionRev)}).</p>
-    </div>
-    <div>${bars([
-      { label: 'A안 캠핏 3년', v: a.y3fee, color: '#64748b' },
-      { label: 'B안 캠핏 3년', v: b.y3fee, color: '#7c4dff' },
-    ], { labelW: 130 })}</div>`;
+    <p class="small muted" style="margin:12px 0 0">B안 매출은 대시보드 1년 매출을 한 줄로 씁니다. 월급·월세는 빼지 않았습니다. 수수료는 이 페이지에서 A 16.5%, B 20%로 고정입니다.</p>`;
 }
 function gearLines(list, B) {
   const rows = list.map(it => {
