@@ -671,11 +671,11 @@ table.split th.camp { color: #6d28d9; }
 </section>
 
 <!-- ═════════ 14. 장비 투자 ═════════ -->
-<section class="slide" data-title="장비 구입">
+<section class="slide" data-title="시설비">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">14</span> 장비 사는 돈</div>
-  <h1 class="title" contenteditable="true" data-k="s16b.title">빌려 줄 장비를 사려면, 처음에 얼마가 드나</h1>
-  <p class="lead" contenteditable="true" data-k="s16b.lead">가운데 큰 숫자는 밖에 설치하는 것과, 손님에게 빌려 주는 장비를 사는 돈입니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
+  <div class="eyebrow"><span class="chip">14</span> 외부 · 내부 시설비</div>
+  <h1 class="title" contenteditable="true" data-k="s16c.title">외부시설비와 내부시설비</h1>
+  <p class="lead" contenteditable="true" data-k="s16c.lead">가운데 큰 숫자는 외부시설비와 내부시설비를 더한 금액입니다. 내부시설비에는 내부에 비치하는 것과 대여 장비가 모두 들어 있습니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
   <div id="gearHero"></div>
   <div class="grid g2" id="gearLists"></div>
   <div class="card gear-other" id="gearOther"></div>
@@ -728,7 +728,7 @@ let state, texts = {}, decision = { pick: null, at: null };
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s15b.title','s15b.lead','s16.title','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s15b.title','s15b.lead','s16.title','s16b.title','s16b.lead','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
   } catch (e) {}
   state = makeDefault();
   ensurePartner();
@@ -1577,29 +1577,31 @@ function renderAb({ R }) {
 function gearLines(list, B) {
   const rows = list.map(it => {
     const base = num(it.price) * num(it.qty);
-    return `<tr><td>${esc(it.name)}</td><td class="calc">${fmt(num(it.qty))}</td><td class="calc">${man(num(it.price))}</td><td class="calc">${man(base)}</td><td class="calc">${man(base * B)}</td></tr>`;
-  }).join('') || `<tr><td colspan="5" class="muted">항목 없음</td></tr>`;
+    return `<tr><td>${esc(it._tag || '')}</td><td>${esc(it.name)}</td><td class="calc">${fmt(num(it.qty))}</td><td class="calc">${man(num(it.price))}</td><td class="calc">${man(base)}</td><td class="calc">${man(base * B)}</td></tr>`;
+  }).join('') || `<tr><td colspan="6" class="muted">항목 없음</td></tr>`;
   const base = list.reduce((a, it) => a + num(it.price) * num(it.qty), 0);
-  return { rows, base, total: base * B };
+  const tagged = tag => list.filter(it => it._tag === tag).reduce((a, it) => a + num(it.price) * num(it.qty), 0) * B;
+  return { rows, base, total: base * B, placed: tagged('비치'), rented: tagged('대여') };
 }
 function renderGear({ R }) {
   const hero = document.getElementById('gearHero');
   if (!hero) return;
-  const outdoor = [...VIEW.outdoorFixed, ...VIEW.outdoorRental];
-  const rental = VIEW.indoorRental;
+  const tag = (list, label) => list.map(it => ({ ...it, _tag: label }));
+  const outdoor = [...tag(VIEW.outdoorFixed, '비치'), ...tag(VIEW.outdoorRental, '대여')];
+  const indoor = [...tag(VIEW.indoorFixed, '비치'), ...tag(VIEW.indoorRental, '대여')];
   const o = gearLines(outdoor, R.B);
-  const i = gearLines(rental, R.B);
+  const i = gearLines(indoor, R.B);
   const sum = o.total + i.total;
   hero.innerHTML = `<div class="gear-hero">
-    <div class="k">밖에 설치하는 것 + 손님에게 빌려 주는 장비</div>
+    <div class="k">외부시설비 + 내부시설비</div>
     <div class="amt">${man(sum)}</div>
     <div class="sub">물건값 ${man(o.base + i.base)} + 값이 오를 수 있어서 더해 둔 ${R.m.buffer}% ${man(sum - o.base - i.base)}</div>
-    <div class="sub">밖에 설치 ${man(o.total)} · 빌려 주는 장비 ${man(i.total)} · 종류 ${outdoor.length + rental.length}가지</div>
+    <div class="sub">외부시설비 ${man(o.total)} · 내부시설비 ${man(i.total)}</div>
   </div>`;
-  const head = `<thead><tr><th>이름</th><th style="text-align:right">개수</th><th style="text-align:right">하나 가격</th><th style="text-align:right">물건값</th><th style="text-align:right">더해 둔 값까지</th></tr></thead>`;
+  const head = `<thead><tr><th>구분</th><th>이름</th><th style="text-align:right">개수</th><th style="text-align:right">하나 가격</th><th style="text-align:right">물건값</th><th style="text-align:right">더해 둔 값까지</th></tr></thead>`;
   document.getElementById('gearLists').innerHTML = `
-    <div class="card"><h3>밖에 설치하는 것 ${man(o.total)}</h3><p class="small muted" style="margin-top:-4px">풀타프·울타리·조명처럼 자리에 고정하는 것</p><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
-    <div class="card"><h3>빌려 주는 장비 ${man(i.total)}</h3><p class="small muted" style="margin-top:-4px">텐트·침낭·팬히터처럼 손님이 빌려 가는 것</p><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
+    <div class="card"><h3>외부시설비 ${man(o.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
+    <div class="card"><h3>내부시설비 ${man(i.total)}</h3><p class="small muted" style="margin-top:-4px">내부 비치 ${man(i.placed)} · 대여 ${man(i.rented)}</p><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
   const month = (label, v) => `<div class="src"><div class="k">${label}</div><div class="v" style="font-size:18px">${man(v)}</div><div class="s">한 달</div></div>`;
   document.getElementById('gearOther').innerHTML = `<h3>그 밖에 드는 돈</h3>
     <div class="split-src" style="grid-template-columns:repeat(5,1fr)">
