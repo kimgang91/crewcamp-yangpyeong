@@ -227,19 +227,63 @@ ol.talk, ul.talk { margin: 6px 0 0; padding-left: 22px; } ol.talk li, ul.talk li
 /* ── 핵심요약 보고서 (인쇄 전용) ── */
 #report { display: none; }
 @page { size: A4 landscape; margin: 8mm 10mm; }
+body.print-slides .slides { position: static !important; inset: auto !important; top: auto !important; right: auto !important; bottom: auto !important; left: auto !important; width: auto !important; height: auto !important; overflow: visible !important; display: block !important; }
+body.print-slides .slide { position: relative !important; inset: auto !important; top: auto !important; right: auto !important; bottom: auto !important; left: auto !important; height: auto !important; max-height: none !important; min-height: 0 !important; overflow: visible !important; transform: none !important; opacity: 1 !important; display: block !important; pointer-events: auto !important; }
+body.print-slides .slide.skip-print { display: none !important; }
+body.print-slides .wrap { max-width: none !important; }
+body.print-slides .tablebox,
+body.print-slides .card,
+body.print-slides .grid { overflow: visible !important; max-height: none !important; }
+body.print-slides table { width: 100% !important; max-width: 100% !important; }
+body.print-slides table.ed th,
+body.print-slides table.ed td,
+body.print-slides table.ed td.calc { white-space: normal !important; }
+body.print-slides .in,
+body.print-slides .in.w-name,
+body.print-slides .in.w-note { min-width: 0 !important; }
+body.print-slides .gear-fold tr.is-extra { display: table-row !important; }
+body.print-slides .gear-more { display: none !important; }
+body.print-slides .slide:not(.print-flow) .g2 { grid-template-columns: 1fr 1fr !important; }
+body.print-slides .slide:not(.print-flow) .g3 { grid-template-columns: repeat(3, 1fr) !important; }
+body.print-slides .slide:not(.print-flow) .g4 { grid-template-columns: repeat(4, 1fr) !important; }
+body.print-slides .slide:not(.print-flow) .g5 { grid-template-columns: repeat(5, 1fr) !important; }
+body.print-slides .slide:not(.print-flow) .g-73 { grid-template-columns: 7fr 3fr !important; }
+body.print-slides .slide:not(.print-flow) .g-37 { grid-template-columns: 3fr 7fr !important; }
+body.print-slides .slide:not(.print-flow) .g-64 { grid-template-columns: 6fr 4fr !important; }
+body.print-slides .slide:not(.print-flow) .g-46 { grid-template-columns: 4fr 6fr !important; }
+body.print-slides .slide:not(.print-flow) .kpi-strip { grid-template-columns: repeat(5, 1fr) 1.2fr !important; }
+body.print-slides .slide:not(.print-flow) .panel { display: grid !important; grid-template-columns: 340px minmax(0, 1fr) !important; }
+body.print-slides .slide:not(.print-flow) .panel-side { display: block !important; }
+body.print-slides .slide:not(.print-flow) .flow { flex-direction: row !important; }
+body.print-slides .slide:not(.print-flow) .flow .arrowx { width: 44px !important; height: auto !important; transform: none !important; }
+body.print-slides .slide:not(.print-flow) .camfit-hero { grid-template-columns: 1.35fr .9fr !important; }
+body.print-slides .slide:not(.print-flow) .split-main { grid-template-columns: 320px minmax(0, 1fr) !important; }
+body.print-slides .slide:not(.print-flow) .split-src { grid-template-columns: repeat(4, 1fr) !important; }
+body.print-slides #gearOther .split-src { grid-template-columns: repeat(5, 1fr) !important; }
+body.print-slides .slide.print-flow .grid,
+body.print-slides .slide.print-flow .kpi-strip,
+body.print-slides .slide.print-flow .panel,
+body.print-slides .slide.print-flow .panel-side,
+body.print-slides .slide.print-flow .flow,
+body.print-slides .slide.print-flow .camfit-hero,
+body.print-slides .slide.print-flow .split-src,
+body.print-slides .slide.print-flow .mini-inputs,
+body.print-slides .slide.print-flow .metrics { display: block !important; width: auto !important; }
+body.print-slides .slide.print-flow .flow .arrowx { transform: rotate(90deg); width: auto !important; height: 24px; }
 @media print {
-  html, body { height: auto; background: #fff !important; }
+  html, body { height: auto !important; overflow: visible !important; background: #fff !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body:not(.print-slides) { font-size: 10.5px; }
   body:not(.print-slides) > *:not(#report) { display: none !important; }
   body:not(.print-slides) #report { display: block; }
   body.print-slides { font-size: 13px; }
   body.print-slides > *:not(.slides) { display: none !important; }
-  body.print-slides .slides { position: static !important; display: block !important; inset: auto; height: auto; }
-  body.print-slides .slide { position: static !important; opacity: 1 !important; transform: none !important; display: block !important; overflow: visible; pointer-events: auto; page-break-after: always; break-after: page; height: auto; padding: 16px 18px; }
-  body.print-slides .slide.skip-print { display: none !important; }
-  .gear-fold tr.is-extra { display: table-row !important; }
-  .gear-more { display: none !important; }
+  body.print-slides .slide { break-after: page; page-break-after: always; break-inside: auto; page-break-inside: auto; padding: 0 0 6mm; }
+  body.print-slides .slide:not(.print-flow) { break-inside: avoid; page-break-inside: avoid; }
+  body.print-slides .slide.print-last { break-after: auto !important; page-break-after: auto !important; }
+  body.print-slides .slide.print-flow tr,
+  body.print-slides .slide.print-flow .kpi,
+  body.print-slides .slide.print-flow .src { break-inside: avoid; page-break-inside: avoid; }
 }
 .rp-page { break-after: page; color: #0b1324; font-size: 10.5px; line-height: 1.5; }
 .rp-page:last-child { break-after: auto; }
@@ -2036,6 +2080,43 @@ document.getElementById('btnReport').onclick = () => {
   toast("인쇄 창에서 대상을 'PDF로 저장'으로 고르세요");
   setTimeout(() => window.print(), 300);
 };
+function clearPrintFit() {
+  slides.forEach(s => {
+    s.style.zoom = '';
+    s.style.width = '';
+    s.classList.remove('print-flow', 'print-last');
+  });
+}
+function fitPrintSlides() {
+  const mm = 96 / 25.4;
+  const pageW = Math.floor((297 - 20) * mm);
+  const pageH = Math.floor((210 - 16) * mm);
+  slides.forEach(s => {
+    s.style.zoom = '';
+    s.style.width = '';
+    s.classList.remove('print-flow');
+    if (s.classList.contains('skip-print')) return;
+    s.style.width = pageW + 'px';
+  });
+  slides.forEach(s => {
+    if (s.classList.contains('skip-print')) return;
+    const w = Math.max(s.scrollWidth, 1);
+    const h = Math.max(s.scrollHeight, 1);
+    const zFit = Math.min(1, pageW / w, pageH / h) * 0.97;
+    if (zFit >= 0.62) {
+      s.style.zoom = String(Math.round(zFit * 1000) / 1000);
+      return;
+    }
+    s.classList.add('print-flow');
+    s.style.zoom = '1';
+  });
+  slides.forEach(s => {
+    if (!s.classList.contains('print-flow')) return;
+    const w = Math.max(s.scrollWidth, 1);
+    const z = Math.min(1, pageW / w) * 0.97;
+    s.style.zoom = String(Math.round(z * 1000) / 1000);
+  });
+}
 document.getElementById('btnSlidePdf').onclick = () => {
   const n = slides.length;
   let a = clamp(Math.round(num(document.getElementById('pdfFrom').value)) || 1, 1, n);
@@ -2043,17 +2124,24 @@ document.getElementById('btnSlidePdf').onclick = () => {
   if (a > b) { const t = a; a = b; b = t; }
   document.getElementById('pdfFrom').value = a;
   document.getElementById('pdfTo').value = b;
+  clearPrintFit();
   slides.forEach((s, i) => s.classList.toggle('skip-print', i + 1 < a || i + 1 > b));
+  const shown = slides.filter(s => !s.classList.contains('skip-print'));
+  if (shown.length) shown[shown.length - 1].classList.add('print-last');
   document.body.classList.add('print-slides');
   renderAll();
-  toast(`${a}–${b}페이지. 인쇄 창에서 'PDF로 저장'을 고르세요`);
+  toast(`${a}–${b}페이지. 인쇄 창에서 용지는 가로, 'PDF로 저장'을 고르세요`);
   setTimeout(() => window.print(), 300);
 };
 window.addEventListener('afterprint', () => {
   document.body.classList.remove('print-slides');
   slides.forEach(s => s.classList.remove('skip-print'));
+  clearPrintFit();
 });
-window.addEventListener('beforeprint', renderAll);
+window.addEventListener('beforeprint', () => {
+  renderAll();
+  if (document.body.classList.contains('print-slides')) fitPrintSlides();
+});
 document.getElementById('btnEdit').onclick = e => {
   document.body.classList.toggle('editing');
   const on = document.body.classList.contains('editing');
