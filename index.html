@@ -288,9 +288,31 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
 .rp-tag { display: inline-block; background: #ede9fe; color: #6d28d9; border-radius: 99px; padding: 0 7px; font-size: 9px; font-weight: 800; }
 
 /* ── 피코 · 캠핏 분배 ── */
-.slide[data-title="수익 분배"] { padding-top: 22px; }
-.slide[data-title="수익 분배"] h1.title { font-size: 30px; margin: 6px 0 4px; }
-.slide[data-title="수익 분배"] .lead { font-size: 15px; margin-bottom: 12px; }
+.slide[data-title="캠핏 수익"] { padding-top: 18px; }
+.slide[data-title="캠핏 수익"] h1.title { font-size: 30px; margin: 6px 0 4px; }
+.slide[data-title="캠핏 수익"] .lead { font-size: 15px; margin-bottom: 12px; }
+.camfit-hero { display: grid; grid-template-columns: 1.35fr .9fr; gap: 18px; align-items: center; color: #fff;
+  background: linear-gradient(135deg, #7c4dff, #5b21b6 58%, #4c1d95); border-radius: 20px; padding: 20px 26px; box-shadow: var(--shadow-lg); }
+.camfit-hero .role { font-size: 13px; font-weight: 800; letter-spacing: .3px; opacity: .85; }
+.camfit-hero .line { font-size: 22px; font-weight: 800; margin-top: 4px; letter-spacing: -.4px; }
+.camfit-hero .amt { font-size: 64px; font-weight: 900; letter-spacing: -2.4px; line-height: .95; margin: 6px 0; }
+.camfit-hero .eq { font-size: 14.5px; opacity: .9; }
+.camfit-hero .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.camfit-hero .metric { background: rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; }
+.camfit-hero .metric .k { font-size: 12px; font-weight: 800; opacity: .8; }
+.camfit-hero .metric .v { font-size: 20px; font-weight: 900; letter-spacing: -.4px; line-height: 1.2; }
+.camfit-hero .metric .s { font-size: 11.5px; opacity: .75; }
+.ladder { display: flex; flex-direction: column; gap: 6px; }
+.ladder-row { display: grid; grid-template-columns: 132px 1fr auto; gap: 8px; align-items: center; width: 100%; text-align: left;
+  border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 8px 12px; cursor: pointer; }
+.ladder-row:hover { border-color: #c4b5fd; background: #faf8ff; }
+.ladder-row .pct { font-weight: 800; }
+.ladder-row .amt { font-weight: 900; font-size: 20px; color: #6d28d9; letter-spacing: -.4px; }
+.ladder-row .sub { font-size: 12px; color: var(--sub); text-align: right; }
+.ladder-row.on { background: #6d28d9; border-color: #6d28d9; color: #fff; }
+.ladder-row.on .amt { color: #fff; font-size: 28px; }
+.ladder-row.on .sub { color: rgba(255,255,255,.85); }
+@media (max-width: 1100px) { .camfit-hero { grid-template-columns: 1fr; } .camfit-hero .amt { font-size: 48px; } }
 .split-src { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .split-src .src { background: var(--card); border: 1px solid rgba(15,23,42,.06); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 16px; }
 .split-src .k { font-size: 13px; color: var(--sub); font-weight: 800; }
@@ -578,25 +600,25 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 12. 피코 vs 캠핏 수익 분배 ═════════ -->
-<section class="slide" data-title="수익 분배">
+<!-- ═════════ 12. 캠핏 수익 ═════════ -->
+<section class="slide" data-title="캠핏 수익">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">별첨</span> 피코(운영사) vs 캠핏(지원사)</div>
-  <h1 class="title" contenteditable="true" data-k="s13.title">투자금과 수수료율로, 두 회사가 가져가는 돈을 나눕니다</h1>
-  <p class="lead" contenteditable="true" data-k="s13.lead">캠핏(CAMFIT) 수수료는 남는 돈이 아니라 1년 매출에 붙는 플랫폼 수수료입니다. 피코는 1년 남는 돈에서 그 수수료를 뺀 금액을 가져갑니다.</p>
+  <div class="eyebrow"><span class="chip">별첨</span> 캠핏(CAMFIT) 수익</div>
+  <h1 class="title" contenteditable="true" data-k="s14.title">매출의 몇 %를 회수하면, 캠핏에 얼마가 남나</h1>
+  <p class="lead" contenteditable="true" data-k="s14.lead">캠핏이 투자를 더 넣을수록 매출에서 가져가는 비율을 높일 수 있습니다. 비율을 올리면 1년에 회수하는 금액이 바로 커집니다.</p>
 
-  <div class="split-src" id="splitSource"></div>
+  <div class="camfit-hero" id="camfitHero"></div>
 
   <div class="grid split-main">
    <div class="card split-ctl">
-    <h3>🎛 분배 조건</h3>
+    <h3>🎛 캠핏 투자 · 회수 비율</h3>
     <div class="ctl">
      <label>캠핏(CAMFIT) 투자 금액 <output id="campfitInvestOut"></output></label>
      <input class="in n" id="campfitInvest" data-partner="invest" inputmode="numeric" autocomplete="off" placeholder="0">
-     <div class="help">0원이면 투자 없이 기본 수수료 16.5%. 예: 10,000,000 = 1,000만 원</div>
+     <div class="help">0원이면 매출의 16.5%. 투자를 넣으면 비율을 올려 더 많이 회수합니다.</div>
     </div>
     <div class="ctl" id="feeCtl">
-     <label>캠핏 수수료율 <output id="campfitFeeOut"></output></label>
+     <label>매출에서 회수하는 비율 <output id="campfitFeeOut"></output></label>
      <input type="range" id="campfitFeeRange" data-partner="fee" min="0" max="100" step="0.1" value="16.5">
      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
       <input class="in" id="campfitFee" data-partner="fee" inputmode="decimal" autocomplete="off" value="16.5" style="width:120px;text-align:right;font-weight:800">
@@ -605,14 +627,10 @@ table.split th.camp { color: #6d28d9; }
      <div class="help" id="feeHelp"></div>
     </div>
    </div>
-   <div class="grid g2" id="splitCards"></div>
+   <div class="card" id="feeLadder"></div>
   </div>
 
   <div id="splitWarn"></div>
-  <div class="card split-formula">
-   <div id="splitFormula"></div>
-   <div id="splitBar" style="margin-top:10px"></div>
-  </div>
   <div class="card" id="splitTable"></div>
  </div>
 </section>
@@ -1375,50 +1393,61 @@ function partnerCard({ cls, role, name, headline, note, profit, invest, totalInv
     </div>
   </div>`;
 }
+function ladderRates(fee) {
+  const rates = [16.5, 20, 25, 30, 35];
+  if (!rates.some(r => Math.abs(r - fee) < 0.05)) rates.push(fee);
+  return rates.sort((a, b) => a - b);
+}
 function renderPartner({ R }) {
   ensurePartner();
   const P = partnerOf(R);
   syncPartnerInputs(P);
-  const box = document.getElementById('splitSource');
-  if (!box) return;
-  const picoShare = P.profit > 0 ? P.picoProfit / P.profit * 100 : null;
-  box.innerHTML = `
-    <div class="src"><div class="k">총 투자비</div><div class="v">${man(P.investTotal)}</div><div class="s">대시보드 · 처음 드는 돈</div></div>
-    <div class="src"><div class="k">1년 매출</div><div class="v" style="color:var(--rev)">${man(P.revenue)}</div><div class="s">플랫폼 수수료를 매기는 기준</div></div>
-    <div class="src"><div class="k">1년 남는 돈</div><div class="v" style="color:${P.profit >= 0 ? 'var(--good)' : 'var(--bad)'}">${man(P.profit)}</div><div class="s">수수료 차감 전 사업 순이익</div></div>
-    <div class="src"><div class="k">적용 수수료율</div><div class="v" style="color:#6d28d9">${feeTxt(P.fee)}%</div><div class="s">${P.feeLocked ? '투자금 0원 · 매출의 16.5%' : '매출액에 적용'}</div></div>`;
-  document.getElementById('splitFormula').innerHTML = `
-    <div class="formula">
-      <div class="box"><span class="small muted">1년 매출</span><b>${man(P.revenue)}</b></div>
-      <span class="op">×</span>
-      <div class="box"><span class="small muted">CAMFIT 수수료</span><b>${feeTxt(P.fee)}%</b></div>
-      <span class="op">=</span>
-      <div class="box" style="background:#f5f3ff;border-color:#ddd6fe"><span class="small muted">캠핏 플랫폼 수수료</span><b style="color:#6d28d9">${man(P.campfitProfit)}</b></div>
+  const hero = document.getElementById('camfitHero');
+  if (!hero) return;
+  const invPct = P.investTotal > 0 ? P.campfitInvest / P.investTotal * 100 : 0;
+  const gap = P.campfitProfit - P.picoProfit;
+  hero.innerHTML = `
+    <div>
+      <div class="role">캠핏(CAMFIT) · 매출에서 회수</div>
+      <div class="line">매출의 ${feeTxt(P.fee)}%를 회수하면</div>
+      <div class="amt">${man(P.campfitProfit)}</div>
+      <div class="eq">1년 매출 ${man(P.revenue)} × ${feeTxt(P.fee)}% = 캠핏이 1년에 가져가는 돈</div>
     </div>
-    <p class="small" style="margin:12px 0 0">피코가 가져가는 돈 = 1년 남는 돈 − 플랫폼 수수료 = <b style="color:${P.picoProfit >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(P.picoProfit)}</b></p>`;
-  const barHost = document.getElementById('splitBar');
-  barHost.innerHTML = P.picoProfit > 0 && P.campfitProfit > 0
-    ? profitSplitBar(P.picoProfit, P.campfitProfit)
-    : `<div class="note-box ${P.picoProfit < 0 ? 'bad' : 'warn'}">${P.picoProfit < 0 ? `플랫폼 수수료(${man(P.campfitProfit)})가 1년 남는 돈(${man(P.profit)})보다 큽니다. 피코가 가져가는 돈은 ${man(P.picoProfit)}입니다.` : '나눌 플러스 수익이 없습니다. 대시보드 숫자를 바꾸면 이 장표도 바로 다시 계산됩니다.'}</div>`;
+    <div class="metrics">
+      <div class="metric"><div class="k">캠핏 투자금</div><div class="v">${man(P.campfitInvest)}</div><div class="s">${P.campfitInvest > 0 ? '총 투자비의 ' + pct(invPct, 1) : '투자 없음 · 기본 16.5%'}</div></div>
+      <div class="metric"><div class="k">한 달 평균</div><div class="v">${man(P.campfitProfit / 12)}</div><div class="s">1년 회수액 ÷ 12</div></div>
+      <div class="metric"><div class="k">회수 기간</div><div class="v">${partnerMonths(P.campfitInvest, P.campfitProfit)}</div><div class="s">${partnerPeriodNote(P.campfitInvest, P.campfitProfit)}</div></div>
+      <div class="metric"><div class="k">수익률 (1년)</div><div class="v">${partnerRoi(P.campfitInvest, P.campfitProfit)}</div><div class="s">${partnerRoiNote(P.campfitInvest, P.campfitProfit)}</div></div>
+    </div>`;
+  const rows = ladderRates(P.fee).map(rate => {
+    const amount = P.revenue * rate / 100;
+    const on = Math.abs(rate - P.fee) < 0.05;
+    return `<button type="button" class="ladder-row${on ? ' on' : ''}" data-fee-pick="${rate}">
+      <span class="pct">매출의 ${feeTxt(rate)}%</span>
+      <span class="amt">${man(amount)}</span>
+      <span class="sub">${partnerMonths(P.campfitInvest, amount)} · ${partnerRoi(P.campfitInvest, amount)}</span>
+    </button>`;
+  }).join('');
+  document.getElementById('feeLadder').innerHTML = `<h3>매출의 몇 %씩 회수하면 얼마인가</h3>
+    <p class="small muted" style="margin:-4px 0 10px">같은 매출에서 비율만 올리면 캠핏이 가져가는 돈이 커집니다. 칸을 누르면 그 비율로 바로 바뀝니다.</p>
+    <div class="ladder">${rows}</div>
+    <p class="small" style="margin:10px 0 0">피코에게 남는 돈 = 1년 남는 돈 ${man(P.profit)} − 캠핏 회수 ${man(P.campfitProfit)} = <b style="color:${P.picoProfit >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(P.picoProfit)}</b>${gap > 0 ? ` · 캠핏이 피코보다 ${man(gap)} 더 가져갑니다` : ''}</p>`;
   document.getElementById('splitWarn').innerHTML = P.excess > 0
     ? `<div class="note-box warn" style="margin-top:16px">캠핏 투자금(${man(P.campfitInvest)})이 총 투자비(${man(P.investTotal)})보다 ${man(P.excess)} 많습니다. 피코 투자금은 0원으로 보고, 캠핏의 회수 기간·수익률은 입력한 투자금 전체로 계산합니다.</div>`
-    : '';
-  document.getElementById('splitCards').innerHTML =
-    partnerCard({ cls: 'pico', role: '운영사', name: '피코', headline: picoShare == null ? '—' : feeTxt(picoShare) + '%', note: '남는 돈에서 · 수수료 차감 후', profit: P.picoProfit, invest: P.picoInvest, totalInvest: P.investTotal }) +
-    partnerCard({ cls: 'camp', role: '지원사', name: '캠핏', headline: feeTxt(P.fee) + '%', note: '1년 매출에서 플랫폼 수수료', profit: P.campfitProfit, invest: P.campfitInvest, totalInvest: P.investTotal });
-  const invPct = v => P.investTotal > 0 ? pct(v / P.investTotal * 100, 1) : '—';
-  const row = (k, a, b, c) => `<tr><td>${k}</td><td class="numc pico">${a}</td><td class="numc camp">${b}</td><td class="numc">${c}</td></tr>`;
-  document.getElementById('splitTable').innerHTML = `<table class="ed split">
-    <thead><tr><th>항목</th><th class="numc pico">피코 · 운영사</th><th class="numc camp">캠핏 · 지원사</th><th class="numc">합계 · 사업 전체</th></tr></thead>
+    : (P.picoProfit < 0 ? `<div class="note-box bad" style="margin-top:16px">매출의 ${feeTxt(P.fee)}%(${man(P.campfitProfit)})가 1년 남는 돈보다 커서, 피코에게 남는 돈은 ${man(P.picoProfit)}입니다.</div>` : '');
+  const share = v => P.investTotal > 0 ? pct(v / P.investTotal * 100, 1) : '—';
+  const row = (k, camp, pico, total) => `<tr><td>${k}</td><td class="numc camp">${camp}</td><td class="numc pico">${pico}</td><td class="numc">${total}</td></tr>`;
+  document.getElementById('splitTable').innerHTML = `<h3 style="margin-bottom:8px">캠핏이 더 넣으면, 가져가는 돈도 커집니다</h3><table class="ed split">
+    <thead><tr><th>항목</th><th class="numc camp">캠핏 · CAMFIT</th><th class="numc pico">피코 · 운영사</th><th class="numc">사업 전체</th></tr></thead>
     <tbody>
-      ${row('투자금', man(P.picoInvest), man(P.campfitInvest), man(P.investTotal))}
-      ${row('투자 비중', invPct(P.picoInvest), P.excess > 0 ? '총투자 초과' : invPct(P.campfitInvest), '100%')}
-      ${row('1년 가져가는 돈', man(P.picoProfit), man(P.campfitProfit), man(P.profit))}
-      ${row('산정 기준', '남는 돈 − 플랫폼 수수료', '매출 × ' + feeTxt(P.fee) + '%', '매출 ' + man(P.revenue))}
-      ${row('회수 기간', partnerMonths(P.picoInvest, P.picoProfit), partnerMonths(P.campfitInvest, P.campfitProfit), monthsTxt(R.payback))}
-      ${row('수익률 (1년)', partnerRoi(P.picoInvest, P.picoProfit), partnerRoi(P.campfitInvest, P.campfitProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
+      ${row('투자금', man(P.campfitInvest), man(P.picoInvest), man(P.investTotal))}
+      ${row('투자 비중', P.excess > 0 ? '총투자 초과' : share(P.campfitInvest), share(P.picoInvest), '100%')}
+      ${row('1년 가져가는 돈', man(P.campfitProfit), man(P.picoProfit), man(P.profit))}
+      ${row('산정 기준', '매출 × ' + feeTxt(P.fee) + '%', '남는 돈 − 캠핏 회수', '매출 ' + man(P.revenue))}
+      ${row('회수 기간', partnerMonths(P.campfitInvest, P.campfitProfit), partnerMonths(P.picoInvest, P.picoProfit), monthsTxt(R.payback))}
+      ${row('수익률 (1년)', partnerRoi(P.campfitInvest, P.campfitProfit), partnerRoi(P.picoInvest, P.picoProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
     </tbody></table>
-    <p class="small muted" style="margin:10px 0 0">캠핏(CAMFIT) 수수료 = 1년 매출 × 수수료율. 피코 = 1년 남는 돈 − 그 수수료. 회수 기간 = 투자금 ÷ 1년에 가져가는 돈 × 12개월 · 수익률 = 1년에 가져가는 돈 ÷ 투자금. 합계의 회수 기간·수익률은 수수료를 빼기 전 사업 전체 기준입니다.</p>`;
+    <p class="small muted" style="margin:10px 0 0">캠핏 회수액 = 1년 매출 × 회수 비율. 비율이 높을수록 캠핏이 가져가는 돈이 커지고, 피코에게 남는 돈은 그만큼 줄어듭니다. 회수 기간 = 투자금 ÷ 1년 회수액 × 12.</p>`;
 }
 
 /* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
@@ -1709,6 +1738,15 @@ document.addEventListener('focusout', e => {
 });
 document.addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.feePick) {
+    if (num(state.meta.campfitInvest) === 0 && Math.abs(num(t.dataset.feePick) - CAMFIT_BASE_FEE) > 0.05) {
+      toast('투자 금액을 입력하면 회수 비율을 올릴 수 있습니다');
+      return;
+    }
+    state.meta.campfitFee = num(t.dataset.feePick);
+    renderAll(); save();
+    return;
+  }
   if (t.dataset.step) {
     const inp = t.parentElement.querySelector('input');
     inp.value = fmt(Math.max(0, num(inp.value) + Number(t.dataset.step)));
