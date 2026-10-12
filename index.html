@@ -228,10 +228,16 @@ ol.talk, ul.talk { margin: 6px 0 0; padding-left: 22px; } ol.talk li, ul.talk li
 #report { display: none; }
 @page { size: A4 landscape; margin: 8mm 10mm; }
 @media print {
-  html, body { height: auto; background: #fff !important; font-size: 10.5px; }
-  body > *:not(#report) { display: none !important; }
-  #report { display: block; }
+  html, body { height: auto; background: #fff !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body:not(.print-slides) { font-size: 10.5px; }
+  body:not(.print-slides) > *:not(#report) { display: none !important; }
+  body:not(.print-slides) #report { display: block; }
+  body.print-slides { font-size: 13px; }
+  body.print-slides > *:not(.slides) { display: none !important; }
+  body.print-slides .slides { position: static !important; display: block !important; inset: auto; height: auto; }
+  body.print-slides .slide { position: static !important; opacity: 1 !important; transform: none !important; display: block !important; overflow: visible; pointer-events: auto; page-break-after: always; break-after: page; height: auto; padding: 16px 18px; }
+  body.print-slides .slide.skip-print { display: none !important; }
 }
 .rp-page { break-after: page; color: #0b1324; font-size: 10.5px; line-height: 1.5; }
 .rp-page:last-child { break-after: auto; }
@@ -347,7 +353,16 @@ table.split th.camp { color: #6d28d9; }
   .split-main { grid-template-columns: 1fr; }
   .split-src { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 800px) { .split-src, .partner .metrics { grid-template-columns: 1fr; } }
+.pdfpick { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 800; color: var(--sub); padding: 0 4px; white-space: nowrap; }
+.pdfpick .in { width: 48px; height: 28px; text-align: center; padding: 2px 4px; }
+.gear-hero { text-align: center; padding: 8px 8px 18px; }
+.gear-hero .k { font-size: 14px; font-weight: 800; color: var(--sub); }
+.gear-hero .amt { font-size: 68px; font-weight: 900; letter-spacing: -2.5px; line-height: 1; color: #6d28d9; margin: 6px 0; }
+.gear-hero .sub { font-size: 14px; color: var(--ink2); }
+.gear-other { margin-top: 14px; }
+.gear-other h3 { font-size: 14px; color: var(--sub); }
+.scale-amt { font-size: 42px; font-weight: 900; letter-spacing: -1.4px; line-height: 1; }
+@media (max-width: 1100px) { .gear-hero .amt { font-size: 46px; } .scale-amt { font-size: 32px; } }
 </style>
 </head>
 <body class="editing">
@@ -362,6 +377,12 @@ table.split th.camp { color: #6d28d9; }
    <button class="tbtn" id="btnDash" title="대시보드로 이동 (값 조정)">🎛 값 조정</button>
   </div>
   <div class="tgroup">
+   <label class="pdfpick">장표
+    <input id="pdfFrom" class="in" inputmode="numeric" value="1" title="시작 페이지">
+    –
+    <input id="pdfTo" class="in" inputmode="numeric" value="15" title="끝 페이지">
+   </label>
+   <button class="tbtn" id="btnSlidePdf" title="고른 페이지를 PDF로 저장 (인쇄 창에서 'PDF로 저장')">장표 PDF</button>
    <button class="tbtn" id="btnReport" title="지금 값으로 핵심요약 PDF 만들기 (인쇄 창에서 'PDF로 저장' 선택)">📄 요약 PDF</button>
    <button class="tbtn" id="btnExport" title="현재 숫자·글씨를 파일로 저장">💾 저장</button>
    <button class="tbtn" id="btnImport" title="저장 파일 불러오기">📂 불러오기</button>
@@ -634,6 +655,44 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
+<!-- ═════════ 13. A/B 단가 비교 ═════════ -->
+<section class="slide" data-title="단가 비교">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">13</span> 단가 · 숙박 매출</div>
+  <h1 class="title" contenteditable="true" data-k="s15.title">같은 가동률의 A안 · B안 숙박 매출</h1>
+  <p class="lead" contenteditable="true" data-k="s15.lead">A안은 사이트 20개 × 6만 원, 펜션 1개 × 20만 원(주말·평일 동일 단가)입니다. B안은 대시보드 객실 수와 주말·평일 단가입니다. 판매 일수는 두 안이 같습니다.</p>
+  <div id="abCompare"></div>
+ </div>
+</section>
+
+<!-- ═════════ 14. 장비 투자 ═════════ -->
+<section class="slide" data-title="장비 투자">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">14</span> 외부 시설 · 내부 대여 장비</div>
+  <h1 class="title" contenteditable="true" data-k="s16.title">외부 시설비와 내부 대여 장비 구입비</h1>
+  <div id="gearHero"></div>
+  <div class="grid g2" id="gearLists"></div>
+  <div class="card gear-other" id="gearOther"></div>
+ </div>
+</section>
+
+<!-- ═════════ 15. 변동 수수료 ═════════ -->
+<section class="slide" data-title="변동 수수료">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">15</span> 매출 달성률 · 수수료</div>
+  <h1 class="title" contenteditable="true" data-k="s17.title">매출 달성률에 따른 수수료와 정산 금액</h1>
+  <p class="lead" contenteditable="true" data-k="s17.lead">적용 수수료율 = 12번 장표의 기준 수수료율 × 매출 달성률 ÷ 100. 달성 매출 = 대시보드 1년 매출 × 달성률. 변동비는 달성률과 같이 움직이고, 고정비는 그대로입니다.</p>
+  <div class="card">
+   <div class="ctl">
+    <label>매출 달성률 <output data-out="achieveRate"></output></label>
+    <input type="range" min="50" max="150" step="1" data-meta="achieveRate">
+    <div class="help">50% ~ 150%. 100%는 대시보드 1년 매출과 같습니다.</div>
+   </div>
+  </div>
+  <div id="scaleResult" style="margin-top:16px"></div>
+ </div>
+</section>
+
 </main>
 
 <nav class="nav">
@@ -655,7 +714,7 @@ const uid = () => 'i' + (Date.now().toString(36)) + (seq++).toString(36);
 const withIds = arr => arr.map(o => ({ id: uid(), ...o }));
 
 function makeDefault() {
-  return JSON.parse(JSON.stringify({"meta":{"campfitInvest":0,"campfitFee":16.5,"weekendRate":70,"weekdayRate":10,"weekendDays":104,"weekdayDays":261,"buffer":15,"bufferLabor":false,"lossRate":10,"zoneClean":10000,"pensionClean":30000,"targetMonths":24},"rooms":[{"id":"imuy8nu4z0","name":"1구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 16·15"},{"id":"imuy8nu4z1","name":"2구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 14·13·12"},{"id":"imuy8nu4z2","name":"3구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 11·10·9·8 (큰 구역)"},{"id":"imuy8nu4z3","name":"4구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 7·6·5"},{"id":"imuy8nu4z4","name":"5구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 4·3·2·1 (큰 구역)"},{"id":"imuy8nu4z5","name":"6구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 19·20·방갈로 (단체 12인)"},{"id":"imuy8nu4z6","name":"7구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 17·18"},{"id":"imuy8nu4z7","name":"펜션","kind":"펜션","cap":8,"wd":150000,"we":200000,"note":"8인 단체 객실 (단체 대여 공간)"}],"construction":[{"id":"imuy8nu4z8","name":"파쇄석(쇄석) 포설","price":700000,"qty":10,"stage":1,"note":"25t 1대 70만원 · 5cm 도포 약 900평"},{"id":"imuy8nu4za","name":"석분 포설·다짐","price":1500000,"qty":1,"stage":1,"note":"인력 2명 × 3일 + 진동롤러"},{"id":"imuy8nu4zb","name":"포크레인 (중장비)","price":1000000,"qty":3,"stage":1,"note":"1일 100만원 × 3일 · 정지·포설 최소 2~3일"}],"outdoorFixed":[{"id":"imuy8nu4zc","name":"프레임형 풀타프 (게이블·일체형)","price":3636000,"qty":7,"stage":1,"note":"구역마다 1동"},{"id":"imuy8nu4zd","name":"1.5×6m 모듈형 울타리","price":400000,"qty":4,"stage":1,"note":"3·5구역 각 2모듈"},{"id":"imuy8nu4ze","name":"헬로닷 줄조명 파티라이트 6구","price":77000,"qty":7,"stage":1,"note":"야간 분위기"}],"outdoorRental":[],"indoorFixed":[{"id":"imuy8nu4zi","name":"스탠드형 냉난방기","price":1500000,"qty":7,"stage":1,"note":"4계절 기본 냉난방"},{"id":"imuy8nu4zj","name":"사이트 분전반 + 케이블 릴","price":41070,"qty":7,"stage":1,"note":"누전차단기 포함"},{"id":"imuy8nu4zk","name":"ABC 분말 소화기 3.3kg","price":17900,"qty":7,"stage":1,"note":"화기 구역 필수"},{"id":"imuy8nu4zl","name":"일산화탄소(CO) 경보기","price":30000,"qty":7,"stage":1,"note":"안전 · 단가 추정"},{"id":"imuy8nu4zm","name":"하이그라운즈 카고박스","price":57560,"qty":7,"stage":1,"note":"수납"},{"id":"imuy8nu4zr","name":"207L 냉장고 (바베큐 식자재)","price":265000,"qty":7,"stage":1,"note":"바베큐 패키지"},{"id":"imuy8nu4zf","name":"영라이즌 접이식 캠핑화로대","price":24900,"qty":7,"stage":1,"note":"불멍·숯불"},{"id":"imuy8nu4zx","name":"로티캠프 로우체어 4개","price":99800,"qty":12,"fee":2500,"rate":30,"months":12,"care":0,"note":"2팀 8개 / 3팀 12개 ","stage":1},{"id":"imuy8nu4zy","name":"빈슨메시프 롤테이블","price":45400,"qty":14,"fee":5000,"rate":30,"months":12,"care":0,"note":"4인용","stage":1},{"id":"imuya2wlv1","name":"메세타 화목난로","price":251000,"qty":7,"stage":1,"note":"화목난로"},{"id":"imuya5d5q2","name":"스마트 폴더블쉘프 3단(블루)","price":78900,"qty":7,"stage":1,"note":"선반"},{"id":"imuy8nu4z10","name":"썬토치 스토브 ","price":40340,"qty":14,"fee":10000,"rate":20,"months":12,"care":3000,"note":"1개동 다 2개씩 비치","stage":1}],"indoorRental":[{"id":"imuy8nu4zu","name":"팬히터 (전기·안전형)","price":403200,"qty":4,"fee":20000,"rate":20,"months":5,"care":4000,"note":"11~3월 · 신일 SFH-CC910MVP 가격"},{"id":"imuy8nu4zv","name":"포레바 자충매트리스 (더블)","price":169000,"qty":10,"fee":7500,"rate":20,"months":12,"care":3000,"note":"2인용"},{"id":"imuy8nu4zw","name":"블랙독 침낭","price":25800,"qty":24,"fee":2500,"rate":20,"months":12,"care":2000,"note":"세탁 순환분 포함"},{"id":"imuy8nu4zs","name":"낚시 도구 세트","price":30000,"qty":10,"stage":3,"note":"빙어·송어 · 추정","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zq","name":"로스팅 도구","price":59000,"qty":1,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zp","name":"핸드드립 세트 (그라인더 포함)","price":59000,"qty":2,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zo","name":"팝콘 기기","price":19500,"qty":1,"stage":3,"note":"팝콘 판매","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuya07du0","name":"로우체어 2개","price":49900,"qty":1,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuya979i3","name":"스위스마운틴 헥사돔 원터치텐트","price":93800,"qty":7,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuy8nu4zh","name":"이너텐트","price":40000,"qty":7,"fee":10000,"rate":30,"months":12,"care":0,"note":"단가 추정"}],"labor":[{"id":"imuy8nu4z11","name":"메인 매니저 (평일·주말 상주)","amount":2500000,"cycle":"월","note":"200~250만원 중 상한"},{"id":"imuy8nu4z12","name":"주말 보조 알바 1명","amount":1500000,"cycle":"월","note":"시급 10,320원 × 2명 × 금·토 약 8.5시간"}],"rent":[{"id":"imuy8nu4z13","name":"임대료 · 지대","amount":2500000,"cycle":"월","note":""}],"utility":[{"id":"imuy8nu4z14","name":"전기 · 수도 · 가스","amount":1500000,"cycle":"월","note":"냉난방기 상시 가동"}],"misc":[{"id":"imuy8nu4z15","name":"저수조 청소","amount":110000,"cycle":"연","note":""},{"id":"imuy8nu4z16","name":"방역 · 소독","amount":100000,"cycle":"월","note":"월 1회"},{"id":"imuy8nu4z17","name":"정화조 청소 · 수질검사","amount":420000,"cycle":"연","note":"추정"},{"id":"imuy8nu4z18","name":"쓰레기 · 음식물 처리","amount":300000,"cycle":"월","note":""},{"id":"imuy8nu4z19","name":"공용 소모품","amount":200000,"cycle":"월","note":"화장실·샤워장 휴지·세제"},{"id":"imuy8nu4z1a","name":"시설 수선 · 유지보수","amount":200000,"cycle":"월","note":""},{"id":"imuy8nu4z1b","name":"야영장 배상책임 · 화재보험","amount":1200000,"cycle":"연","note":"의무 가입"},{"id":"imuy8nu4z1c","name":"통신 · 인터넷 · CCTV","amount":100000,"cycle":"월","note":""},{"id":"imuy8nu4z1d","name":"예초 · 조경 관리","amount":50000,"cycle":"월","note":""},{"id":"imuy8nu4z1e","name":"소방시설 점검","amount":300000,"cycle":"연","note":""},{"id":"imuy8nu4z1f","name":"온라인 홍보 · 광고","amount":200000,"cycle":"월","note":""}],"programs":[{"id":"imuy8nu4z1g","name":"바베큐 패키지 (4인)","icon":"🍖","price":80000,"uptake":20,"perTeam":1,"unit":"팀","costRate":60,"months":12},{"id":"imuy8nu4z1h","name":"커피 만들기 체험","icon":"☕","price":15000,"uptake":20,"perTeam":2,"unit":"명","costRate":30,"months":12},{"id":"imuy8nu4z1i","name":"팝콘 판매","icon":"🍿","price":3000,"uptake":20,"perTeam":1,"unit":"봉","costRate":35,"months":12},{"id":"imuy8nu4z1j","name":"빙어 · 송어 잡기","icon":"🎣","price":20000,"uptake":30,"perTeam":3,"unit":"명","costRate":50,"months":3}]}));
+  return JSON.parse(JSON.stringify({"meta":{"campfitInvest":0,"campfitFee":16.5,"achieveRate":100,"weekendRate":70,"weekdayRate":10,"weekendDays":104,"weekdayDays":261,"buffer":15,"bufferLabor":false,"lossRate":10,"zoneClean":10000,"pensionClean":30000,"targetMonths":24},"rooms":[{"id":"imuy8nu4z0","name":"1구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 16·15"},{"id":"imuy8nu4z1","name":"2구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 14·13·12"},{"id":"imuy8nu4z2","name":"3구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 11·10·9·8 (큰 구역)"},{"id":"imuy8nu4z3","name":"4구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 7·6·5"},{"id":"imuy8nu4z4","name":"5구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 4·3·2·1 (큰 구역)"},{"id":"imuy8nu4z5","name":"6구역","kind":"구역","cap":12,"wd":250000,"we":300000,"note":"기존 19·20·방갈로 (단체 12인)"},{"id":"imuy8nu4z6","name":"7구역","kind":"구역","cap":8,"wd":150000,"we":200000,"note":"기존 17·18"},{"id":"imuy8nu4z7","name":"펜션","kind":"펜션","cap":8,"wd":150000,"we":200000,"note":"8인 단체 객실 (단체 대여 공간)"}],"construction":[{"id":"imuy8nu4z8","name":"파쇄석(쇄석) 포설","price":700000,"qty":10,"stage":1,"note":"25t 1대 70만원 · 5cm 도포 약 900평"},{"id":"imuy8nu4za","name":"석분 포설·다짐","price":1500000,"qty":1,"stage":1,"note":"인력 2명 × 3일 + 진동롤러"},{"id":"imuy8nu4zb","name":"포크레인 (중장비)","price":1000000,"qty":3,"stage":1,"note":"1일 100만원 × 3일 · 정지·포설 최소 2~3일"}],"outdoorFixed":[{"id":"imuy8nu4zc","name":"프레임형 풀타프 (게이블·일체형)","price":3636000,"qty":7,"stage":1,"note":"구역마다 1동"},{"id":"imuy8nu4zd","name":"1.5×6m 모듈형 울타리","price":400000,"qty":4,"stage":1,"note":"3·5구역 각 2모듈"},{"id":"imuy8nu4ze","name":"헬로닷 줄조명 파티라이트 6구","price":77000,"qty":7,"stage":1,"note":"야간 분위기"}],"outdoorRental":[],"indoorFixed":[{"id":"imuy8nu4zi","name":"스탠드형 냉난방기","price":1500000,"qty":7,"stage":1,"note":"4계절 기본 냉난방"},{"id":"imuy8nu4zj","name":"사이트 분전반 + 케이블 릴","price":41070,"qty":7,"stage":1,"note":"누전차단기 포함"},{"id":"imuy8nu4zk","name":"ABC 분말 소화기 3.3kg","price":17900,"qty":7,"stage":1,"note":"화기 구역 필수"},{"id":"imuy8nu4zl","name":"일산화탄소(CO) 경보기","price":30000,"qty":7,"stage":1,"note":"안전 · 단가 추정"},{"id":"imuy8nu4zm","name":"하이그라운즈 카고박스","price":57560,"qty":7,"stage":1,"note":"수납"},{"id":"imuy8nu4zr","name":"207L 냉장고 (바베큐 식자재)","price":265000,"qty":7,"stage":1,"note":"바베큐 패키지"},{"id":"imuy8nu4zf","name":"영라이즌 접이식 캠핑화로대","price":24900,"qty":7,"stage":1,"note":"불멍·숯불"},{"id":"imuy8nu4zx","name":"로티캠프 로우체어 4개","price":99800,"qty":12,"fee":2500,"rate":30,"months":12,"care":0,"note":"2팀 8개 / 3팀 12개 ","stage":1},{"id":"imuy8nu4zy","name":"빈슨메시프 롤테이블","price":45400,"qty":14,"fee":5000,"rate":30,"months":12,"care":0,"note":"4인용","stage":1},{"id":"imuya2wlv1","name":"메세타 화목난로","price":251000,"qty":7,"stage":1,"note":"화목난로"},{"id":"imuya5d5q2","name":"스마트 폴더블쉘프 3단(블루)","price":78900,"qty":7,"stage":1,"note":"선반"},{"id":"imuy8nu4z10","name":"썬토치 스토브 ","price":40340,"qty":14,"fee":10000,"rate":20,"months":12,"care":3000,"note":"1개동 다 2개씩 비치","stage":1}],"indoorRental":[{"id":"imuy8nu4zu","name":"팬히터 (전기·안전형)","price":403200,"qty":4,"fee":20000,"rate":20,"months":5,"care":4000,"note":"11~3월 · 신일 SFH-CC910MVP 가격"},{"id":"imuy8nu4zv","name":"포레바 자충매트리스 (더블)","price":169000,"qty":10,"fee":7500,"rate":20,"months":12,"care":3000,"note":"2인용"},{"id":"imuy8nu4zw","name":"블랙독 침낭","price":25800,"qty":24,"fee":2500,"rate":20,"months":12,"care":2000,"note":"세탁 순환분 포함"},{"id":"imuy8nu4zs","name":"낚시 도구 세트","price":30000,"qty":10,"stage":3,"note":"빙어·송어 · 추정","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zq","name":"로스팅 도구","price":59000,"qty":1,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zp","name":"핸드드립 세트 (그라인더 포함)","price":59000,"qty":2,"stage":3,"note":"커피 체험","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuy8nu4zo","name":"팝콘 기기","price":19500,"qty":1,"stage":3,"note":"팝콘 판매","fee":10000,"rate":20,"months":12,"care":0},{"id":"imuya07du0","name":"로우체어 2개","price":49900,"qty":1,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuya979i3","name":"스위스마운틴 헥사돔 원터치텐트","price":93800,"qty":7,"fee":10000,"rate":20,"months":12,"care":0,"note":""},{"id":"imuy8nu4zh","name":"이너텐트","price":40000,"qty":7,"fee":10000,"rate":30,"months":12,"care":0,"note":"단가 추정"}],"labor":[{"id":"imuy8nu4z11","name":"메인 매니저 (평일·주말 상주)","amount":2500000,"cycle":"월","note":"200~250만원 중 상한"},{"id":"imuy8nu4z12","name":"주말 보조 알바 1명","amount":1500000,"cycle":"월","note":"시급 10,320원 × 2명 × 금·토 약 8.5시간"}],"rent":[{"id":"imuy8nu4z13","name":"임대료 · 지대","amount":2500000,"cycle":"월","note":""}],"utility":[{"id":"imuy8nu4z14","name":"전기 · 수도 · 가스","amount":1500000,"cycle":"월","note":"냉난방기 상시 가동"}],"misc":[{"id":"imuy8nu4z15","name":"저수조 청소","amount":110000,"cycle":"연","note":""},{"id":"imuy8nu4z16","name":"방역 · 소독","amount":100000,"cycle":"월","note":"월 1회"},{"id":"imuy8nu4z17","name":"정화조 청소 · 수질검사","amount":420000,"cycle":"연","note":"추정"},{"id":"imuy8nu4z18","name":"쓰레기 · 음식물 처리","amount":300000,"cycle":"월","note":""},{"id":"imuy8nu4z19","name":"공용 소모품","amount":200000,"cycle":"월","note":"화장실·샤워장 휴지·세제"},{"id":"imuy8nu4z1a","name":"시설 수선 · 유지보수","amount":200000,"cycle":"월","note":""},{"id":"imuy8nu4z1b","name":"야영장 배상책임 · 화재보험","amount":1200000,"cycle":"연","note":"의무 가입"},{"id":"imuy8nu4z1c","name":"통신 · 인터넷 · CCTV","amount":100000,"cycle":"월","note":""},{"id":"imuy8nu4z1d","name":"예초 · 조경 관리","amount":50000,"cycle":"월","note":""},{"id":"imuy8nu4z1e","name":"소방시설 점검","amount":300000,"cycle":"연","note":""},{"id":"imuy8nu4z1f","name":"온라인 홍보 · 광고","amount":200000,"cycle":"월","note":""}],"programs":[{"id":"imuy8nu4z1g","name":"바베큐 패키지 (4인)","icon":"🍖","price":80000,"uptake":20,"perTeam":1,"unit":"팀","costRate":60,"months":12},{"id":"imuy8nu4z1h","name":"커피 만들기 체험","icon":"☕","price":15000,"uptake":20,"perTeam":2,"unit":"명","costRate":30,"months":12},{"id":"imuy8nu4z1i","name":"팝콘 판매","icon":"🍿","price":3000,"uptake":20,"perTeam":1,"unit":"봉","costRate":35,"months":12},{"id":"imuy8nu4z1j","name":"빙어 · 송어 잡기","icon":"🎣","price":20000,"uptake":30,"perTeam":3,"unit":"명","costRate":50,"months":3}]}));
 }
 
 /* ═══════════════════════ 상태 저장 ═══════════════════════ */
@@ -678,6 +737,8 @@ function ensurePartner() {
   m.campfitInvest = Math.max(0, num(m.campfitInvest));
   if (m.campfitFee == null || m.campfitFee === '') m.campfitFee = CAMFIT_BASE_FEE;
   m.campfitFee = Math.round(clamp(num(m.campfitFee), 0, 100) * 100) / 100;
+  if (m.achieveRate == null || m.achieveRate === '') m.achieveRate = 100;
+  m.achieveRate = clamp(Math.round(num(m.achieveRate)), 50, 150);
 }
 function partnerOf(R) {
   const investTotal = R.investTotal;
@@ -1123,6 +1184,7 @@ function renderAll() {
   syncMetaInputs();
   renderKpi(X); renderOverview(X); renderFlow(X); renderStage1(X); renderStage2(X); renderStage3(X);
   renderStages(X); renderInvest(X); renderCost(X); renderPnl(X); renderExec(X); renderPartner(X);
+  renderAb(X); renderGear(X); renderScale(X);
   buildReport(X);
 }
 
@@ -1446,6 +1508,145 @@ function renderPartner({ R }) {
       ${row('수익률 (1년)', partnerRoi(P.campfitInvest, P.campfitProfit), partnerRoi(P.picoInvest, P.picoProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
     </tbody></table>
     <p class="small muted" style="margin:10px 0 0">캠핏 회수액 = 1년 매출 × 회수 비율. 피코 = 1년 남는 돈 − 캠핏 회수액. 회수 기간 = 투자금 ÷ 1년 회수액 × 12.</p>`;
+}
+
+/* ═══════════════════════ 13·14·15 의사결정 장표 ═══════════════════════ */
+function planA(R) {
+  const nights = R.nWe + R.nWd;
+  const sites = 20, sitePrice = 60000, pensions = 1, pensionPrice = 200000;
+  const siteRev = sites * sitePrice * nights;
+  const pensionRev = pensions * pensionPrice * nights;
+  return { nights, sites, sitePrice, pensions, pensionPrice, siteRev, pensionRev, total: siteRev + pensionRev, units: sites + pensions };
+}
+function signedMan(n) {
+  if (Math.abs(n) < 1) return man(0);
+  return (n > 0 ? '+' : '') + man(n);
+}
+function renderAb({ R }) {
+  const host = document.getElementById('abCompare');
+  if (!host) return;
+  const A = planA(R);
+  const B = R.lodging;
+  const diff = B - A.total;
+  const avg = (total, units) => units && A.nights ? total / (units * A.nights) : 0;
+  const roomRows = VIEW.rooms.map(r => `<tr><td>${esc(r.name)}</td><td>${esc(r.kind)}</td><td class="calc">${fmt(num(r.cap))}</td><td class="calc">${man(num(r.wd))}</td><td class="calc">${man(num(r.we))}</td><td class="calc">${man(R.roomMap[r.id] || 0)}</td></tr>`).join('');
+  host.innerHTML = `
+    <div class="card" style="margin-bottom:16px">
+     <div class="small">주말 판매 ${fmt(R.nWe)}일 (주말 ${R.m.weekendDays}일 × ${R.m.weekendRate}%) · 평일 판매 ${fmt(R.nWd)}일 (평일 ${R.m.weekdayDays}일 × ${R.m.weekdayRate}%) · 객실당 ${fmt(A.nights)}박</div>
+     <div style="margin-top:12px">${bars([
+       { label: 'A안 1년 숙박 매출', v: A.total, color: '#64748b' },
+       { label: 'B안 1년 숙박 매출', v: B, color: 'var(--s1)' },
+     ], { labelW: 160 })}</div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="tablebox"><table class="ed">
+     <thead><tr><th></th><th>A안</th><th>B안</th><th style="text-align:right">B − A</th></tr></thead>
+     <tbody>
+      <tr><td>구성</td><td>사이트 ${A.sites} + 펜션 ${A.pensions}</td><td>대시보드 객실 ${R.units}개</td><td class="calc">${(R.units - A.units > 0 ? '+' : '') + fmt(R.units - A.units)}개</td></tr>
+      <tr><td>1박 단가</td><td>사이트 ${man(A.sitePrice)} · 펜션 ${man(A.pensionPrice)}<div class="tiny muted">주말·평일 동일</div></td><td>객실별 주말·평일 단가</td><td class="calc">—</td></tr>
+      <tr><td>판매 일수</td><td>주말 ${fmt(R.nWe)} + 평일 ${fmt(R.nWd)}</td><td>주말 ${fmt(R.nWe)} + 평일 ${fmt(R.nWd)}</td><td class="calc">0일</td></tr>
+      <tr><td>1년 숙박 매출</td><td class="calc">${man(A.total)}</td><td class="calc">${man(B)}</td><td class="calc">${signedMan(diff)}</td></tr>
+      <tr><td>객실 1박 평균</td><td class="calc">${man(avg(A.total, A.units))}</td><td class="calc">${man(avg(B, R.units))}</td><td class="calc">${signedMan(avg(B, R.units) - avg(A.total, A.units))}</td></tr>
+     </tbody></table></div></div>
+    <div class="grid g2">
+     <div class="card"><h3>A안 산출</h3><table class="ed"><tbody>
+      <tr><td>사이트 ${A.sites} × ${man(A.sitePrice)} × ${fmt(A.nights)}박</td><td class="calc">${man(A.siteRev)}</td></tr>
+      <tr><td>펜션 ${A.pensions} × ${man(A.pensionPrice)} × ${fmt(A.nights)}박</td><td class="calc">${man(A.pensionRev)}</td></tr>
+      <tr><td>합계</td><td class="calc">${man(A.total)}</td></tr>
+     </tbody></table></div>
+     <div class="card"><h3>B안 객실별 숙박 매출</h3><div class="tablebox"><table class="ed"><thead><tr><th>객실</th><th>구분</th><th style="text-align:right">인원</th><th style="text-align:right">평일</th><th style="text-align:right">주말</th><th style="text-align:right">1년 매출</th></tr></thead><tbody>
+      ${roomRows}
+      <tr><td>합계</td><td></td><td></td><td></td><td></td><td class="calc">${man(B)}</td></tr>
+     </tbody></table></div></div>
+    </div>`;
+}
+function gearLines(list, B) {
+  const rows = list.map(it => {
+    const base = num(it.price) * num(it.qty);
+    return `<tr><td>${esc(it.name)}</td><td class="calc">${fmt(num(it.qty))}</td><td class="calc">${man(num(it.price))}</td><td class="calc">${man(base)}</td><td class="calc">${man(base * B)}</td></tr>`;
+  }).join('') || `<tr><td colspan="5" class="muted">항목 없음</td></tr>`;
+  const base = list.reduce((a, it) => a + num(it.price) * num(it.qty), 0);
+  return { rows, base, total: base * B };
+}
+function renderGear({ R }) {
+  const hero = document.getElementById('gearHero');
+  if (!hero) return;
+  const outdoor = [...VIEW.outdoorFixed, ...VIEW.outdoorRental];
+  const rental = VIEW.indoorRental;
+  const o = gearLines(outdoor, R.B);
+  const i = gearLines(rental, R.B);
+  const sum = o.total + i.total;
+  hero.innerHTML = `<div class="gear-hero">
+    <div class="k">외부 시설비 + 내부 대여 장비</div>
+    <div class="amt">${man(sum)}</div>
+    <div class="sub">구입비 ${man(o.base + i.base)} + 여유분 ${R.m.buffer}% ${man(sum - o.base - i.base)}</div>
+    <div class="sub">외부 시설 ${man(o.total)} · 내부 대여 장비 ${man(i.total)} · 품목 ${outdoor.length + rental.length}개</div>
+  </div>`;
+  const head = `<thead><tr><th>품목</th><th style="text-align:right">수량</th><th style="text-align:right">단가</th><th style="text-align:right">구입비</th><th style="text-align:right">여유분 포함</th></tr></thead>`;
+  document.getElementById('gearLists').innerHTML = `
+    <div class="card"><h3>외부 시설비 ${man(o.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
+    <div class="card"><h3>내부 대여 장비 ${man(i.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
+  const month = (label, v) => `<div class="src"><div class="k">${label}</div><div class="v" style="font-size:18px">${man(v)}</div><div class="s">월</div></div>`;
+  document.getElementById('gearOther').innerHTML = `<h3>기타 부대비용</h3>
+    <div class="split-src" style="grid-template-columns:repeat(5,1fr)">
+      <div class="src"><div class="k">공사비</div><div class="v" style="font-size:18px">${man(R.inv.construction * R.B)}</div><div class="s">1회 · 여유분 포함</div></div>
+      ${month('인건비', R.fixedM.labor)}
+      ${month('임대료', R.fixedM.rent)}
+      ${month('운영비', R.fixedM.utility)}
+      ${month('잡비', R.fixedM.misc)}
+    </div>`;
+}
+function scaleOf(R) {
+  const baseFee = partnerOf(R).fee;
+  const achieve = clamp(Math.round(num(state.meta.achieveRate) || 100), 50, 150);
+  const appliedFee = Math.round(Math.min(100, baseFee * achieve / 100) * 100) / 100;
+  const revenue = R.revenue * achieve / 100;
+  const variable = R.varAnnual * achieve / 100;
+  const fixed = R.fixedAnnual;
+  const profit = revenue - variable - fixed;
+  const camp = revenue * appliedFee / 100;
+  const pico = profit - camp;
+  return { baseFee, achieve, appliedFee, revenue, variable, fixed, profit, camp, pico };
+}
+function renderScale({ R }) {
+  const host = document.getElementById('scaleResult');
+  if (!host) return;
+  const S = scaleOf(R);
+  const marks = [50, 75, 100, 125, 150].map(p => {
+    const fee = Math.round(Math.min(100, S.baseFee * p / 100) * 100) / 100;
+    const rev = R.revenue * p / 100;
+    const camp = rev * fee / 100;
+    const pico = (rev - R.varAnnual * p / 100 - R.fixedAnnual) - camp;
+    const on = p === S.achieve;
+    return `<tr${on ? ' style="background:#f5f3ff"' : ''}><td>${p}%</td><td class="calc">${feeTxt(fee)}%</td><td class="calc">${man(rev)}</td><td class="calc">${man(camp)}</td><td class="calc">${man(camp / 12)}</td><td class="calc">${man(pico)}</td><td class="calc">${man(pico / 12)}</td></tr>`;
+  }).join('');
+  host.innerHTML = `
+    <div class="grid g2">
+     <div class="card" style="background:#f5f3ff;border-color:#ddd6fe">
+      <div class="small" style="font-weight:800;color:#6d28d9">캠핏 정산 · 달성 매출 × ${feeTxt(S.appliedFee)}%</div>
+      <div class="scale-amt" style="color:#6d28d9">${man(S.camp)}</div>
+      <div class="small muted">1년 · 한 달 ${man(S.camp / 12)} (1년 ÷ 12)</div>
+     </div>
+     <div class="card">
+      <div class="small" style="font-weight:800;color:var(--brand)">피코 정산 · 달성 손익 − 캠핏 정산</div>
+      <div class="scale-amt" style="color:${S.pico >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(S.pico)}</div>
+      <div class="small muted">1년 · 한 달 ${man(S.pico / 12)} (1년 ÷ 12)</div>
+     </div>
+    </div>
+    <div class="card" style="margin-top:16px"><table class="ed"><tbody>
+     <tr><td>기준 수수료율 (12번)</td><td class="calc">${feeTxt(S.baseFee)}%</td></tr>
+     <tr><td>매출 달성률</td><td class="calc">${S.achieve}%</td></tr>
+     <tr><td>적용 수수료율 = ${feeTxt(S.baseFee)}% × ${S.achieve} ÷ 100</td><td class="calc">${feeTxt(S.appliedFee)}%</td></tr>
+     <tr><td>대시보드 1년 매출</td><td class="calc">${man(R.revenue)}</td></tr>
+     <tr><td>달성 매출 = 1년 매출 × ${S.achieve}%</td><td class="calc">${man(S.revenue)}</td></tr>
+     <tr><td>변동비 × ${S.achieve}%</td><td class="calc">${man(S.variable)}</td></tr>
+     <tr><td>고정비 (변동 없음)</td><td class="calc">${man(S.fixed)}</td></tr>
+     <tr><td>달성 손익 = 달성 매출 − 변동비 − 고정비</td><td class="calc">${man(S.profit)}</td></tr>
+    </tbody></table></div>
+    <div class="card" style="margin-top:16px"><h3>달성률별 정산</h3><div class="tablebox"><table class="ed"><thead><tr><th>달성률</th><th style="text-align:right">적용 수수료</th><th style="text-align:right">달성 매출</th><th style="text-align:right">캠핏 1년</th><th style="text-align:right">캠핏 한 달</th><th style="text-align:right">피코 1년</th><th style="text-align:right">피코 한 달</th></tr></thead><tbody>${marks}</tbody></table></div></div>
+    <div style="margin-top:16px">${bars([
+      { label: '캠핏 1년 정산', v: Math.max(0, S.camp), color: '#7c4dff' },
+      { label: '피코 1년 정산', v: Math.max(0, S.pico), color: 'var(--brand)' },
+    ], { labelW: 140 })}</div>`;
 }
 
 /* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
@@ -1785,7 +1986,29 @@ function toast(msg, actionLabel, action) {
   toastTimer = setTimeout(() => el.classList.remove('show'), actionLabel ? 5000 : 1800);
 }
 document.getElementById('btnDash').onclick = () => go(0);
-document.getElementById('btnReport').onclick = () => { renderAll(); toast("인쇄 창에서 대상을 'PDF로 저장'으로 고르세요"); setTimeout(() => window.print(), 300); };
+document.getElementById('btnReport').onclick = () => {
+  document.body.classList.remove('print-slides');
+  renderAll();
+  toast("인쇄 창에서 대상을 'PDF로 저장'으로 고르세요");
+  setTimeout(() => window.print(), 300);
+};
+document.getElementById('btnSlidePdf').onclick = () => {
+  const n = slides.length;
+  let a = clamp(Math.round(num(document.getElementById('pdfFrom').value)) || 1, 1, n);
+  let b = clamp(Math.round(num(document.getElementById('pdfTo').value)) || n, 1, n);
+  if (a > b) { const t = a; a = b; b = t; }
+  document.getElementById('pdfFrom').value = a;
+  document.getElementById('pdfTo').value = b;
+  slides.forEach((s, i) => s.classList.toggle('skip-print', i + 1 < a || i + 1 > b));
+  document.body.classList.add('print-slides');
+  renderAll();
+  toast(`${a}–${b}페이지. 인쇄 창에서 'PDF로 저장'을 고르세요`);
+  setTimeout(() => window.print(), 300);
+};
+window.addEventListener('afterprint', () => {
+  document.body.classList.remove('print-slides');
+  slides.forEach(s => s.classList.remove('skip-print'));
+});
 window.addEventListener('beforeprint', renderAll);
 document.getElementById('btnEdit').onclick = e => {
   document.body.classList.toggle('editing');
@@ -1821,6 +2044,9 @@ document.getElementById('btnFull').onclick = () => document.fullscreenElement ? 
 
 /* ═══════════════════════ 슬라이드 이동 ═══════════════════════ */
 const slides = [...document.querySelectorAll('.slide')];
+document.getElementById('pdfFrom').max = slides.length;
+document.getElementById('pdfTo').max = slides.length;
+document.getElementById('pdfTo').value = slides.length;
 let cur = 0;
 function go(i) {
   cur = clamp(i, 0, slides.length - 1);
