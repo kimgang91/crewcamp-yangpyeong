@@ -686,14 +686,25 @@ table.split th.camp { color: #6d28d9; }
 <section class="slide" data-title="수수료 변화">
  <div class="wrap">
   <div class="eyebrow"><span class="chip">15</span> 매출이 달라지면</div>
-  <h1 class="title" contenteditable="true" data-k="s17b.title">매출이 달라지면, 수수료도 같이 바뀝니다</h1>
-  <p class="lead" contenteditable="true" data-k="s17b.lead">막대를 움직여 보세요. 100%는 대시보드에서 계산한 1년 매출입니다. 막대를 내리면 캠핏 수수료도 내려가고, 올리면 수수료도 올라갑니다.</p>
+  <h1 class="title" contenteditable="true" data-k="s17c.title">매출이 달라지면, 수수료도 같이 바뀝니다</h1>
+  <p class="lead" contenteditable="true" data-k="s17c.lead">막대는 50%에서 300%까지입니다. 100%는 대시보드 1년 매출이고, 300%는 그 3배입니다. 기준 수수료를 고치면 매출 비율에 맞춘 수수료와 금액이 그 숫자로 다시 계산됩니다.</p>
   <div class="card">
    <div class="ctl">
-    <label>예상한 매출의 몇 %가 들어왔나 <output data-out="achieveRate"></output></label>
-    <input type="range" min="50" max="150" step="1" data-meta="achieveRate">
-    <div class="help">50%는 절반, 100%는 그대로, 150%는 1.5배입니다. 수수료 = 12번 장표의 기준 수수료 × 이 숫자 ÷ 100.</div>
+    <label>매출이 예상보다 얼마나 들어왔나 <output data-out="achieveRate"></output></label>
+    <input type="range" min="50" max="300" step="1" data-meta="achieveRate">
+    <div class="help">50%는 절반, 100%는 그대로, 300%는 3배입니다.</div>
    </div>
+   <div class="grid g2" style="margin-top:12px">
+    <div class="ctl">
+     <label>100%일 때 캠핏 수수료 (기준)</label>
+     <input class="in" id="scaleBaseFee" data-scale-fee="base" inputmode="decimal" autocomplete="off" style="width:140px;text-align:right;font-weight:800">
+    </div>
+    <div class="ctl">
+     <label>지금 매출에서의 캠핏 수수료</label>
+     <input class="in" id="scaleNowFee" data-scale-fee="now" inputmode="decimal" autocomplete="off" style="width:140px;text-align:right;font-weight:800">
+    </div>
+   </div>
+   <div class="help" id="scaleFeeHelp"></div>
   </div>
   <div id="scaleResult" style="margin-top:16px"></div>
  </div>
@@ -728,7 +739,7 @@ let state, texts = {}, decision = { pick: null, at: null };
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s15b.title','s15b.lead','s16.title','s16b.title','s16b.lead','s17.title','s17.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
+    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s15.title','s15.lead','s15b.title','s15b.lead','s16.title','s16b.title','s16b.lead','s17.title','s17.lead','s17b.title','s17b.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
   } catch (e) {}
   state = makeDefault();
   ensurePartner();
@@ -744,7 +755,8 @@ function ensurePartner() {
   if (m.campfitFee == null || m.campfitFee === '') m.campfitFee = CAMFIT_BASE_FEE;
   m.campfitFee = Math.round(clamp(num(m.campfitFee), 0, 100) * 100) / 100;
   if (m.achieveRate == null || m.achieveRate === '') m.achieveRate = 100;
-  m.achieveRate = clamp(Math.round(num(m.achieveRate)), 50, 150);
+  m.achieveRate = clamp(Math.round(num(m.achieveRate)), 50, 300);
+  if (m.scaleFeeTouched) m.scaleBaseFee = Math.round(clamp(num(m.scaleBaseFee), 0, 100) * 100) / 100;
 }
 function partnerOf(R) {
   const investTotal = R.investTotal;
@@ -1613,29 +1625,46 @@ function renderGear({ R }) {
     </div>
     <p class="small muted" style="margin:8px 0 0">위 다섯 칸은 단위가 달라서 하나로 더하지 않았습니다. 공사는 시작할 때 한 번, 나머지는 한 달 금액입니다.</p>`;
 }
-function scaleOf(R) {
-  const baseFee = partnerOf(R).fee;
-  const achieve = clamp(Math.round(num(state.meta.achieveRate) || 100), 50, 150);
-  const appliedFee = Math.round(Math.min(100, baseFee * achieve / 100) * 100) / 100;
+function scaleBaseOf(R) {
+  if (state.meta.scaleFeeTouched) return Math.round(clamp(num(state.meta.scaleBaseFee), 0, 100) * 100) / 100;
+  return partnerOf(R).fee;
+}
+function scaleAt(R, achieve, baseFee) {
+  const feeRaw = baseFee * achieve / 100;
+  const appliedFee = Math.round(Math.min(100, feeRaw) * 100) / 100;
   const revenue = R.revenue * achieve / 100;
   const variable = R.varAnnual * achieve / 100;
   const fixed = R.fixedAnnual;
   const profit = revenue - variable - fixed;
   const camp = revenue * appliedFee / 100;
   const pico = profit - camp;
-  return { baseFee, achieve, appliedFee, revenue, variable, fixed, profit, camp, pico };
+  return { achieve, feeRaw, appliedFee, revenue, variable, fixed, profit, camp, pico };
+}
+function scaleOf(R) {
+  const baseFee = scaleBaseOf(R);
+  const achieve = clamp(Math.round(num(state.meta.achieveRate) || 100), 50, 300);
+  return { baseFee, invest: R.investTotal, ...scaleAt(R, achieve, baseFee) };
 }
 function renderScale({ R }) {
   const host = document.getElementById('scaleResult');
   if (!host) return;
   const S = scaleOf(R);
-  const marks = [50, 75, 100, 125, 150].map(p => {
-    const fee = Math.round(Math.min(100, S.baseFee * p / 100) * 100) / 100;
-    const rev = R.revenue * p / 100;
-    const camp = rev * fee / 100;
-    const pico = (rev - R.varAnnual * p / 100 - R.fixedAnnual) - camp;
+  const baseEl = document.getElementById('scaleBaseFee');
+  const nowEl = document.getElementById('scaleNowFee');
+  if (baseEl && document.activeElement !== baseEl) baseEl.value = feeTxt(S.baseFee);
+  if (nowEl && document.activeElement !== nowEl) nowEl.value = feeTxt(S.appliedFee);
+  const help = document.getElementById('scaleFeeHelp');
+  if (help) {
+    const cap = S.feeRaw > 100 + 1e-9;
+    help.textContent = `지금 수수료 = 기준 ${feeTxt(S.baseFee)}% × 매출 ${S.achieve}% ÷ 100` + (cap ? ` = ${feeTxt(S.feeRaw)}%이고, 100%에서 멈춥니다.` : ` = ${feeTxt(S.appliedFee)}%.`) + ' 두 칸 중 하나를 고치면 그 숫자가 새 기준이 되어 표 전체가 다시 계산됩니다.';
+  }
+  const marks = [50, 100, 150, 200, 250, 300];
+  if (!marks.includes(S.achieve)) marks.push(S.achieve);
+  marks.sort((a, b) => a - b);
+  const rows = marks.map(p => {
+    const x = scaleAt(R, p, S.baseFee);
     const on = p === S.achieve;
-    return `<tr${on ? ' style="background:#f5f3ff"' : ''}><td>${p}%</td><td class="calc">${feeTxt(fee)}%</td><td class="calc">${man(rev)}</td><td class="calc">${man(camp)}</td><td class="calc">${man(pico)}</td></tr>`;
+    return `<tr${on ? ' style="background:#f5f3ff"' : ''}><td>${p}%</td><td class="calc">${feeTxt(x.appliedFee)}%</td><td class="calc">${man(x.revenue)}</td><td class="calc">${man(x.fixed / 12)}</td><td class="calc">${man(x.profit)}</td><td class="calc">${man(x.camp)}</td><td class="calc">${man(x.pico)}</td></tr>`;
   }).join('');
   host.innerHTML = `
     <div class="grid g2">
@@ -1647,21 +1676,28 @@ function renderScale({ R }) {
      <div class="card">
       <div class="small" style="font-weight:800;color:var(--brand)">피코에게 1년에 남는 돈</div>
       <div class="scale-amt" style="color:${S.pico >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(S.pico)}</div>
-      <div class="small muted">번 돈에서 쓴 돈과 캠핏 수수료를 뺀 금액 · 한 달 ${man(S.pico / 12)}</div>
+      <div class="small muted">순이익 − 캠핏 수수료 · 한 달 ${man(S.pico / 12)}</div>
      </div>
     </div>
-    <div class="card" style="margin-top:16px"><h3>이 숫자는 이렇게 구했습니다</h3><table class="ed"><tbody>
-     <tr><td>12번 장표의 기준 수수료</td><td class="calc">${feeTxt(S.baseFee)}%</td></tr>
-     <tr><td>막대 (예상 매출 대비)</td><td class="calc">${S.achieve}%</td></tr>
-     <tr><td>이번 수수료 = ${feeTxt(S.baseFee)}% × ${S.achieve} ÷ 100</td><td class="calc">${feeTxt(S.appliedFee)}%</td></tr>
-     <tr><td>대시보드 1년 매출 (100%)</td><td class="calc">${man(R.revenue)}</td></tr>
-     <tr><td>실제로 들어온 매출</td><td class="calc">${man(S.revenue)}</td></tr>
-     <tr><td>손님 따라 드는 돈 (청소·재료, 막대와 같이 움직임)</td><td class="calc">${man(S.variable)}</td></tr>
-     <tr><td>매달 나가는 돈 (월급·월세, 그대로)</td><td class="calc">${man(S.fixed)}</td></tr>
-     <tr><td>쓰고 남은 돈</td><td class="calc">${man(S.profit)}</td></tr>
-    </tbody></table>
-    <p class="small muted" style="margin:10px 0 0">예) 기준 수수료가 16.5%일 때, 막대 50%면 수수료는 8.25%, 막대 150%면 24.75%입니다. 100%를 넘어도 수수료는 100%에서 멈춥니다.</p></div>
-    <div class="card" style="margin-top:16px"><h3>막대 위치에 따른 1년 금액</h3><div class="tablebox"><table class="ed"><thead><tr><th>막대</th><th style="text-align:right">수수료</th><th style="text-align:right">들어온 매출</th><th style="text-align:right">캠핏</th><th style="text-align:right">피코</th></tr></thead><tbody>${marks}</tbody></table></div></div>
+    <div class="grid g3" style="margin-top:16px">
+     <div class="card">
+      <div class="small" style="font-weight:800">월 고정비</div>
+      <div class="scale-amt" style="font-size:32px">${man(S.fixed / 12)}</div>
+      <div class="small muted">한 달에 꼭 나가는 돈. 1년이면 ${man(S.fixed)}. 매출 %를 바꿔도 그대로입니다.</div>
+     </div>
+     <div class="card">
+      <div class="small" style="font-weight:800">투자비</div>
+      <div class="scale-amt" style="font-size:32px">${man(S.invest)}</div>
+      <div class="small muted">시설·장비를 살 때 처음에 한 번 넣는 돈. 순이익으로 찾는 기간 ${partnerMonths(S.invest, S.profit)}.</div>
+     </div>
+     <div class="card">
+      <div class="small" style="font-weight:800">순이익</div>
+      <div class="scale-amt" style="font-size:32px;color:${S.profit >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(S.profit)}</div>
+      <div class="small muted">들어온 매출 − 손님 따라 드는 돈 − 월 고정비 1년분. 한 달 ${man(S.profit / 12)}.</div>
+     </div>
+    </div>
+    <div class="card" style="margin-top:16px"><h3>매출 %에 따른 1년 금액</h3><div class="tablebox"><table class="ed"><thead><tr><th>매출</th><th style="text-align:right">캠핏 수수료</th><th style="text-align:right">들어온 매출</th><th style="text-align:right">월 고정비</th><th style="text-align:right">순이익</th><th style="text-align:right">캠핏</th><th style="text-align:right">피코</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="small muted" style="margin:10px 0 0">캠핏 수수료 = 기준 수수료 × 매출 % ÷ 100. 순이익 = 들어온 매출 − 손님 따라 드는 돈 − 월 고정비 1년분. 피코 = 순이익 − 캠핏.</p></div>
     <div style="margin-top:16px">${bars([
       { label: '캠핏 1년', v: Math.max(0, S.camp), color: '#7c4dff' },
       { label: '피코 1년', v: Math.max(0, S.pico), color: 'var(--brand)' },
@@ -1903,6 +1939,14 @@ document.addEventListener('input', e => {
     state.meta.campfitInvest = Math.max(0, num(t.value));
     renderAll(); save(); return;
   }
+  if (t.dataset && t.dataset.scaleFee) {
+    const achieve = clamp(Math.round(num(state.meta.achieveRate) || 100), 50, 300);
+    let v = Math.round(clamp(num(t.value), 0, 100) * 100) / 100;
+    if (t.dataset.scaleFee === 'now') v = achieve > 0 ? Math.round(clamp(v * 100 / achieve, 0, 100) * 100) / 100 : v;
+    state.meta.scaleFeeTouched = true;
+    state.meta.scaleBaseFee = v;
+    renderAll(); save(); return;
+  }
   if (t.dataset && t.dataset.partner === 'fee') {
     if (num(state.meta.campfitInvest) === 0) { t.value = feeTxt(CAMFIT_BASE_FEE); return; }
     const raw = String(t.value).trim();
@@ -1948,6 +1992,10 @@ document.addEventListener('focusout', e => {
   const t = e.target;
   if (t.dataset && t.dataset.partner === 'fee') {
     t.value = feeTxt(num(state.meta.campfitInvest) === 0 ? CAMFIT_BASE_FEE : state.meta.campfitFee);
+    return;
+  }
+  if (t.dataset && t.dataset.scaleFee) {
+    t.value = feeTxt(num(t.value));
     return;
   }
   if (t.classList && t.classList.contains('n') && t.tagName === 'INPUT') {
