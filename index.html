@@ -606,10 +606,32 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 11. 수익 RS비교 ═════════ -->
+<!-- ═════════ 11. 추가검증 ═════════ -->
+<section class="slide" data-title="추가검증">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">11</span> 추가검증</div>
+  <h1 class="title" contenteditable="true" data-k="s15c.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
+  <p class="lead" contenteditable="true" data-k="s15c.lead">A안은 예전 요금이고 수수료는 16.5%입니다. B안은 캠핏이 5,000만 원을 넣고, 대시보드 1년 매출의 20%를 가져갑니다. 손님이 오는 날 수는 같습니다.</p>
+  <div id="abCompare"></div>
+ </div>
+</section>
+
+<!-- ═════════ 12. 투자내역 ═════════ -->
+<section class="slide" data-title="투자내역">
+ <div class="wrap">
+  <div class="eyebrow"><span class="chip">12</span> 투자내역</div>
+  <h1 class="title" contenteditable="true" data-k="s16c.title">외부시설비와 내부시설비</h1>
+  <p class="lead" contenteditable="true" data-k="s16c.lead">가운데 큰 숫자는 외부시설비와 내부시설비를 더한 금액입니다. 내부시설비에는 내부에 비치하는 것과 대여 장비가 모두 들어 있습니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
+  <div id="gearHero"></div>
+  <div class="grid g2" id="gearLists"></div>
+  <div class="card gear-other" id="gearOther"></div>
+ </div>
+</section>
+
+<!-- ═════════ 13. 수익 RS비교 ═════════ -->
 <section class="slide" data-title="수익 RS비교">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">11</span> 수익 RS비교</div>
+  <div class="eyebrow"><span class="chip">13</span> 수익 RS비교</div>
   <h1 class="title" contenteditable="true" data-k="s14.title">매출의 몇 %를 회수하면, 캠핏에 얼마가 남나</h1>
 
   <div class="camfit-hero" id="camfitHero"></div>
@@ -637,28 +659,6 @@ table.split th.camp { color: #6d28d9; }
 
   <div id="splitWarn"></div>
   <div class="card" id="splitTable"></div>
- </div>
-</section>
-
-<!-- ═════════ 12. 추가검증1 ═════════ -->
-<section class="slide" data-title="추가검증1">
- <div class="wrap">
-  <div class="eyebrow"><span class="chip">12</span> 추가검증1</div>
-  <h1 class="title" contenteditable="true" data-k="s15c.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
-  <p class="lead" contenteditable="true" data-k="s15c.lead">A안은 예전 요금이고 수수료는 16.5%입니다. B안은 캠핏이 5,000만 원을 넣고, 대시보드 1년 매출의 20%를 가져갑니다. 손님이 오는 날 수는 같습니다.</p>
-  <div id="abCompare"></div>
- </div>
-</section>
-
-<!-- ═════════ 13. 시설비 ═════════ -->
-<section class="slide" data-title="시설비">
- <div class="wrap">
-  <div class="eyebrow"><span class="chip">13</span> 외부 · 내부 시설비</div>
-  <h1 class="title" contenteditable="true" data-k="s16c.title">외부시설비와 내부시설비</h1>
-  <p class="lead" contenteditable="true" data-k="s16c.lead">가운데 큰 숫자는 외부시설비와 내부시설비를 더한 금액입니다. 내부시설비에는 내부에 비치하는 것과 대여 장비가 모두 들어 있습니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
-  <div id="gearHero"></div>
-  <div class="grid g2" id="gearLists"></div>
-  <div class="card gear-other" id="gearOther"></div>
  </div>
 </section>
 
@@ -1575,17 +1575,15 @@ function renderGear({ R }) {
   hero.innerHTML = `<div class="gear-hero">
     <div class="k">외부시설비 + 내부시설비</div>
     <div class="amt">${man(sum)}</div>
-    <div class="sub">물건값 ${man(o.base + i.base)} + 값이 오를 수 있어서 더해 둔 ${R.m.buffer}% ${man(sum - o.base - i.base)}</div>
-    <div class="sub">외부시설비 ${man(o.total)} · 내부시설비 ${man(i.total)}</div>
   </div>`;
-  const head = `<thead><tr><th>구분</th><th>이름</th><th style="text-align:right">개수</th><th style="text-align:right">하나 가격</th><th style="text-align:right">물건값</th><th style="text-align:right">더해 둔 값까지</th></tr></thead>`;
+  const head = `<thead><tr><th>구분</th><th>이름</th><th style="text-align:right">개수</th><th style="text-align:right">1개 금액</th><th style="text-align:right">합계</th><th style="text-align:right">여유 ${R.m.buffer}% 값</th></tr></thead>`;
   document.getElementById('gearLists').innerHTML = `
     <div class="card"><h3>외부시설비 ${man(o.total)}</h3><div class="tablebox"><table class="ed">${head}<tbody>${o.rows}</tbody></table></div></div>
     <div class="card"><h3>내부시설비 ${man(i.total)}</h3><p class="small muted" style="margin-top:-4px">내부 비치 ${man(i.placed)} · 대여 ${man(i.rented)}</p><div class="tablebox"><table class="ed">${head}<tbody>${i.rows}</tbody></table></div></div>`;
   const month = (label, v) => `<div class="src"><div class="k">${label}</div><div class="v" style="font-size:18px">${man(v)}</div><div class="s">한 달</div></div>`;
   document.getElementById('gearOther').innerHTML = `<h3>그 밖에 드는 돈</h3>
     <div class="split-src" style="grid-template-columns:repeat(5,1fr)">
-      <div class="src"><div class="k">공사</div><div class="v" style="font-size:18px">${man(R.inv.construction * R.B)}</div><div class="s">한 번 · 오른 값 포함</div></div>
+      <div class="src"><div class="k">공사</div><div class="v" style="font-size:18px">${man(R.inv.construction * R.B)}</div><div class="s">한 번 · 여유 ${R.m.buffer}% 포함</div></div>
       ${month('월급', R.fixedM.labor)}
       ${month('월세', R.fixedM.rent)}
       ${month('전기·수도·가스', R.fixedM.utility)}
