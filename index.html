@@ -294,9 +294,9 @@ table.rp.kv td:first-child { color: #586174; font-weight: 700; } table.rp.kv td:
 .rp-tag { display: inline-block; background: #ede9fe; color: #6d28d9; border-radius: 99px; padding: 0 7px; font-size: 9px; font-weight: 800; }
 
 /* ── 피코 · 캠핏 분배 ── */
-.slide[data-title="캠핏 수익"] { padding-top: 18px; }
-.slide[data-title="캠핏 수익"] h1.title { font-size: 30px; margin: 6px 0 4px; }
-.slide[data-title="캠핏 수익"] .lead { font-size: 15px; margin-bottom: 12px; }
+.slide[data-title="수익 RS비교"] { padding-top: 18px; }
+.slide[data-title="수익 RS비교"] h1.title { font-size: 30px; margin: 6px 0 4px; }
+.slide[data-title="수익 RS비교"] .lead { font-size: 15px; margin-bottom: 12px; }
 .camfit-hero { display: grid; grid-template-columns: 1.35fr .9fr; gap: 18px; align-items: center; color: #fff;
   background: linear-gradient(135deg, #7c4dff, #5b21b6 58%, #4c1d95); border-radius: 20px; padding: 20px 26px; box-shadow: var(--shadow-lg); }
 .camfit-hero .role { font-size: 13px; font-weight: 800; letter-spacing: .3px; opacity: .85; }
@@ -598,38 +598,10 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 11. 경영진 의사결정 요약 ═════════ -->
-<section class="slide" data-title="의사결정 요약">
+<!-- ═════════ 11. 수익 RS비교 ═════════ -->
+<section class="slide" data-title="수익 RS비교">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip" style="background:#0f172a">EXECUTIVE SUMMARY</span> 경영진 의사결정 요약</div>
-  <h1 class="title" contenteditable="true" data-k="s12.title">결론과 토론할 것</h1>
-  <div id="execVerdict"></div>
-  <div class="grid g2" style="margin-top:16px">
-   <div class="card"><h3>💵 투자와 회수</h3><table class="exec-table" id="exec1"></table></div>
-   <div class="card"><h3>⚖️ 본전 라인 (손익분기점 · BEP)</h3><table class="exec-table" id="exec2"></table></div>
-  </div>
-  <div class="grid g2" style="margin-top:16px">
-   <div class="card"><h3>🗣 토론 포인트</h3>
-    <ol class="talk" contenteditable="true" data-k="s12.talk"></ol>
-   </div>
-   <div class="card"><h3>✅ 최종 결정</h3>
-    <div class="decide" id="decide">
-     <button data-d="go" class="good">🟢 추진</button>
-     <button data-d="cond" class="warn">🟡 조건부 추진</button>
-     <button data-d="hold" class="bad">🔴 보류 · 재검토</button>
-    </div>
-    <div class="small muted" style="margin-top:14px">결정 메모 · 조건 · 담당자 (클릭해서 입력)</div>
-    <div class="note-box" style="min-height:120px;margin-top:6px" contenteditable="true" data-k="s12.memo">예) 주말 가동률 60% 이상 확보 가능성 검증 후 착공 · 팬히터 전기식 확정 · 담당: ○○○ · 기한: ○월 ○일</div>
-    <div class="small muted" style="margin-top:10px" id="decideStamp"></div>
-   </div>
-  </div>
- </div>
-</section>
-
-<!-- ═════════ 12. 캠핏 수익 ═════════ -->
-<section class="slide" data-title="캠핏 수익">
- <div class="wrap">
-  <div class="eyebrow"><span class="chip">별첨</span> 캠핏(CAMFIT) 수익</div>
+  <div class="eyebrow"><span class="chip">11</span> 수익 RS비교</div>
   <h1 class="title" contenteditable="true" data-k="s14.title">매출의 몇 %를 회수하면, 캠핏에 얼마가 남나</h1>
 
   <div class="camfit-hero" id="camfitHero"></div>
@@ -660,20 +632,20 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 13. A/B 3년 비교 ═════════ -->
-<section class="slide" data-title="3년 비교">
+<!-- ═════════ 12. 추가검증1 ═════════ -->
+<section class="slide" data-title="추가검증1">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">13</span> A안 · B안, 3년</div>
+  <div class="eyebrow"><span class="chip">12</span> 추가검증1</div>
   <h1 class="title" contenteditable="true" data-k="s15c.title">3년 동안 A안과 B안, 캠핏은 얼마를 가져가나</h1>
   <p class="lead" contenteditable="true" data-k="s15c.lead">A안은 예전 요금이고 수수료는 16.5%입니다. B안은 캠핏이 5,000만 원을 넣고, 대시보드 1년 매출의 20%를 가져갑니다. 손님이 오는 날 수는 같습니다.</p>
   <div id="abCompare"></div>
  </div>
 </section>
 
-<!-- ═════════ 14. 장비 투자 ═════════ -->
+<!-- ═════════ 13. 시설비 ═════════ -->
 <section class="slide" data-title="시설비">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">14</span> 외부 · 내부 시설비</div>
+  <div class="eyebrow"><span class="chip">13</span> 외부 · 내부 시설비</div>
   <h1 class="title" contenteditable="true" data-k="s16c.title">외부시설비와 내부시설비</h1>
   <p class="lead" contenteditable="true" data-k="s16c.lead">가운데 큰 숫자는 외부시설비와 내부시설비를 더한 금액입니다. 내부시설비에는 내부에 비치하는 것과 대여 장비가 모두 들어 있습니다. 공사·월급·월세는 아래쪽에 작게 따로 적었습니다.</p>
   <div id="gearHero"></div>
@@ -682,10 +654,10 @@ table.split th.camp { color: #6d28d9; }
  </div>
 </section>
 
-<!-- ═════════ 15. 변동 수수료 ═════════ -->
+<!-- ═════════ 14. 수수료 변화 ═════════ -->
 <section class="slide" data-title="수수료 변화">
  <div class="wrap">
-  <div class="eyebrow"><span class="chip">15</span> 매출이 달라지면</div>
+  <div class="eyebrow"><span class="chip">14</span> 매출이 달라지면</div>
   <h1 class="title" contenteditable="true" data-k="s17c.title">매출이 달라지면, 수수료도 같이 바뀝니다</h1>
   <p class="lead" contenteditable="true" data-k="s17c.lead">막대는 50%에서 300%까지입니다. 100%는 대시보드 1년 매출이고, 300%는 그 3배입니다. 기준 수수료를 고치면 매출 비율에 맞춘 수수료와 금액이 그 숫자로 다시 계산됩니다.</p>
   <div class="card">
@@ -1402,6 +1374,7 @@ function renderPnl({ R, cum, pbMonth }) {
 }
 
 function renderExec({ R, V, bepWe, targetWe, minNightsMonth }) {
+  if (!document.getElementById('execVerdict')) return;
   const roi = R.investTotal ? R.profit / R.investTotal * 100 : 0;
   const bepRevenue = (1 - R.varAnnual / Math.max(R.revenue, 1)) > 0 ? R.fixedAnnual / (1 - R.varAnnual / R.revenue) : Infinity;
   document.getElementById('execVerdict').innerHTML = `<div class="verdict-card ${V.cls}" style="flex-direction:row;align-items:center;gap:24px;padding:18px 24px">
