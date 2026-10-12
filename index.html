@@ -1484,16 +1484,14 @@ function renderPartner({ R }) {
   document.getElementById('splitTable').innerHTML = `<h3 style="margin-bottom:8px">캠핏 · 피코 운영성과 현황</h3><table class="ed split">
     <thead><tr><th>항목</th><th class="numc camp">캠핏 · CAMFIT</th><th class="numc pico">피코 · 운영사</th><th class="numc">사업 전체</th></tr></thead>
     <tbody>
-      ${row('보증금', '—', man(P.picoDeposit), man(P.picoDeposit))}
-      ${row('권리금', '—', man(P.picoPremium), man(P.picoPremium))}
-      ${row('투자금', man(P.campfitInvest), man(P.picoInvest), man(P.investTotal))}
+      ${row('투자금', man(P.campfitInvest), `${man(P.picoInvest)}<div class="tiny muted">보증금 ${man(P.picoDeposit)}, 권리금 ${man(P.picoPremium)} 포함</div>`, man(P.investTotal))}
       ${row('투자 비중', P.excess > 0 ? '시설비 초과' : share(P.campfitInvest), share(P.picoInvest), '100%')}
       ${row('1년 가져가는 돈', man(P.campfitProfit), man(P.picoProfit), man(P.profit))}
       ${row('산정 기준', '매출 × ' + feeTxt(P.fee) + '%', '남는 돈 − 캠핏 회수', '매출 ' + man(P.revenue))}
       ${row('회수 기간', partnerMonths(P.campfitInvest, P.campfitProfit), partnerMonths(P.picoInvest, P.picoProfit), monthsTxt(R.payback))}
       ${row('수익률 (1년)', partnerRoi(P.campfitInvest, P.campfitProfit), partnerRoi(P.picoInvest, P.picoProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
     </tbody></table>
-    <p class="small muted" style="margin:10px 0 0">피코 투자금 = 보증금 + 권리금 + 시설비 중 캠핏이 넣지 않은 금액. 캠핏 회수액 = 1년 매출 × 회수 비율. 피코가 가져가는 돈 = 1년 남는 돈 − 캠핏 회수액.</p>`;
+    <p class="small muted" style="margin:10px 0 0">피코 투자금은 보증금과 권리금을 포함한 총액입니다. 캠핏 회수액 = 1년 매출 × 회수 비율. 피코가 가져가는 돈 = 1년 남는 돈 − 캠핏 회수액.</p>`;
 }
 
 /* ═══════════════════════ 13·14·15 의사결정 장표 ═══════════════════════ */
