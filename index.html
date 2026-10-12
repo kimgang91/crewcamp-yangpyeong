@@ -377,7 +377,7 @@ table.split th.camp { color: #6d28d9; }
 <section class="slide" data-title="대시보드">
  <div class="wrap">
   <div class="eyebrow"><span class="chip">MAIN</span> 시뮬레이션 대시보드</div>
-  <h1 class="title" contenteditable="true" data-k="s1.title">숫자를 바꾸면, 모든 슬라이드가 바로 다시 계산됩니다</h1>
+  <h1 class="title" contenteditable="true" data-k="s1.simTitle">사업 검토를 위한 시뮬레이터</h1>
   <p class="lead" contenteditable="true" data-k="s1.lead">왼쪽에서 손님이 오는 비율과 요금을, 오른쪽에서 비용 항목을 고쳐 보세요. 기본값은 수정본 시뮬레이션 PDF(2026-10-07)의 숫자입니다.</p>
 
   <div class="kpi-strip" id="kpiStrip"></div>
@@ -605,7 +605,6 @@ table.split th.camp { color: #6d28d9; }
  <div class="wrap">
   <div class="eyebrow"><span class="chip">별첨</span> 캠핏(CAMFIT) 수익</div>
   <h1 class="title" contenteditable="true" data-k="s14.title">매출의 몇 %를 회수하면, 캠핏에 얼마가 남나</h1>
-  <p class="lead" contenteditable="true" data-k="s14.lead">캠핏이 투자를 더 넣을수록 매출에서 가져가는 비율을 높일 수 있습니다. 비율을 올리면 1년에 회수하는 금액이 바로 커집니다.</p>
 
   <div class="camfit-hero" id="camfitHero"></div>
 
@@ -615,7 +614,7 @@ table.split th.camp { color: #6d28d9; }
     <div class="ctl">
      <label>캠핏(CAMFIT) 투자 금액 <output id="campfitInvestOut"></output></label>
      <input class="in n" id="campfitInvest" data-partner="invest" inputmode="numeric" autocomplete="off" placeholder="0">
-     <div class="help">0원이면 매출의 16.5%. 투자를 넣으면 비율을 올려 더 많이 회수합니다.</div>
+     <div class="help">0원이면 매출의 16.5%로 계산됩니다. 투자금을 입력하면 비율을 바꿀 수 있습니다.</div>
     </div>
     <div class="ctl" id="feeCtl">
      <label>매출에서 회수하는 비율 <output id="campfitFeeOut"></output></label>
@@ -1405,7 +1404,6 @@ function renderPartner({ R }) {
   const hero = document.getElementById('camfitHero');
   if (!hero) return;
   const invPct = P.investTotal > 0 ? P.campfitInvest / P.investTotal * 100 : 0;
-  const gap = P.campfitProfit - P.picoProfit;
   hero.innerHTML = `
     <div>
       <div class="role">캠핏(CAMFIT) · 매출에서 회수</div>
@@ -1429,15 +1427,15 @@ function renderPartner({ R }) {
     </button>`;
   }).join('');
   document.getElementById('feeLadder').innerHTML = `<h3>매출의 몇 %씩 회수하면 얼마인가</h3>
-    <p class="small muted" style="margin:-4px 0 10px">같은 매출에서 비율만 올리면 캠핏이 가져가는 돈이 커집니다. 칸을 누르면 그 비율로 바로 바뀝니다.</p>
+    <p class="small muted" style="margin:-4px 0 10px">칸을 누르면 그 비율로 계산됩니다.</p>
     <div class="ladder">${rows}</div>
-    <p class="small" style="margin:10px 0 0">피코에게 남는 돈 = 1년 남는 돈 ${man(P.profit)} − 캠핏 회수 ${man(P.campfitProfit)} = <b style="color:${P.picoProfit >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(P.picoProfit)}</b>${gap > 0 ? ` · 캠핏이 피코보다 ${man(gap)} 더 가져갑니다` : ''}</p>`;
+    <p class="small" style="margin:10px 0 0">피코에게 남는 돈 = 1년 남는 돈 ${man(P.profit)} − 캠핏 회수 ${man(P.campfitProfit)} = <b style="color:${P.picoProfit >= 0 ? 'var(--brand)' : 'var(--bad)'}">${man(P.picoProfit)}</b></p>`;
   document.getElementById('splitWarn').innerHTML = P.excess > 0
     ? `<div class="note-box warn" style="margin-top:16px">캠핏 투자금(${man(P.campfitInvest)})이 총 투자비(${man(P.investTotal)})보다 ${man(P.excess)} 많습니다. 피코 투자금은 0원으로 보고, 캠핏의 회수 기간·수익률은 입력한 투자금 전체로 계산합니다.</div>`
     : (P.picoProfit < 0 ? `<div class="note-box bad" style="margin-top:16px">매출의 ${feeTxt(P.fee)}%(${man(P.campfitProfit)})가 1년 남는 돈보다 커서, 피코에게 남는 돈은 ${man(P.picoProfit)}입니다.</div>` : '');
   const share = v => P.investTotal > 0 ? pct(v / P.investTotal * 100, 1) : '—';
   const row = (k, camp, pico, total) => `<tr><td>${k}</td><td class="numc camp">${camp}</td><td class="numc pico">${pico}</td><td class="numc">${total}</td></tr>`;
-  document.getElementById('splitTable').innerHTML = `<h3 style="margin-bottom:8px">캠핏이 더 넣으면, 가져가는 돈도 커집니다</h3><table class="ed split">
+  document.getElementById('splitTable').innerHTML = `<h3 style="margin-bottom:8px">캠핏 · 피코 운영성과 현황</h3><table class="ed split">
     <thead><tr><th>항목</th><th class="numc camp">캠핏 · CAMFIT</th><th class="numc pico">피코 · 운영사</th><th class="numc">사업 전체</th></tr></thead>
     <tbody>
       ${row('투자금', man(P.campfitInvest), man(P.picoInvest), man(P.investTotal))}
@@ -1447,7 +1445,7 @@ function renderPartner({ R }) {
       ${row('회수 기간', partnerMonths(P.campfitInvest, P.campfitProfit), partnerMonths(P.picoInvest, P.picoProfit), monthsTxt(R.payback))}
       ${row('수익률 (1년)', partnerRoi(P.campfitInvest, P.campfitProfit), partnerRoi(P.picoInvest, P.picoProfit), P.investTotal > 0 ? pct(P.profit / P.investTotal * 100, 1) : '—')}
     </tbody></table>
-    <p class="small muted" style="margin:10px 0 0">캠핏 회수액 = 1년 매출 × 회수 비율. 비율이 높을수록 캠핏이 가져가는 돈이 커지고, 피코에게 남는 돈은 그만큼 줄어듭니다. 회수 기간 = 투자금 ÷ 1년 회수액 × 12.</p>`;
+    <p class="small muted" style="margin:10px 0 0">캠핏 회수액 = 1년 매출 × 회수 비율. 피코 = 1년 남는 돈 − 캠핏 회수액. 회수 기간 = 투자금 ÷ 1년 회수액 × 12.</p>`;
 }
 
 /* ═══════════════════════ 핵심요약 보고서 (PDF) ═══════════════════════ */
