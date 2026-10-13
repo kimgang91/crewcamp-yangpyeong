@@ -150,7 +150,15 @@ svg text { font-family: inherit; }
   .panel-side { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: start; }
   .panel-side > .card { margin-top: 0 !important; }
 }
+@media (max-width: 1300px) { .panel-side { grid-template-columns: 340px minmax(0, 1fr); } }
 @media (max-width: 1000px) { .panel-side { grid-template-columns: 1fr; } }
+/* 넓은 화면: 객실 · 1박 요금을 오른쪽 넓은 칸(비용 항목 위)에 둬서 옆으로 밀지 않고 한눈에 */
+@media (min-width: 1701px) {
+  .panel-side { display: contents; }
+  .panel-side > .card:first-child { grid-column: 1; grid-row: 1 / span 2; }
+  .panel > .panel-side > .rooms-card { grid-column: 2; grid-row: 1; margin-top: 0 !important; }
+  .panel > .cost-card { grid-column: 2; grid-row: 2; }
+}
 .ctl { margin: 12px 0; }
 .ctl label { display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 700; }
 .ctl label output { color: var(--brand); font-weight: 900; font-size: 15px; }
@@ -444,12 +452,12 @@ table.split th.camp { color: #6d28d9; }
       <div class="help">기본값은 보증금 3,000만 원, 권리금 1,000만 원입니다. 둘을 더한 금액이 피코 투자금이고, 처음 드는 돈에 포함됩니다.</div>
      </div>
     </div>
-    <div class="card" style="margin-top:16px">
+    <div class="card rooms-card" style="margin-top:16px">
      <h3>🏕 객실 · 1박 요금 <span class="tag s1">1단계</span></h3>
      <div class="tablebox" id="tblRooms"></div>
     </div>
    </div>
-   <div class="card">
+   <div class="card cost-card">
     <h3>💰 비용 · 장비 항목</h3>
     <div class="help-strip"><span><b>숫자 칸</b> 클릭해서 바로 수정</span><span><b>− ＋</b> 수량 조절</span><span><b>포함 스위치</b> 끄면 삭제 없이 계산에서 빠짐</span><span><b>위치</b> 외부 ↔ 내부 이동</span><span><b>⇄</b> 상시 비치 ↔ 대여 상품 이동</span><span><b>삭제</b> 후 '되돌리기' 가능</span></div>
     <div class="tabs" id="tabs"></div>
