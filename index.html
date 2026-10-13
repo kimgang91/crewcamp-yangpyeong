@@ -96,6 +96,10 @@ body.editing [contenteditable="true"] { outline: 1px dashed transparent; border-
 body.editing [contenteditable="true"]:hover { outline-color: #94a3b8; background: rgba(20,184,166,.05); cursor: text; }
 body.editing [contenteditable="true"]:focus { outline: 2px solid var(--brand2, #14b8a6); background: #fff; }
 .edit-hint { font-size: 12px; color: var(--sub); }
+.sync { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: #ecfdf5; color: #047857; }
+.sync[data-s="saving"] { background: #eff6ff; color: #1d4ed8; }
+.sync[data-s="off"] { background: #fef2f2; color: #b91c1c; }
+@media print { .sync { display: none; } }
 
 /* ── 차트 ── */
 .bar-row { display: grid; grid-template-columns: 170px 1fr 110px; gap: 10px; align-items: center; margin: 7px 0; font-size: 13.5px; }
@@ -380,6 +384,7 @@ table.split th.camp { color: #6d28d9; }
   <span class="crumb" id="crumb">전수창업 운영 시뮬레이션</span>
   <span class="sp"></span>
   <span class="edit-hint">글씨는 클릭해서 바로 고칠 수 있어요</span>
+  <span class="sync" id="syncState" data-s="saving" title="고친 값은 링크를 가진 모든 사람에게 같이 보입니다">☁️ 불러오는 중…</span>
   <div class="tgroup">
    <button class="tbtn on" id="btnEdit" title="글씨 편집 켜기/끄기">✏️ 편집 ON</button>
    <button class="tbtn" id="btnDash" title="대시보드로 이동 (값 조정)">🎛 값 조정</button>
@@ -677,6 +682,7 @@ table.split th.camp { color: #6d28d9; }
 <div class="toast" id="toast"></div>
 <div id="report"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 'use strict';
 /* ═══════════════════════ 기본값 (수정본 PDF 기준) ═══════════════════════ */
@@ -691,10 +697,16 @@ function makeDefault() {
 
 /* ═══════════════════════ 상태 저장 ═══════════════════════ */
 let state, texts = {}, decision = { pick: null, at: null };
+/* 저장본을 화면 상태로 받아들인다 (내 브라우저 · 공유 저장 공통) */
+function adopt(raw) {
+  state = raw.state; texts = raw.texts || {}; decision = raw.decision || { pick: null, at: null };
+  delete texts['s12.talk']; ['s2.title','s2.c1','s2.c2t','s2.c2','s2.c3t','s2.c3','s3.title','s3.lead','s3.pb','s4.title','s4.lead','s4.whyT','s4.why','s5.title','s5.lead','s6.title','s6.lead','s7.title','s7.lead','s8.title','s8.lead','s9.title','s9.lead','s10.title','s10.lead','s14.title','s15.title','s15.lead','s15b.title','s15b.lead','s15c.title','s15c.lead','s15d.title','s15d.lead','s16.title','s16b.title','s16b.lead','s17.title','s17.lead','s17b.title','s17b.lead'].forEach(k => delete texts[k]); 
+  ensurePartner();
+}
 function load() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-    if (raw && raw.state) { state = raw.state; texts = raw.texts || {}; decision = raw.decision || decision; delete texts['s12.talk']; ['s2.title','s2.c1','s2.c2t','s2.c2','s2.c3t','s2.c3','s3.title','s3.lead','s3.pb','s4.title','s4.lead','s4.whyT','s4.why','s5.title','s5.lead','s6.title','s6.lead','s7.title','s7.lead','s8.title','s8.lead','s9.title','s9.lead','s10.title','s10.lead','s14.title','s15.title','s15.lead','s15b.title','s15b.lead','s15c.title','s15c.lead','s15d.title','s15d.lead','s16.title','s16b.title','s16b.lead','s17.title','s17.lead','s17b.title','s17b.lead'].forEach(k => delete texts[k]); ensurePartner(); return; }
+    if (raw && raw.state) { adopt(raw); return; }
   } catch (e) {}
   state = makeDefault();
   ensurePartner();
@@ -750,11 +762,76 @@ function partnerRoiNote(invest, annual) {
   return '1년 수익 ÷ 투자금';
 }
 let saveTimer;
-function save() {
+function saveLocal() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try { localStorage.setItem(STORE_KEY, JSON.stringify({ state, texts, decision })); } catch (e) {}
   }, 250);
+}
+function save() { saveLocal(); pushShared(); }
+
+/* ═══════════════════════ 공유 저장 (Supabase) ═══════════════════════ */
+/* 링크를 가진 모두가 같은 값을 본다. 마지막에 고친 사람의 값이 남는다. */
+const SB_URL = 'https://dinvbbqfhjnrtmefbiwr.supabase.co';
+const SB_KEY = 'sb_publishable_CS5H5UbmcSE_D5h2YPgqTA_QA1VX0H5';
+const SHARED_ID = 'main';
+const CLIENT_ID = uid();
+let sb = null, pushTimer = null, pushing = false, pendingRemote = null, lastRemoteAt = null;
+function setSync(s) {
+  const el = document.getElementById('syncState'); if (!el) return;
+  const m = { ok: '☁️ 모두에게 저장됨', saving: '☁️ 저장 중…', loading: '☁️ 불러오는 중…', off: '⚠️ 공유 저장 안 됨 · 이 브라우저에만 저장' }[s];
+  el.textContent = m; el.dataset.s = s === 'loading' ? 'saving' : s;
+}
+function pushShared() {
+  if (!sb) return;
+  pushing = true; setSync('saving');
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(async () => {
+    const { data, error } = await sb.from('sim_state')
+      .upsert({ id: SHARED_ID, data: { state, texts, decision, by: CLIENT_ID } })
+      .select('updated_at').single();
+    pushing = false;
+    if (error) { setSync('off'); return; }
+    lastRemoteAt = data.updated_at; setSync('ok');
+  }, 800);
+}
+const isTyping = () => { const a = document.activeElement; return !!a && (a.isContentEditable || ['INPUT', 'SELECT', 'TEXTAREA'].includes(a.tagName)); };
+function applyShared(d) {
+  if (pushing) { pendingRemote = null; return; }          // 내가 고친 값을 올리는 중이면 내 값이 마지막이 된다
+  if (isTyping()) { pendingRemote = d; return; }           // 입력 중에는 덮어쓰지 않고 손을 뗀 뒤 반영
+  pendingRemote = null;
+  adopt(d);
+  document.querySelectorAll('[contenteditable][data-k]').forEach(el => {
+    const v = texts[el.dataset.k] ?? defaultTexts[el.dataset.k];
+    if (v != null && el.innerHTML !== v) el.innerHTML = v;
+  });
+  renderRoomsTable(); renderTabs(); renderAll(); saveLocal();
+}
+document.addEventListener('focusout', () => setTimeout(() => { if (pendingRemote && !isTyping()) applyShared(pendingRemote); }, 300));
+function receive(row) {
+  if (!row || !row.data || row.updated_at === lastRemoteAt) return;
+  lastRemoteAt = row.updated_at;
+  if (row.data.by === CLIENT_ID || !row.data.state) return;
+  applyShared(row.data);
+}
+async function pullShared(first) {
+  const { data, error } = await sb.from('sim_state').select('data,updated_at').eq('id', SHARED_ID).maybeSingle();
+  if (error) { setSync('off'); return false; }
+  if (!data) { if (first) pushShared(); return true; }   // 아직 공유본이 없으면 지금 값으로 시작
+  receive(data);
+  if (!pushing) setSync('ok');
+  return true;
+}
+async function initShared() {
+  if (!window.supabase) { setSync('off'); return; }
+  sb = window.supabase.createClient(SB_URL, SB_KEY);
+  setSync('loading');
+  if (!(await pullShared(true))) return;
+  sb.channel('sim-state')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'sim_state', filter: 'id=eq.' + SHARED_ID }, p => receive(p.new))
+    .subscribe(st => { if (st === 'SUBSCRIBED') pullShared(); });   // 연결되기 전 사이에 바뀐 값도 받기
+  setInterval(() => pullShared(), 20000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) pullShared(); });
 }
 
 /* ═══════════════════════ 포맷 ═══════════════════════ */
@@ -2094,7 +2171,7 @@ document.getElementById('btnEdit').onclick = e => {
   applyTexts();
 };
 document.getElementById('btnReset').onclick = () => {
-  if (!confirm('숫자와 글씨를 모두 저장해 둔 기준값으로 되돌릴까요?')) return;
+  if (!confirm('숫자와 글씨를 모두 기준값으로 되돌릴까요?\n링크를 가진 모든 사람의 화면이 함께 바뀝니다. (이전 값은 기록에 남습니다)')) return;
   state = makeDefault(); texts = {}; decision = { pick: null, at: null };
   document.querySelectorAll('[contenteditable][data-k]').forEach(el => { if (defaultTexts[el.dataset.k] != null) el.innerHTML = defaultTexts[el.dataset.k]; });
   renderRoomsTable(); renderTabs(); renderAll(); save(); toast('기본값으로 되돌렸습니다');
@@ -2154,6 +2231,7 @@ renderRoomsTable();
 renderTabs();
 renderAll();
 go((parseInt(location.hash.slice(1), 10) || 1) - 1);
+initShared();
 </script>
 </body>
 </html>
